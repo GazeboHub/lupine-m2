@@ -1,6 +1,8 @@
+# Text
+*~
+# Java
 *.class
-
-# Package Files #
+## Archives
 *.jar
 *.war
 *.ear
