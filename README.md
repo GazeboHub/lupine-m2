@@ -1,8 +1,11 @@
 lupine-m2
 =========
+ 
+The Lupine M2 project - formally, _Project Lupine_ - will design an
+MOF M2 Metamodel for modeling of ANSI Common Lisp program components,
+as well as an implementation of the UML M2 metamodel for MOF. GUI
+components will be defined onto CLIM.
 
-The Lupine M2 project will design an MOF M2 Metamodel for modeling of program components developed in ANSI Common Lisp.
-
-The Lupine M2 metamodel will also design a metamodel module for for modeling of extensions of the Common Lisp MetaObject and may design a module for modeling CLIM applications.
-
-Refer to the [Lupine M2 Wiki](https://github.com/GazeboHub/lupine-m2/wiki) for documentation of design elements, in the Lupine M2 project.
+Documetation for the Lupine M2 project is avaiable via the [Lupine M2
+Wiki](https://github.com/GazeboHub/lupine-m2/wiki) and in the 'doc'
+directory in the project's source tree.
