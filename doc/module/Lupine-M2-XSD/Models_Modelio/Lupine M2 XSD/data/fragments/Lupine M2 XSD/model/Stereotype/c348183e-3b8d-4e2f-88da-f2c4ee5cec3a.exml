@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Slot" version="3">
+  <DEPS>
+    <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+    <PID name="LocalProfile" mc="Profile" uid="426240de-e63d-43fc-9dd0-01ae4e209ab5"/>
+    <ATTRIBUTES>
+      <ATT name="Image"></ATT>
+      <ATT name="Icon"></ATT>
+      <ATT name="IsHidden">false</ATT>
+      <ATT name="LabelKey"><![CDATA[Slot]]></ATT>
+      <ATT name="BaseClassName"><![CDATA[Attribute]]></ATT>
+      <ATT name="Name"><![CDATA[Slot]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

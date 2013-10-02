@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CL" version="3">
+  <DEPS>
+    <ID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <COMPID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
+    <COMPID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+    <COMPID name="Symbol" mc="DataType" uid="15698f44-8f3c-45d2-bee1-d33213e87add"/>
+    <COMPID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
+    <COMPID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <PID name="Lupine" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CL]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
+        <COMPID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
+        <COMPID name="Symbol" mc="DataType" uid="15698f44-8f3c-45d2-bee1-d33213e87add"/>
+        <COMPID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
+        <COMPID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

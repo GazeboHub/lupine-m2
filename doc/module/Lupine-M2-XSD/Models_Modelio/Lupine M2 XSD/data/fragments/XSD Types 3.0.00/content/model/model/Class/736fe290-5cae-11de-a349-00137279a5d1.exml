@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DerivedTypes" version="3">
+  <DEPS>
+    <ID name="DerivedTypes" mc="Class" uid="736fe290-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:ENTITIES" mc="DataType" uid="737244ed-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:ENTITY" mc="DataType" uid="737244f3-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:ID" mc="DataType" uid="737244f1-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:IDREF" mc="DataType" uid="737244f2-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:IDREFS" mc="DataType" uid="736fe295-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:NCName" mc="DataType" uid="737244f0-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:NMTOKEN" mc="DataType" uid="737244ee-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:Name" mc="DataType" uid="737244ef-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:byte" mc="DataType" uid="7374a750-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:int" mc="DataType" uid="7374a74e-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:integer" mc="DataType" uid="737244f4-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:language" mc="DataType" uid="736fe294-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:long" mc="DataType" uid="7374a74d-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:negativeInteger" mc="DataType" uid="7374a74c-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:nonNegativeInteger" mc="DataType" uid="7374a751-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:nonPositiveInteger" mc="DataType" uid="7374a74b-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:normalizedString" mc="DataType" uid="736fe292-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:positiveInteger" mc="DataType" uid="737709ad-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:short" mc="DataType" uid="7374a74f-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:token" mc="DataType" uid="736fe293-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:unsignedByte" mc="DataType" uid="737709ac-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:unsignedInt" mc="DataType" uid="737709aa-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:unsignedLong" mc="DataType" uid="737709a9-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:unsignedShort" mc="DataType" uid="737709ab-5cae-11de-a349-00137279a5d1"/>
+    <FOREIGNID name="XSDSimpleDerivedTypes" mc="Stereotype" uid="006020f8-0000-0939-0000-000000000000"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="DerivedTypes" mc="Class" uid="736fe290-5cae-11de-a349-00137279a5d1"/>
+    <PID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[DerivedTypes]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="xs:ENTITIES" mc="DataType" uid="737244ed-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:ENTITY" mc="DataType" uid="737244f3-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:ID" mc="DataType" uid="737244f1-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:IDREF" mc="DataType" uid="737244f2-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:IDREFS" mc="DataType" uid="736fe295-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:NCName" mc="DataType" uid="737244f0-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:NMTOKEN" mc="DataType" uid="737244ee-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:Name" mc="DataType" uid="737244ef-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:byte" mc="DataType" uid="7374a750-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:int" mc="DataType" uid="7374a74e-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:integer" mc="DataType" uid="737244f4-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:language" mc="DataType" uid="736fe294-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:long" mc="DataType" uid="7374a74d-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:negativeInteger" mc="DataType" uid="7374a74c-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:nonNegativeInteger" mc="DataType" uid="7374a751-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:nonPositiveInteger" mc="DataType" uid="7374a74b-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:normalizedString" mc="DataType" uid="736fe292-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:positiveInteger" mc="DataType" uid="737709ad-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:short" mc="DataType" uid="7374a74f-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:token" mc="DataType" uid="736fe293-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:unsignedByte" mc="DataType" uid="737709ac-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:unsignedInt" mc="DataType" uid="737709aa-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:unsignedLong" mc="DataType" uid="737709a9-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:unsignedShort" mc="DataType" uid="737709ab-5cae-11de-a349-00137279a5d1"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="XSDSimpleDerivedTypes" mc="Stereotype" uid="006020f8-0000-0939-0000-000000000000"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

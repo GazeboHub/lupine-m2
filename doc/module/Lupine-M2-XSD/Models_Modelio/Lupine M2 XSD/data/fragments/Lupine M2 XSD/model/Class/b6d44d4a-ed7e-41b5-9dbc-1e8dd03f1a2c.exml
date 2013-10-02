@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Extern-Alien" version="3">
+  <DEPS>
+    <ID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+    <EXTID name="%Alien-Value" mc="Class" uid="ea803ac1-816b-4d09-ad0b-95040e6d14f4"/>
+    <EXTID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <EXTID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+    <PID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Extern-Alien]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Name" mc="Attribute" uid="669ff3a5-70f1-4bb4-add2-218b21a28d03"/>
+          <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Name]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Extension">
+              <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Type" mc="Attribute" uid="ad62861b-2fc2-43c5-a008-3b58a4e192f9"/>
+          <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Type]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Extension">
+              <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="calls" mc="AssociationEnd" uid="5c55f269-ba32-4fec-9ffa-c0dafd4ca883"/>
+          <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[calls]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="%Alien-Value" mc="Class" uid="ea803ac1-816b-4d09-ad0b-95040e6d14f4"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <OBJECT>
+                <ID name="" mc="AssociationEnd" uid="4c313535-e2d0-4e8a-9f77-b304026e8e46"/>
+                <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+                <ATTRIBUTES>
+                  <ATT name="Aggregation">KindIsAssociation</ATT>
+                  <ATT name="IsChangeable">true</ATT>
+                  <ATT name="Changeable">ReadWrite</ATT>
+                  <ATT name="IsDerived">false</ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="Visibility">Public</ATT>
+                  <ATT name="IsClass">false</ATT>
+                  <ATT name="IsAbstract">false</ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="Opposite">
+                    <COMPID name="calls" mc="AssociationEnd" uid="5c55f269-ba32-4fec-9ffa-c0dafd4ca883"/>
+                  </COMP>
+                  <COMP relation="Association">
+                    <OBJECT>
+                      <ID name="" mc="Association" uid="5af919e0-c77a-486d-b7dd-127a3b35c44b"/>
+                      <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES></DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="" mc="Association" uid="5af919e0-c77a-486d-b7dd-127a3b35c44b"/>
+                <PID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="PrimitiveTypes" version="3">
+  <DEPS>
+    <ID name="PrimitiveTypes" mc="Class" uid="736fe291-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:NOTATION" mc="DataType" uid="737e30c3-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:QName" mc="DataType" uid="737bce6b-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:anySimpleType" mc="DataType" uid="737e30c5-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:anyType" mc="DataType" uid="737e30c4-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:anyURI" mc="DataType" uid="737bce6a-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:base64Binary" mc="DataType" uid="737bce69-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:boolean" mc="DataType" uid="737709af-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:date" mc="DataType" uid="73796c0c-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:dateTime" mc="DataType" uid="73796c0a-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:decimal" mc="DataType" uid="73796c08-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:double" mc="DataType" uid="73796c07-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:duration" mc="DataType" uid="73796c09-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:float" mc="DataType" uid="737709b0-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:gDay" mc="DataType" uid="737bce66-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:gMonth" mc="DataType" uid="737bce67-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:gMonthDay" mc="DataType" uid="737bce65-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:gYear" mc="DataType" uid="73796c0e-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:gYearMonth" mc="DataType" uid="73796c0d-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:hexBinary" mc="DataType" uid="737bce68-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:string" mc="DataType" uid="737709ae-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="xs:time" mc="DataType" uid="73796c0b-5cae-11de-a349-00137279a5d1"/>
+    <FOREIGNID name="XSDSimplePrimitiveTypes" mc="Stereotype" uid="006020f8-0000-093e-0000-000000000000"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="PrimitiveTypes" mc="Class" uid="736fe291-5cae-11de-a349-00137279a5d1"/>
+    <PID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[PrimitiveTypes]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="xs:NOTATION" mc="DataType" uid="737e30c3-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:QName" mc="DataType" uid="737bce6b-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:anySimpleType" mc="DataType" uid="737e30c5-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:anyType" mc="DataType" uid="737e30c4-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:anyURI" mc="DataType" uid="737bce6a-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:base64Binary" mc="DataType" uid="737bce69-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:boolean" mc="DataType" uid="737709af-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:date" mc="DataType" uid="73796c0c-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:dateTime" mc="DataType" uid="73796c0a-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:decimal" mc="DataType" uid="73796c08-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:double" mc="DataType" uid="73796c07-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:duration" mc="DataType" uid="73796c09-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:float" mc="DataType" uid="737709b0-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:gDay" mc="DataType" uid="737bce66-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:gMonth" mc="DataType" uid="737bce67-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:gMonthDay" mc="DataType" uid="737bce65-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:gYear" mc="DataType" uid="73796c0e-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:gYearMonth" mc="DataType" uid="73796c0d-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:hexBinary" mc="DataType" uid="737bce68-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:string" mc="DataType" uid="737709ae-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="xs:time" mc="DataType" uid="73796c0b-5cae-11de-a349-00137279a5d1"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="XSDSimplePrimitiveTypes" mc="Stereotype" uid="006020f8-0000-093e-0000-000000000000"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

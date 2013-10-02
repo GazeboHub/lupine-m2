@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="http://www.w3.org/2001/XMLSchema" version="3">
+  <DEPS>
+    <ID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="DerivedTypes" mc="Class" uid="736fe290-5cae-11de-a349-00137279a5d1"/>
+    <COMPID name="PrimitiveTypes" mc="Class" uid="736fe291-5cae-11de-a349-00137279a5d1"/>
+    <FOREIGNID name="XSDTypeNamespace" mc="Stereotype" uid="006020f8-0000-0934-0000-000000000000"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+    <PID name="XSDTypes" mc="Package" uid="2ac65b4a-acb2-4f32-ba3f-55dace204d62"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[http://www.w3.org/2001/XMLSchema]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="DerivedTypes" mc="Class" uid="736fe290-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="PrimitiveTypes" mc="Class" uid="736fe291-5cae-11de-a349-00137279a5d1"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="XSDTypeNamespace" mc="Stereotype" uid="006020f8-0000-0934-0000-000000000000"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

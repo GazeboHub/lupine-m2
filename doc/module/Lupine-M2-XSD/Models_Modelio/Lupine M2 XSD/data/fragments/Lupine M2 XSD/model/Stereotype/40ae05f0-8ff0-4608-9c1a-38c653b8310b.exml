@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Arg" version="3">
+  <DEPS>
+    <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <PID name="LocalProfile" mc="Profile" uid="426240de-e63d-43fc-9dd0-01ae4e209ab5"/>
+    <ATTRIBUTES>
+      <ATT name="Image"></ATT>
+      <ATT name="Icon"></ATT>
+      <ATT name="IsHidden">false</ATT>
+      <ATT name="LabelKey"><![CDATA[Arg]]></ATT>
+      <ATT name="BaseClassName"><![CDATA[Attribute]]></ATT>
+      <ATT name="Name"><![CDATA[Arg]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

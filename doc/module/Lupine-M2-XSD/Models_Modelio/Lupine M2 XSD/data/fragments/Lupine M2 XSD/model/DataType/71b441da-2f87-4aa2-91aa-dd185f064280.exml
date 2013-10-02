@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Cons" version="3">
+  <DEPS>
+    <ID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+    <PID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Cons]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Classoid" version="3">
+  <DEPS>
+    <ID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+    <EXTID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <EXTID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
+    <EXTID name="SBCL CTypes" mc="ClassDiagram" uid="dedc7a10-a4d7-4b91-abc4-d9acfe1fed74"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+    <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Classoid]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="a6dec3e7-196e-4353-a11b-bc2630cc3804"/>
+          <PID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+      <COMP relation="DependsOnDependency">
+        <OBJECT>
+          <ID name="" mc="Dependency" uid="1aaa5252-82a0-4fea-a1ed-b0f8d4ff5d8e"/>
+          <PID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+          <ATTRIBUTES>
+            <ATT name="DependsOnId"></ATT>
+            <ATT name="DependsOnName"></ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="DependsOn">
+              <ID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
+            </LINK>
+            <LINK relation="Extension">
+              <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="" mc="Dependency" uid="0ddd910a-2755-44d6-a68d-1526cf7902c8"/>
+          <PID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+          <ATTRIBUTES>
+            <ATT name="DependsOnId"></ATT>
+            <ATT name="DependsOnName"></ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="DependsOn">
+              <ID name="SBCL CTypes" mc="ClassDiagram" uid="dedc7a10-a4d7-4b91-abc4-d9acfe1fed74"/>
+            </LINK>
+            <LINK relation="Extension">
+              <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

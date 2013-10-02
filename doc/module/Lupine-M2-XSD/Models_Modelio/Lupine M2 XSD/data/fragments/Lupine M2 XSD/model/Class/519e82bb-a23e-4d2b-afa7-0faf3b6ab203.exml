@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Compute-Extract-Lambda" version="3">
+  <DEPS>
+    <ID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+    <EXTID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+    <EXTID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <EXTID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+    <EXTID name="Extract-Gen" mc="Class" uid="cf56d536-8c34-47d4-8abe-85f2bd8c511f"/>
+    <EXTID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+    <EXTID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+    <PID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Compute-Extract-Lambda]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Type" mc="Attribute" uid="cfdceba1-964a-466c-a860-bccc6d7ba629"/>
+          <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Type]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Value" mc="Attribute" uid="62d3917d-ad44-40b2-89fc-978c9c7d9a1b"/>
+          <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Value]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="extract-Gen" mc="AssociationEnd" uid="73e9f0e7-aea8-4821-b9ef-6a9e48cc7ea4"/>
+          <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[extract-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="Extract-Gen" mc="Class" uid="cf56d536-8c34-47d4-8abe-85f2bd8c511f"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <OBJECT>
+                <ID name="" mc="AssociationEnd" uid="94cc7b0e-4bb3-4ba9-bd60-1b895dfa8beb"/>
+                <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+                <ATTRIBUTES>
+                  <ATT name="Aggregation">KindIsAssociation</ATT>
+                  <ATT name="IsChangeable">true</ATT>
+                  <ATT name="Changeable">ReadWrite</ATT>
+                  <ATT name="IsDerived">false</ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="Visibility">Public</ATT>
+                  <ATT name="IsClass">false</ATT>
+                  <ATT name="IsAbstract">false</ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="Opposite">
+                    <COMPID name="extract-Gen" mc="AssociationEnd" uid="73e9f0e7-aea8-4821-b9ef-6a9e48cc7ea4"/>
+                  </COMP>
+                  <COMP relation="Association">
+                    <OBJECT>
+                      <ID name="" mc="Association" uid="b9543fec-5f11-472e-a80a-475c27b9ebef"/>
+                      <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES></DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="" mc="Association" uid="b9543fec-5f11-472e-a80a-475c27b9ebef"/>
+                <PID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

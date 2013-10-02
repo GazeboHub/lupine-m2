@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="LocalProfile" version="3">
+  <DEPS>
+    <ID name="LocalProfile" mc="Profile" uid="426240de-e63d-43fc-9dd0-01ae4e209ab5"/>
+    <COMPID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
+    <COMPID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <COMPID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+    <COMPID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+    <COMPID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+    <COMPID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+    <COMPID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+    <COMPID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="LocalProfile" mc="Profile" uid="426240de-e63d-43fc-9dd0-01ae4e209ab5"/>
+    <PID name="LocalModule" mc="ModuleComponent" uid="c5a149dd-bed4-40f2-8edf-f7ad7988da9f"/>
+    <ATTRIBUTES>
+      <ATT name="JCode"></ATT>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[LocalProfile]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="DefinedStereotype">
+        <COMPID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+        <COMPID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+        <COMPID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+        <COMPID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+        <COMPID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+        <COMPID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+        <COMPID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+        <COMPID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

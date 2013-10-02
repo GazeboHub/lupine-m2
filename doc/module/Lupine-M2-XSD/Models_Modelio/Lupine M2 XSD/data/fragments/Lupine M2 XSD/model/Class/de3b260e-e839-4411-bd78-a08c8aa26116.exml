@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CType-Of" version="3">
+  <DEPS>
+    <ID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+    <EXTID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <EXTID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <EXTID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+    <EXTID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
+    <EXTID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CType-Of]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Object" mc="Attribute" uid="5d22c34b-d9d0-4d65-a849-071638de1d78"/>
+          <PID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Object]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Value" mc="Attribute" uid="afd9409e-2dea-422e-a4f9-a32c1c8daabc"/>
+          <PID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Value]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

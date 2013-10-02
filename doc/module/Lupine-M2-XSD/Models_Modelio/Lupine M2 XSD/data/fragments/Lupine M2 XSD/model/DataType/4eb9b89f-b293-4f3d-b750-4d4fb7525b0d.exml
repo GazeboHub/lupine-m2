@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Unsigned-Byte" version="3">
+  <DEPS>
+    <ID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
+    <PID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Unsigned-Byte]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

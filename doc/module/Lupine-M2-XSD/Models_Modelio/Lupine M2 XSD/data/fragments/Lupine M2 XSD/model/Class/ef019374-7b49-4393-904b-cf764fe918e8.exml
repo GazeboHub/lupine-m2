@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien-Type-Type" version="3">
+  <DEPS>
+    <ID name="Alien-Type-Type" mc="Class" uid="ef019374-7b49-4393-904b-cf764fe918e8"/>
+    <EXTID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Alien-Type-Type" mc="Class" uid="ef019374-7b49-4393-904b-cf764fe918e8"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Alien-Type-Type]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="35fac685-d8b5-4282-85df-bdc5dc59ac42"/>
+          <PID name="Alien-Type-Type" mc="Class" uid="ef019374-7b49-4393-904b-cf764fe918e8"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

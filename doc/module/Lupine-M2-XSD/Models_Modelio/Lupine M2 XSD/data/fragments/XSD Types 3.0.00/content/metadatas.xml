@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ram-component manifest-version="2.0"
+               name="XSD Types" version="3" release="0"  clevel="0">
+    <description>
+        <![CDATA[This model component contains all the primitive and derived types to create an XSD model.]]>
+    </description>
+    <dependencies>
+    </dependencies>
+    <contributors>
+    </contributors>
+    <roots>
+      <root metaclass="Project" name="XSDTypes" uuid="bf02dbe9-2f92-4a58-b4bb-48e4c9771e60"></root>
+    </roots>
+</ram-component>

@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="System-Area-Pointer" version="3">
+  <DEPS>
+    <ID name="System-Area-Pointer" mc="Class" uid="fbe2e432-cfff-41d6-86d7-03062ea6e70e"/>
+    <EXTID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="System-Area-Pointer" mc="Class" uid="fbe2e432-cfff-41d6-86d7-03062ea6e70e"/>
+    <PID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[System-Area-Pointer]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <ID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

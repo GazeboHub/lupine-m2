@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="SB-Kernel" version="3">
+  <DEPS>
+    <ID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <COMPID name="Alien-Type-Type" mc="Class" uid="ef019374-7b49-4393-904b-cf764fe918e8"/>
+    <COMPID name="Args-Type" mc="Class" uid="990fbe72-d9ab-4706-b1da-e5125d733c83"/>
+    <COMPID name="Array-Type" mc="Class" uid="5bbf63b0-914e-4820-8f20-45d4bb271cda"/>
+    <COMPID name="Buit-In-Classoid" mc="Class" uid="a8dc467c-f890-40f6-b36b-25bb0eff2ee7"/>
+    <COMPID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <COMPID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+    <COMPID name="Character-Set-Type" mc="Class" uid="f9de4d94-210c-421a-bfbb-9a5005a90a6a"/>
+    <COMPID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+    <COMPID name="Compound-Type" mc="Class" uid="ecccc27b-bbe4-44ba-9ce5-64cc5bc82f43"/>
+    <COMPID name="Condition-Classoid" mc="Class" uid="11abd1fa-4b56-4b23-ac72-e5c3b25f458b"/>
+    <COMPID name="Cons-Type" mc="Class" uid="316072f9-af52-45bb-bf68-aa3f74e5bc25"/>
+    <COMPID name="Constant-Type" mc="Class" uid="b93ed28f-12c4-47e2-83e7-f8b331a59439"/>
+    <COMPID name="Fun-Type" mc="Class" uid="9a749181-f640-48db-aac3-4d3543691073"/>
+    <COMPID name="Hairy-Type" mc="Class" uid="6a6fbd1c-31f4-4241-83bf-16ba64eb3944"/>
+    <COMPID name="Intersection-Type" mc="Class" uid="f152ddff-e452-4217-aae0-265bbf908ce6"/>
+    <COMPID name="Member-Type" mc="Class" uid="c4e7eb53-c355-4842-9b06-b61b555199cf"/>
+    <COMPID name="Named-Type" mc="Class" uid="c03883da-375a-49eb-b379-5f54fb32ecaf"/>
+    <COMPID name="Negation-Type" mc="Class" uid="a55dc83b-7c46-4da4-a188-940fed2cb1c3"/>
+    <COMPID name="Numeric-Type" mc="Class" uid="cf8043f8-a22d-4826-bdd3-5f85cef50cef"/>
+    <COMPID name="SIMD-Pack-Type" mc="Class" uid="7615c11e-abfe-4fae-b721-a0a5f5255cd9"/>
+    <COMPID name="Standard-Classoid" mc="Class" uid="910ede1f-4846-4ffe-b2bb-45afbae24491"/>
+    <COMPID name="Static-Classoid" mc="Class" uid="8e7105f6-e5ce-491f-b23e-746229c60f9b"/>
+    <COMPID name="Structure-Classoid" mc="Class" uid="f6a3658b-4816-4642-af15-0e26d385f45b"/>
+    <COMPID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+    <COMPID name="Undefined-Classoid" mc="Class" uid="6ce91618-3f3a-46a8-9399-ae9964a49cad"/>
+    <COMPID name="Union-Type" mc="Class" uid="bbc4c6f5-71cf-41b3-b72a-4d16213197f5"/>
+    <COMPID name="Unknown-Type" mc="Class" uid="2217b130-bd8b-49e8-b106-8d927ad36490"/>
+    <COMPID name="Values-Type" mc="Class" uid="295e874e-c44e-4eb8-a214-a8dd13018e19"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <PID name="lupine m2 xsd" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[SB-Kernel]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+        <COMPID name="Alien-Type-Type" mc="Class" uid="ef019374-7b49-4393-904b-cf764fe918e8"/>
+        <COMPID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+        <COMPID name="SIMD-Pack-Type" mc="Class" uid="7615c11e-abfe-4fae-b721-a0a5f5255cd9"/>
+        <COMPID name="Cons-Type" mc="Class" uid="316072f9-af52-45bb-bf68-aa3f74e5bc25"/>
+        <COMPID name="Compound-Type" mc="Class" uid="ecccc27b-bbe4-44ba-9ce5-64cc5bc82f43"/>
+        <COMPID name="Member-Type" mc="Class" uid="c4e7eb53-c355-4842-9b06-b61b555199cf"/>
+        <COMPID name="Array-Type" mc="Class" uid="5bbf63b0-914e-4820-8f20-45d4bb271cda"/>
+        <COMPID name="Character-Set-Type" mc="Class" uid="f9de4d94-210c-421a-bfbb-9a5005a90a6a"/>
+        <COMPID name="Numeric-Type" mc="Class" uid="cf8043f8-a22d-4826-bdd3-5f85cef50cef"/>
+        <COMPID name="Named-Type" mc="Class" uid="c03883da-375a-49eb-b379-5f54fb32ecaf"/>
+        <COMPID name="Constant-Type" mc="Class" uid="b93ed28f-12c4-47e2-83e7-f8b331a59439"/>
+        <COMPID name="Args-Type" mc="Class" uid="990fbe72-d9ab-4706-b1da-e5125d733c83"/>
+        <COMPID name="Negation-Type" mc="Class" uid="a55dc83b-7c46-4da4-a188-940fed2cb1c3"/>
+        <COMPID name="Hairy-Type" mc="Class" uid="6a6fbd1c-31f4-4241-83bf-16ba64eb3944"/>
+        <COMPID name="Condition-Classoid" mc="Class" uid="11abd1fa-4b56-4b23-ac72-e5c3b25f458b"/>
+        <COMPID name="Static-Classoid" mc="Class" uid="8e7105f6-e5ce-491f-b23e-746229c60f9b"/>
+        <COMPID name="Standard-Classoid" mc="Class" uid="910ede1f-4846-4ffe-b2bb-45afbae24491"/>
+        <COMPID name="Structure-Classoid" mc="Class" uid="f6a3658b-4816-4642-af15-0e26d385f45b"/>
+        <COMPID name="Buit-In-Classoid" mc="Class" uid="a8dc467c-f890-40f6-b36b-25bb0eff2ee7"/>
+        <COMPID name="Undefined-Classoid" mc="Class" uid="6ce91618-3f3a-46a8-9399-ae9964a49cad"/>
+        <COMPID name="Intersection-Type" mc="Class" uid="f152ddff-e452-4217-aae0-265bbf908ce6"/>
+        <COMPID name="Union-Type" mc="Class" uid="bbc4c6f5-71cf-41b3-b72a-4d16213197f5"/>
+        <COMPID name="Fun-Type" mc="Class" uid="9a749181-f640-48db-aac3-4d3543691073"/>
+        <COMPID name="Values-Type" mc="Class" uid="295e874e-c44e-4eb8-a214-a8dd13018e19"/>
+        <COMPID name="Unknown-Type" mc="Class" uid="2217b130-bd8b-49e8-b106-8d927ad36490"/>
+        <COMPID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+        <COMPID name="CType-Of" mc="Class" uid="de3b260e-e839-4411-bd78-a08c8aa26116"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

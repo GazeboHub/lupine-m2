@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Deposit-Gen" version="3">
+  <DEPS>
+    <ID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
+    <EXTID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
+    <PID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Deposit-Gen]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <ID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

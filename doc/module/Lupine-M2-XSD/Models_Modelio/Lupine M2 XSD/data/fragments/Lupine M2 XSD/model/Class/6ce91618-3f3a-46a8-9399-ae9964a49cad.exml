@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Undefined-Classoid" version="3">
+  <DEPS>
+    <ID name="Undefined-Classoid" mc="Class" uid="6ce91618-3f3a-46a8-9399-ae9964a49cad"/>
+    <EXTID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Undefined-Classoid" mc="Class" uid="6ce91618-3f3a-46a8-9399-ae9964a49cad"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Undefined-Classoid]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="caaa29ec-dd5c-43a0-8e45-494b645f936d"/>
+          <PID name="Undefined-Classoid" mc="Class" uid="6ce91618-3f3a-46a8-9399-ae9964a49cad"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="Classoid" mc="Class" uid="a9986ac0-1314-44d9-b380-a7fdac627d68"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

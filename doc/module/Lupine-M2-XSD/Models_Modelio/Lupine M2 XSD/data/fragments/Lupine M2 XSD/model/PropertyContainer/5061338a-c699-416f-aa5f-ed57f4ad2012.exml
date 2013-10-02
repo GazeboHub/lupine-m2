@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine M2 XSD" version="3">
+  <DEPS>
+    <ID name="Lupine M2 XSD" mc="PropertyContainer" uid="5061338a-c699-416f-aa5f-ed57f4ad2012"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Lupine M2 XSD" mc="PropertyContainer" uid="5061338a-c699-416f-aa5f-ed57f4ad2012"/>
+    <PID name="Lupine M2 XSD" mc="AnalystProject" uid="32d3acf0-3e53-48fa-8564-1e3e87c8bf46"/>
+    <ATTRIBUTES>
+      <ATT name="Name"><![CDATA[Lupine M2 XSD]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

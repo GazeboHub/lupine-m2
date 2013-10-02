@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Fun-Type" version="3">
+  <DEPS>
+    <ID name="Fun-Type" mc="Class" uid="9a749181-f640-48db-aac3-4d3543691073"/>
+    <EXTID name="Args-Type" mc="Class" uid="990fbe72-d9ab-4706-b1da-e5125d733c83"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Fun-Type" mc="Class" uid="9a749181-f640-48db-aac3-4d3543691073"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Fun-Type]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="d9f02524-fecf-459b-b3c3-dc99d746ff57"/>
+          <PID name="Fun-Type" mc="Class" uid="9a749181-f640-48db-aac3-4d3543691073"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="Args-Type" mc="Class" uid="990fbe72-d9ab-4706-b1da-e5125d733c83"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

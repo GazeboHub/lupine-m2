@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine" version="3">
+  <DEPS>
+    <ID name="Lupine" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <COMPID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <COMPID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
+    <COMPID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
+    <COMPID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
+    <COMPID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
+    <COMPID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <COMPID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+    <COMPID name="SBCL CTypes" mc="ClassDiagram" uid="dedc7a10-a4d7-4b91-abc4-d9acfe1fed74"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Lupine" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <PID name="Lupine M2 XSD" mc="Project" uid="828e8ff4-4a42-4f2f-8de8-cda240173e6a"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Lupine]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+        <COMPID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+        <COMPID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
+        <COMPID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
+        <COMPID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="SBCL CTypes" mc="ClassDiagram" uid="dedc7a10-a4d7-4b91-abc4-d9acfe1fed74"/>
+        <COMPID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
+        <COMPID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

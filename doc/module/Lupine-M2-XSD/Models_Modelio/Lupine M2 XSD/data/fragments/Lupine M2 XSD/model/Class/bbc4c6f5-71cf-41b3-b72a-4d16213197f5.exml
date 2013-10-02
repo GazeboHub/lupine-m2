@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Union-Type" version="3">
+  <DEPS>
+    <ID name="Union-Type" mc="Class" uid="bbc4c6f5-71cf-41b3-b72a-4d16213197f5"/>
+    <EXTID name="Compound-Type" mc="Class" uid="ecccc27b-bbe4-44ba-9ce5-64cc5bc82f43"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Union-Type" mc="Class" uid="bbc4c6f5-71cf-41b3-b72a-4d16213197f5"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Union-Type]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="19bd9e17-d745-4dbe-ae06-854a51b84fcf"/>
+          <PID name="Union-Type" mc="Class" uid="bbc4c6f5-71cf-41b3-b72a-4d16213197f5"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="Compound-Type" mc="Class" uid="ecccc27b-bbe4-44ba-9ce5-64cc5bc82f43"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

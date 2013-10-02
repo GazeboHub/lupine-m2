@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="XSDTypes" version="3">
+  <DEPS>
+    <ID name="XSDTypes" mc="Package" uid="2ac65b4a-acb2-4f32-ba3f-55dace204d62"/>
+    <COMPID name="XSD Types" mc="Artifact" uid="b9fc0854-6091-11de-a0b7-00137279a5d1"/>
+    <COMPID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+    <FOREIGNID name="ModelComponentElementAlias" mc="Stereotype" uid="3254be34-c7d8-4018-8a68-5de65c30b773"/>
+    <FOREIGNID name="uuid" mc="TagType" uid="7ebbd53f-a5f3-433b-872c-4024615af229"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="XSDTypes" mc="Package" uid="2ac65b4a-acb2-4f32-ba3f-55dace204d62"/>
+    <PID name="XSDTypes" mc="Project" uid="bf02dbe9-2f92-4a58-b4bb-48e4c9771e60"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[XSDTypes]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="http://www.w3.org/2001/XMLSchema" mc="Class" uid="736fe28f-5cae-11de-a349-00137279a5d1"/>
+        <COMPID name="XSD Types" mc="Artifact" uid="b9fc0854-6091-11de-a0b7-00137279a5d1"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="ModelComponentElementAlias" mc="Stereotype" uid="3254be34-c7d8-4018-8a68-5de65c30b773"/>
+      </LINK>
+      <COMP relation="Tag">
+        <OBJECT>
+          <ID name="" mc="TaggedValue" uid="7aae5625-2f2f-4bc1-a43c-acbf863e471d"/>
+          <PID name="XSDTypes" mc="Package" uid="2ac65b4a-acb2-4f32-ba3f-55dace204d62"/>
+          <ATTRIBUTES>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="Actual">
+              <OBJECT>
+                <ID name="" mc="TagParameter" uid="75561556-6ecb-4176-835f-6ba1fac862c7"/>
+                <PID name="XSDTypes" mc="Package" uid="2ac65b4a-acb2-4f32-ba3f-55dace204d62"/>
+                <ATTRIBUTES>
+                  <ATT name="Value"><![CDATA[219e8c66-5b1e-4b9f-8a51-b7eede0fc184]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <LINK relation="Definition">
+              <FOREIGNID name="uuid" mc="TagType" uid="7ebbd53f-a5f3-433b-872c-4024615af229"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

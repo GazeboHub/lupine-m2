@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="SB-Sys" version="3">
+  <DEPS>
+    <ID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+    <COMPID name="System-Area-Pointer" mc="Class" uid="fbe2e432-cfff-41d6-86d7-03062ea6e70e"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+    <PID name="Lupine" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[SB-Sys]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="System-Area-Pointer" mc="Class" uid="fbe2e432-cfff-41d6-86d7-03062ea6e70e"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

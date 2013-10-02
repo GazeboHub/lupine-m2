@@ -1,0 +1,188 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CType" version="3">
+  <DEPS>
+    <ID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <EXTID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
+    <EXTID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+    <EXTID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+    <EXTID name="Unsigned-Fixnum" mc="DataType" uid="958c24aa-21c5-45c7-b2b6-101835396264"/>
+    <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+    <PID name="SB-Kernel" mc="Package" uid="1270ebdc-8fcb-47d4-9f32-8c2487de5480"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CType]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Class-Info" mc="Attribute" uid="34e0f43c-4ec4-4db6-b5cb-62fd5d3c1567"/>
+          <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Class-Info]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Enumerable" mc="Attribute" uid="5c20d0c5-68ba-4f32-a979-f82f056cacc1"/>
+          <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"><![CDATA[:initform nil]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Enumerable]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Hash-Value" mc="Attribute" uid="ccbe6535-0930-4d26-a575-f96a83cf6b51"/>
+          <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Hash-Value]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Unsigned-Fixnum" mc="DataType" uid="958c24aa-21c5-45c7-b2b6-101835396264"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Might-Contain-Other-Types-P" mc="Attribute" uid="2e6ecb93-c3ff-4fe2-acd7-ce752ef1e3a1"/>
+          <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Might-Contain-Other-Types-P]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="Type-Type-Class" mc="AssociationEnd" uid="2e6c4251-7288-4641-9c48-5e047e87c54a"/>
+          <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Type-Type-Class]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <REFOBJ>
+                <ID name="" mc="AssociationEnd" uid="57fa7249-d307-47d6-a040-328e4e8be199"/>
+                <PID name="Type-Class" mc="Class" uid="823bc3dd-d282-471c-87fb-296234d4d191"/>
+              </REFOBJ>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="" mc="Association" uid="daac7ec0-25c2-464f-910b-9fdd72e5256e"/>
+                <PID name="CType" mc="Class" uid="f016f585-7559-46c1-9ff0-d92d6aa75c87"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

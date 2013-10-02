@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Built In Class" version="3">
+  <DEPS>
+    <ID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+    <PID name="LocalProfile" mc="Profile" uid="426240de-e63d-43fc-9dd0-01ae4e209ab5"/>
+    <ATTRIBUTES>
+      <ATT name="Image"></ATT>
+      <ATT name="Icon"></ATT>
+      <ATT name="IsHidden">false</ATT>
+      <ATT name="LabelKey"><![CDATA[Built In Class]]></ATT>
+      <ATT name="BaseClassName"><![CDATA[Class]]></ATT>
+      <ATT name="Name"><![CDATA[Built In Class]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

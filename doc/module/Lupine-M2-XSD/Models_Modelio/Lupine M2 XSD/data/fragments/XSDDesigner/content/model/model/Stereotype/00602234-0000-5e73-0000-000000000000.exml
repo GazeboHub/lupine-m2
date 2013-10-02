@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="XSDComplexAttributeEnd" version="3">
+  <DEPS>
+    <ID name="XSDComplexAttributeEnd" mc="Stereotype" uid="00602234-0000-5e73-0000-000000000000"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="XSDComplexAttributeEnd" mc="Stereotype" uid="00602234-0000-5e73-0000-000000000000"/>
+    <PID name="XSDDeveloperProfile" mc="Profile" uid="00601e10-0000-1495-0000-000000000000"/>
+    <ATTRIBUTES>
+      <ATT name="Image"><![CDATA[res/bmp/XSDComplexAttribut16.png]]></ATT>
+      <ATT name="Icon"><![CDATA[res/bmp/XSDComplexAttribut16.png]]></ATT>
+      <ATT name="IsHidden">true</ATT>
+      <ATT name="LabelKey"></ATT>
+      <ATT name="BaseClassName"><![CDATA[AssociationEnd]]></ATT>
+      <ATT name="Name"><![CDATA[XSDComplexAttributeEnd]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

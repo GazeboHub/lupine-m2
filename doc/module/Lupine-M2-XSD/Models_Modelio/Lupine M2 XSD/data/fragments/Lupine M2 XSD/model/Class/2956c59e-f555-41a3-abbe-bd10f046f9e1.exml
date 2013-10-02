@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Compute-Deposit-Lambda" version="3">
+  <DEPS>
+    <ID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+    <EXTID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+    <EXTID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+    <EXTID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+    <EXTID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
+    <EXTID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+    <EXTID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+    <PID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Compute-Deposit-Lambda]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Type" mc="Attribute" uid="2bb46b93-bd55-44d5-ad93-c2ea94201181"/>
+          <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Type]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Value" mc="Attribute" uid="090376b6-6b00-44ab-b132-5ef936dd4dd0"/>
+          <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Value]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <ID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+            </LINK>
+            <LINK relation="Extension">
+              <ID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="deposit-Gen" mc="AssociationEnd" uid="941b3a6e-a810-4d7f-b603-67ac45d27f90"/>
+          <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[deposit-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <OBJECT>
+                <ID name="" mc="AssociationEnd" uid="210fb5ac-9eff-4588-9473-25093cd7ef7e"/>
+                <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+                <ATTRIBUTES>
+                  <ATT name="Aggregation">KindIsAssociation</ATT>
+                  <ATT name="IsChangeable">true</ATT>
+                  <ATT name="Changeable">ReadWrite</ATT>
+                  <ATT name="IsDerived">false</ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="Visibility">Public</ATT>
+                  <ATT name="IsClass">false</ATT>
+                  <ATT name="IsAbstract">false</ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="Opposite">
+                    <COMPID name="deposit-Gen" mc="AssociationEnd" uid="941b3a6e-a810-4d7f-b603-67ac45d27f90"/>
+                  </COMP>
+                  <COMP relation="Association">
+                    <OBJECT>
+                      <ID name="" mc="Association" uid="3c796cf1-045d-4e42-ab73-39cfafc99d24"/>
+                      <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES></DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="" mc="Association" uid="3c796cf1-045d-4e42-ab73-39cfafc99d24"/>
+                <PID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
