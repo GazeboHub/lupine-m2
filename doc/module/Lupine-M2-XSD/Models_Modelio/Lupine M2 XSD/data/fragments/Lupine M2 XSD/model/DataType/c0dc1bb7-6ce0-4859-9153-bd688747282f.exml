@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="(Or Null Alien-Type-Class)" version="3">
+  <DEPS>
+    <ID name="(Or Null Alien-Type-Class)" mc="DataType" uid="c0dc1bb7-6ce0-4859-9153-bd688747282f"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="(Or Null Alien-Type-Class)" mc="DataType" uid="c0dc1bb7-6ce0-4859-9153-bd688747282f"/>
+    <PID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[(Or Null Alien-Type-Class)]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

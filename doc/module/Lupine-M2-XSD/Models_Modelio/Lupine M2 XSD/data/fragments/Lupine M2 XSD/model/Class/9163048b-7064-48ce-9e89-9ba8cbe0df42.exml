@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Symbol" version="3">
+  <DEPS>
+    <ID name="Symbol" mc="Class" uid="9163048b-7064-48ce-9e89-9ba8cbe0df42"/>
+    <EXTID name="System Class" mc="Stereotype" uid="1c6f48da-aad1-4746-991c-11314f8a50b3"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Symbol" mc="Class" uid="9163048b-7064-48ce-9e89-9ba8cbe0df42"/>
+    <PID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Symbol]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <ID name="System Class" mc="Stereotype" uid="1c6f48da-aad1-4746-991c-11314f8a50b3"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

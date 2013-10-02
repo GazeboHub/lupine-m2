@@ -4,7 +4,7 @@
     <ID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
     <COMPID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
     <COMPID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
-    <COMPID name="Symbol" mc="DataType" uid="15698f44-8f3c-45d2-bee1-d33213e87add"/>
+    <COMPID name="Symbol" mc="Class" uid="9163048b-7064-48ce-9e89-9ba8cbe0df42"/>
     <COMPID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
     <COMPID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
   </DEPS>
@@ -24,9 +24,9 @@
       <COMP relation="OwnedElement">
         <COMPID name="Boolean" mc="DataType" uid="780c9a3f-238f-41f0-be9e-c79c37be5de0"/>
         <COMPID name="T" mc="DataType" uid="e52eb80c-a788-49ca-9757-c3dd56bcfdb0"/>
-        <COMPID name="Symbol" mc="DataType" uid="15698f44-8f3c-45d2-bee1-d33213e87add"/>
         <COMPID name="Unsigned-Byte" mc="DataType" uid="4eb9b89f-b293-4f3d-b750-4d4fb7525b0d"/>
         <COMPID name="Cons" mc="DataType" uid="71b441da-2f87-4aa2-91aa-dd185f064280"/>
+        <COMPID name="Symbol" mc="Class" uid="9163048b-7064-48ce-9e89-9ba8cbe0df42"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

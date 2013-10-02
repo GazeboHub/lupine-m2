@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien Internals Types" version="3">
+  <DEPS>
+    <ID name="Alien Internals Types" mc="Package" uid="efc49eb6-dbe9-411c-96a7-4404cf36665e"/>
+    <COMPID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
+    <COMPID name="Alien-Fun-Type" mc="Class" uid="71661de8-1204-4602-99b1-c411cf4db3c7"/>
+    <COMPID name="Alien-Pointer-Type" mc="Class" uid="6071d359-c6bd-4061-931b-ae9b47940784"/>
+    <COMPID name="Alien-Record-Type" mc="Class" uid="34c4c181-669a-41fc-8e9d-3ec133a70104"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Alien Internals Types" mc="Package" uid="efc49eb6-dbe9-411c-96a7-4404cf36665e"/>
+    <PID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Alien Internals Types]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Alien-Pointer-Type" mc="Class" uid="6071d359-c6bd-4061-931b-ae9b47940784"/>
+        <COMPID name="Alien-Fun-Type" mc="Class" uid="71661de8-1204-4602-99b1-c411cf4db3c7"/>
+        <COMPID name="Alien-Record-Type" mc="Class" uid="34c4c181-669a-41fc-8e9d-3ec133a70104"/>
+        <COMPID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

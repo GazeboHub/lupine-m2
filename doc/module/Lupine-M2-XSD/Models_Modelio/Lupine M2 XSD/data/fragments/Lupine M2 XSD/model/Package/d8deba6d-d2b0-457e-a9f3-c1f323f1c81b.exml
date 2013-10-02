@@ -2,8 +2,11 @@
 <!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine" version="3">
   <DEPS>
     <ID name="Lupine" mc="Package" uid="d8deba6d-d2b0-457e-a9f3-c1f323f1c81b"/>
+    <COMPID name="Alien Type Methods" mc="ClassDiagram" uid="8c96baf7-7ab6-4613-8bfe-0b649e6bf199"/>
+    <COMPID name="Alien Types" mc="ClassDiagram" uid="f430e71a-eecd-40f3-89f5-a7c4fb5c1f97"/>
     <COMPID name="CL" mc="Package" uid="dd767c81-28ea-4f8b-9634-6caa2bf6ade3"/>
     <COMPID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
+    <COMPID name="Method-Slot" mc="Class" uid="3b9774b3-cb44-4fa9-8c2b-28ab42d276c2"/>
     <COMPID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
     <COMPID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
     <COMPID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
@@ -30,11 +33,14 @@
         <COMPID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
         <COMPID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
         <COMPID name="SB-Sys" mc="Package" uid="a044f373-8a11-46e9-bdc5-2e19922ecace"/>
+        <COMPID name="Method-Slot" mc="Class" uid="3b9774b3-cb44-4fa9-8c2b-28ab42d276c2"/>
       </COMP>
       <COMP relation="Product">
         <COMPID name="SBCL CTypes" mc="ClassDiagram" uid="dedc7a10-a4d7-4b91-abc4-d9acfe1fed74"/>
         <COMPID name="Classoid" mc="ClassDiagram" uid="e08d5127-ab39-4b13-9f93-08d865f08e2f"/>
         <COMPID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
+        <COMPID name="Alien Type Methods" mc="ClassDiagram" uid="8c96baf7-7ab6-4613-8bfe-0b649e6bf199"/>
+        <COMPID name="Alien Types" mc="ClassDiagram" uid="f430e71a-eecd-40f3-89f5-a7c4fb5c1f97"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

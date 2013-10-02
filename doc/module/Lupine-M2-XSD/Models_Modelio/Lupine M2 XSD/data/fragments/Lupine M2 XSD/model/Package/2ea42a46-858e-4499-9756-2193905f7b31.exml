@@ -4,7 +4,10 @@
     <ID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
     <COMPID name="%Alien-Value" mc="Class" uid="ea803ac1-816b-4d09-ad0b-95040e6d14f4"/>
     <COMPID name="(Setf %Alien-Value)" mc="Class" uid="48218c38-e8e2-401c-b626-490eb85dde1c"/>
-    <COMPID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+    <COMPID name="Alien Type" mc="Package" uid="1dc31e0a-38d8-420f-99e8-faf5e385d9f5"/>
+    <COMPID name="Alien-Alien-Value-Type" mc="Class" uid="4e7a69bd-8dab-43fe-9200-82c3b76c9379"/>
+    <COMPID name="Alien-Mem-Block-Type" mc="Class" uid="d10d72d9-a43a-4795-bdf9-fcecc9d7d96a"/>
+    <COMPID name="Alien-Type-Class" mc="Class" uid="744f3b1b-281b-4188-a44b-1313e40fd732"/>
     <COMPID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
     <COMPID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
     <COMPID name="Extract-Gen" mc="Class" uid="cf56d536-8c34-47d4-8abe-85f2bd8c511f"/>
@@ -26,11 +29,14 @@
       <COMP relation="OwnedElement">
         <COMPID name="Extern-Alien" mc="Class" uid="b6d44d4a-ed7e-41b5-9dbc-1e8dd03f1a2c"/>
         <COMPID name="%Alien-Value" mc="Class" uid="ea803ac1-816b-4d09-ad0b-95040e6d14f4"/>
-        <COMPID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
         <COMPID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
         <COMPID name="(Setf %Alien-Value)" mc="Class" uid="48218c38-e8e2-401c-b626-490eb85dde1c"/>
         <COMPID name="Extract-Gen" mc="Class" uid="cf56d536-8c34-47d4-8abe-85f2bd8c511f"/>
         <COMPID name="Deposit-Gen" mc="Class" uid="0603fbb0-f447-4903-818b-2b740d7670ef"/>
+        <COMPID name="Alien-Alien-Value-Type" mc="Class" uid="4e7a69bd-8dab-43fe-9200-82c3b76c9379"/>
+        <COMPID name="Alien-Mem-Block-Type" mc="Class" uid="d10d72d9-a43a-4795-bdf9-fcecc9d7d96a"/>
+        <COMPID name="Alien Type" mc="Package" uid="1dc31e0a-38d8-420f-99e8-faf5e385d9f5"/>
+        <COMPID name="Alien-Type-Class" mc="Class" uid="744f3b1b-281b-4188-a44b-1313e40fd732"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

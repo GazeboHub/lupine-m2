@@ -5,9 +5,12 @@
     <COMPID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
     <COMPID name="Arg" mc="Stereotype" uid="40ae05f0-8ff0-4608-9c1a-38c653b8310b"/>
     <COMPID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
+    <COMPID name="Defines" mc="Stereotype" uid="d32c7e32-8024-4fc3-9bd6-a66bfde19405"/>
+    <COMPID name="Defines" mc="Stereotype" uid="fec21a84-c42e-4b22-a575-582ad6468728"/>
     <COMPID name="Function" mc="Stereotype" uid="194087fe-ad6c-499f-9a35-52c724fbffa3"/>
     <COMPID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
     <COMPID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
+    <COMPID name="System Class" mc="Stereotype" uid="1c6f48da-aad1-4746-991c-11314f8a50b3"/>
     <COMPID name="Value" mc="Stereotype" uid="efa159cd-fe1c-425a-968f-99737eaeab43"/>
     <COMPID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
   </DEPS>
@@ -34,6 +37,9 @@
         <COMPID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
         <COMPID name="Built In Class" mc="Stereotype" uid="3101a065-beb6-478e-b827-7b58e5ebb10b"/>
         <COMPID name="Alien Type Method" mc="Stereotype" uid="da17b74d-afaa-4aff-895e-b60f85568c54"/>
+        <COMPID name="Defines" mc="Stereotype" uid="d32c7e32-8024-4fc3-9bd6-a66bfde19405"/>
+        <COMPID name="Defines" mc="Stereotype" uid="fec21a84-c42e-4b22-a575-582ad6468728"/>
+        <COMPID name="System Class" mc="Stereotype" uid="1c6f48da-aad1-4746-991c-11314f8a50b3"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

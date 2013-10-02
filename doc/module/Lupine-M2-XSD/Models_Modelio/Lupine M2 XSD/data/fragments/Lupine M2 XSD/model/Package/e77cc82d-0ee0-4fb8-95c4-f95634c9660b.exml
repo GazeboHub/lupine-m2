@@ -2,6 +2,8 @@
 <!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Model" version="3">
   <DEPS>
     <ID name="Model" mc="Package" uid="e77cc82d-0ee0-4fb8-95c4-f95634c9660b"/>
+    <COMPID name="(Or Null Alien-Type-Class)" mc="DataType" uid="c0dc1bb7-6ce0-4859-9153-bd688747282f"/>
+    <COMPID name="(Or Null Function)" mc="DataType" uid="ba3f0647-a649-434f-9239-eeb375968486"/>
     <COMPID name="(Or Null Unsigned-Byte)" mc="DataType" uid="4b42e848-e2a5-454c-9fe7-5d2345faf7d5"/>
     <COMPID name="(Or String Symbol)" mc="DataType" uid="648d7c16-231d-4045-b813-a26d2369df00"/>
     <COMPID name="Unsigned-Fixnum" mc="DataType" uid="958c24aa-21c5-45c7-b2b6-101835396264"/>
@@ -23,6 +25,8 @@
         <COMPID name="Unsigned-Fixnum" mc="DataType" uid="958c24aa-21c5-45c7-b2b6-101835396264"/>
         <COMPID name="(Or String Symbol)" mc="DataType" uid="648d7c16-231d-4045-b813-a26d2369df00"/>
         <COMPID name="(Or Null Unsigned-Byte)" mc="DataType" uid="4b42e848-e2a5-454c-9fe7-5d2345faf7d5"/>
+        <COMPID name="(Or Null Function)" mc="DataType" uid="ba3f0647-a649-434f-9239-eeb375968486"/>
+        <COMPID name="(Or Null Alien-Type-Class)" mc="DataType" uid="c0dc1bb7-6ce0-4859-9153-bd688747282f"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

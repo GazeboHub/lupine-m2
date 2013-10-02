@@ -1,0 +1,249 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien Type Methods" version="3">
+  <DEPS>
+    <ID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+    <COMPID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+    <EXTID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+    <PID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Alien Type Methods]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Declared">
+        <OBJECT>
+          <ID name=":Unparse" mc="Instance" uid="caf19c6b-3a8f-40cd-bed1-3390c40b581c"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Unparse]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Type=" mc="Instance" uid="4f5d4a50-ade4-4aef-9341-ad5af1e2a804"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Type=]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Subtypep" mc="Instance" uid="25e9c28a-a53f-41b1-ac2a-60ee3e85a921"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Subtypep]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Lisp-Rep" mc="Instance" uid="adc258c0-106c-414c-bd25-6b5989b44ce5"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Lisp-Rep]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Alien-Rep" mc="Instance" uid="796cd40b-d301-4f71-8efe-2380ab19410f"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Alien-Rep]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Extract-Gen" mc="Instance" uid="b6986530-3703-472f-9a73-f9ab110aa633"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Extract-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Deposit-Gen" mc="Instance" uid="7ce4b769-0866-4e1d-9b66-34ef9c4c8b02"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Deposit-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Naturalize-Gen" mc="Instance" uid="59b3f4b2-ef15-495e-a420-13ad4857943a"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Naturalize-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Deport-Gen" mc="Instance" uid="5faa2cb1-076f-4028-9afb-0a979dbceaa1"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Deport-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Deport-Alloc-Gen" mc="Instance" uid="f66fff0b-3cb2-4222-9d9d-50caaaf4a66e"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Deport-Alloc-Gen]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Deport-Pin-P" mc="Instance" uid="5ed00e20-b18e-42ee-9799-3e943acdccd9"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Deport-Pin-P]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Arg-Tn" mc="Instance" uid="947ce54f-d317-4896-9e74-cd196fcd00fd"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Arg-Tn]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name=":Result-Tn" mc="Instance" uid="fb8389be-36f8-4858-ba73-48f49de757b3"/>
+          <PID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+          <ATTRIBUTES>
+            <ATT name="IsConstant">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="Name"><![CDATA[:Result-Tn]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Base">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <COMP relation="OwnedElement">
+        <COMPID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

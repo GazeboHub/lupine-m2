@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien Type" version="3">
+  <DEPS>
+    <ID name="Alien Type" mc="Package" uid="1dc31e0a-38d8-420f-99e8-faf5e385d9f5"/>
+    <COMPID name="Alien-Boolean-Type" mc="Class" uid="078dfaaf-6f25-4d2d-9d13-8a6097f47492"/>
+    <COMPID name="Alien-C-String-Type" mc="Class" uid="c1d4dca5-a2e6-4de6-97cd-d6de80d5f58d"/>
+    <COMPID name="Alien-Double-Float-Type" mc="Class" uid="5ca2b328-8561-4b66-a501-a07eb1eeee38"/>
+    <COMPID name="Alien-Enum-Type" mc="Class" uid="231610d8-1d7d-40e1-9f03-f4ad209b59eb"/>
+    <COMPID name="Alien-Float-Type" mc="Class" uid="121878b9-4a54-4c97-a0a2-bf6217f17752"/>
+    <COMPID name="Alien-Integer-Type" mc="Class" uid="68c91888-e7bd-40b3-82b0-b4812c310ed4"/>
+    <COMPID name="Alien-Single-Float-Type" mc="Class" uid="ada7886a-e1d7-4782-8db3-d59b90cc7f26"/>
+    <COMPID name="Alien-System-Area-Pointer-Type" mc="Class" uid="37440212-c743-4280-bc45-3181dc1f520a"/>
+    <COMPID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+    <COMPID name="Alien-Values-Type" mc="Class" uid="bb3ffc9f-c28a-4390-9784-a6849f0096e5"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Alien Type" mc="Package" uid="1dc31e0a-38d8-420f-99e8-faf5e385d9f5"/>
+    <PID name="SB-Alien" mc="Package" uid="2ea42a46-858e-4499-9756-2193905f7b31"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Alien Type]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Alien-Values-Type" mc="Class" uid="bb3ffc9f-c28a-4390-9784-a6849f0096e5"/>
+        <COMPID name="Alien-Float-Type" mc="Class" uid="121878b9-4a54-4c97-a0a2-bf6217f17752"/>
+        <COMPID name="Alien-Integer-Type" mc="Class" uid="68c91888-e7bd-40b3-82b0-b4812c310ed4"/>
+        <COMPID name="Alien-System-Area-Pointer-Type" mc="Class" uid="37440212-c743-4280-bc45-3181dc1f520a"/>
+        <COMPID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+        <COMPID name="Alien-Double-Float-Type" mc="Class" uid="5ca2b328-8561-4b66-a501-a07eb1eeee38"/>
+        <COMPID name="Alien-Single-Float-Type" mc="Class" uid="ada7886a-e1d7-4782-8db3-d59b90cc7f26"/>
+        <COMPID name="Alien-Enum-Type" mc="Class" uid="231610d8-1d7d-40e1-9f03-f4ad209b59eb"/>
+        <COMPID name="Alien-Boolean-Type" mc="Class" uid="078dfaaf-6f25-4d2d-9d13-8a6097f47492"/>
+        <COMPID name="Alien-C-String-Type" mc="Class" uid="c1d4dca5-a2e6-4de6-97cd-d6de80d5f58d"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Define-Alien-Type-Method" version="3">
+  <DEPS>
+    <ID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+    <EXTID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+    <EXTID name="Defines" mc="Stereotype" uid="fec21a84-c42e-4b22-a575-582ad6468728"/>
+    <EXTID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+    <PID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Define-Alien-Type-Method]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="alien-Type-Method" mc="AssociationEnd" uid="3a6785c8-dc6f-4b2a-b5c2-28a40631ed1c"/>
+          <PID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[alien-Type-Method]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <OBJECT>
+                <ID name="" mc="AssociationEnd" uid="803f6121-2579-412f-b132-5f6b94a1cdb5"/>
+                <PID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+                <ATTRIBUTES>
+                  <ATT name="Aggregation">KindIsAssociation</ATT>
+                  <ATT name="IsChangeable">true</ATT>
+                  <ATT name="Changeable">ReadWrite</ATT>
+                  <ATT name="IsDerived">false</ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+                  <ATT name="Visibility">Public</ATT>
+                  <ATT name="IsClass">false</ATT>
+                  <ATT name="IsAbstract">false</ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="Opposite">
+                    <COMPID name="alien-Type-Method" mc="AssociationEnd" uid="3a6785c8-dc6f-4b2a-b5c2-28a40631ed1c"/>
+                  </COMP>
+                  <COMP relation="Association">
+                    <OBJECT>
+                      <ID name="" mc="Association" uid="332ff032-4838-4a39-89c9-eac2b51c95d4"/>
+                      <PID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES></DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="" mc="Association" uid="332ff032-4838-4a39-89c9-eac2b51c95d4"/>
+                <PID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <LINK relation="Extension">
+              <ID name="Defines" mc="Stereotype" uid="fec21a84-c42e-4b22-a575-582ad6468728"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Macro" mc="Stereotype" uid="c98c6dc6-b457-44d5-a9c4-f530b1088ddd"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

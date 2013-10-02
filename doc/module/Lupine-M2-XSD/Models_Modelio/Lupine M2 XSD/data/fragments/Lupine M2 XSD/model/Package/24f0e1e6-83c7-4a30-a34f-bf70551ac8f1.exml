@@ -2,8 +2,12 @@
 <!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Internals" version="3">
   <DEPS>
     <ID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
+    <COMPID name="Alien Internals Types" mc="Package" uid="efc49eb6-dbe9-411c-96a7-4404cf36665e"/>
+    <COMPID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
     <COMPID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
     <COMPID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
+    <COMPID name="Define-Alien-Type-Class" mc="Class" uid="c4c286f4-e159-4269-90bd-c5636a02960a"/>
+    <COMPID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
   </DEPS>
   <OBJECT>
     <ID name="Internals" mc="Package" uid="24f0e1e6-83c7-4a30-a34f-bf70551ac8f1"/>
@@ -21,6 +25,10 @@
       <COMP relation="OwnedElement">
         <COMPID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
         <COMPID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
+        <COMPID name="Define-Alien-Type-Method" mc="Class" uid="162a6a86-cb12-473a-8e11-614228e120c8"/>
+        <COMPID name="Alien Type Methods" mc="Package" uid="5c906495-3273-494a-a334-43b43250a2cc"/>
+        <COMPID name="Define-Alien-Type-Class" mc="Class" uid="c4c286f4-e159-4269-90bd-c5636a02960a"/>
+        <COMPID name="Alien Internals Types" mc="Package" uid="efc49eb6-dbe9-411c-96a7-4404cf36665e"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

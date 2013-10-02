@@ -1,20 +1,21 @@
 <?xml version="1.0" ?>
-<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien-Type" version="3">
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Alien-Array-Type" version="3">
   <DEPS>
-    <ID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+    <ID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
     <EXTID name="(Or Null Unsigned-Byte)" mc="DataType" uid="4b42e848-e2a5-454c-9fe7-5d2345faf7d5"/>
     <EXTID name="Alien Types" mc="ClassDiagram" uid="f430e71a-eecd-40f3-89f5-a7c4fb5c1f97"/>
+    <EXTID name="Alien-Alien-Value-Type" mc="Class" uid="4e7a69bd-8dab-43fe-9200-82c3b76c9379"/>
+    <EXTID name="Alien-Mem-Block-Type" mc="Class" uid="d10d72d9-a43a-4795-bdf9-fcecc9d7d96a"/>
     <EXTID name="Compute-Deposit-Lambda" mc="Class" uid="2956c59e-f555-41a3-abbe-bd10f046f9e1"/>
     <EXTID name="Compute-Extract-Lambda" mc="Class" uid="519e82bb-a23e-4d2b-afa7-0faf3b6ab203"/>
-    <EXTID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
     <EXTID name="Slot" mc="Stereotype" uid="c348183e-3b8d-4e2f-88da-f2c4ee5cec3a"/>
     <EXTID name="Symbol" mc="Class" uid="9163048b-7064-48ce-9e89-9ba8cbe0df42"/>
     <EXTID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
     <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
   </DEPS>
   <OBJECT>
-    <ID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
-    <PID name="Alien Type" mc="Package" uid="1dc31e0a-38d8-420f-99e8-faf5e385d9f5"/>
+    <ID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
+    <PID name="Alien Internals Types" mc="Package" uid="efc49eb6-dbe9-411c-96a7-4404cf36665e"/>
     <ATTRIBUTES>
       <ATT name="IsActive">false</ATT>
       <ATT name="IsMain">false</ATT>
@@ -23,14 +24,14 @@
       <ATT name="IsLeaf">false</ATT>
       <ATT name="IsRoot">false</ATT>
       <ATT name="Visibility">Public</ATT>
-      <ATT name="Name"><![CDATA[Alien-Type]]></ATT>
+      <ATT name="Name"><![CDATA[Alien-Array-Type]]></ATT>
       <ATT name="status">1970354901745664</ATT>
     </ATTRIBUTES>
     <DEPENDENCIES>
       <COMP relation="OwnedAttribute">
         <OBJECT>
-          <ID name="Class" mc="Attribute" uid="93454b5f-37e9-4d3b-ad22-edc433c6cf3b"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="Class" mc="Attribute" uid="516c3b65-641e-4f12-a05d-076bfad6fc93"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="TypeConstraint"></ATT>
             <ATT name="Value"></ATT>
@@ -57,8 +58,8 @@
           </DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="Bits" mc="Attribute" uid="ed5280e9-47c2-4839-9f8a-8004581f9249"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="Bits" mc="Attribute" uid="aefe5406-55f5-4ef0-a3c4-f7f3efc0e0ff"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="TypeConstraint"></ATT>
             <ATT name="Value"></ATT>
@@ -85,8 +86,8 @@
           </DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="Alignment" mc="Attribute" uid="1217ab3e-05ca-498c-b0df-779970fe5c2d"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="Alignment" mc="Attribute" uid="b37a93f1-b434-492b-8e3e-19b3f1501c92"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="TypeConstraint"></ATT>
             <ATT name="Value"></ATT>
@@ -115,8 +116,8 @@
       </COMP>
       <COMP relation="OwnedEnd">
         <OBJECT>
-          <ID name="deposit-lambda" mc="AssociationEnd" uid="d4416f9a-3565-459b-8e65-4aefdb17f234"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="deposit-lambda" mc="AssociationEnd" uid="56d617cb-34af-49ea-bfac-e2d427d705d3"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="Aggregation">KindIsAssociation</ATT>
             <ATT name="IsChangeable">true</ATT>
@@ -138,8 +139,8 @@
             </LINK>
             <COMP relation="Opposite">
               <OBJECT>
-                <ID name="" mc="AssociationEnd" uid="062e3387-02bb-4c6c-886e-97021533bc6d"/>
-                <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                <ID name="" mc="AssociationEnd" uid="c0f1b03d-ae17-4f31-b9da-b042e2db9203"/>
+                <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                 <ATTRIBUTES>
                   <ATT name="Aggregation">KindIsAssociation</ATT>
                   <ATT name="IsChangeable">true</ATT>
@@ -157,12 +158,12 @@
                 </ATTRIBUTES>
                 <DEPENDENCIES>
                   <COMP relation="Opposite">
-                    <COMPID name="deposit-lambda" mc="AssociationEnd" uid="d4416f9a-3565-459b-8e65-4aefdb17f234"/>
+                    <COMPID name="deposit-lambda" mc="AssociationEnd" uid="56d617cb-34af-49ea-bfac-e2d427d705d3"/>
                   </COMP>
                   <COMP relation="Association">
                     <OBJECT>
-                      <ID name="" mc="Association" uid="f023e770-af13-4fd4-a8d6-d3ae27b549ae"/>
-                      <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                      <ID name="" mc="Association" uid="e9aa017d-a39d-4957-b95e-47811f8575e7"/>
+                      <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                       <ATTRIBUTES>
                         <ATT name="Name"></ATT>
                         <ATT name="status">1970354901745664</ATT>
@@ -175,8 +176,8 @@
             </COMP>
             <COMP relation="Association">
               <OBJECT>
-                <ID name="" mc="Association" uid="f023e770-af13-4fd4-a8d6-d3ae27b549ae"/>
-                <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                <ID name="" mc="Association" uid="e9aa017d-a39d-4957-b95e-47811f8575e7"/>
+                <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                 <ATTRIBUTES>
                   <ATT name="Name"></ATT>
                   <ATT name="status">1970354901745664</ATT>
@@ -187,8 +188,8 @@
           </DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="extract-lambda" mc="AssociationEnd" uid="59620ac7-2302-4496-9534-b75b71b4d033"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="extract-lambda" mc="AssociationEnd" uid="35e033db-c73a-40c1-888e-d1b51ff6348a"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="Aggregation">KindIsAssociation</ATT>
             <ATT name="IsChangeable">true</ATT>
@@ -210,8 +211,8 @@
             </LINK>
             <COMP relation="Opposite">
               <OBJECT>
-                <ID name="" mc="AssociationEnd" uid="6842f60b-2406-44d2-8d32-6447ffb450b2"/>
-                <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                <ID name="" mc="AssociationEnd" uid="e5d44082-3989-40e0-ace4-a786c27d613f"/>
+                <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                 <ATTRIBUTES>
                   <ATT name="Aggregation">KindIsAssociation</ATT>
                   <ATT name="IsChangeable">true</ATT>
@@ -229,12 +230,12 @@
                 </ATTRIBUTES>
                 <DEPENDENCIES>
                   <COMP relation="Opposite">
-                    <COMPID name="extract-lambda" mc="AssociationEnd" uid="59620ac7-2302-4496-9534-b75b71b4d033"/>
+                    <COMPID name="extract-lambda" mc="AssociationEnd" uid="35e033db-c73a-40c1-888e-d1b51ff6348a"/>
                   </COMP>
                   <COMP relation="Association">
                     <OBJECT>
-                      <ID name="" mc="Association" uid="89156df5-ed7e-4b21-bbf4-c790527e8542"/>
-                      <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                      <ID name="" mc="Association" uid="31bb754c-cdaf-4f87-8c7c-5f50da43eaf7"/>
+                      <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                       <ATTRIBUTES>
                         <ATT name="Name"></ATT>
                         <ATT name="status">1970354901745664</ATT>
@@ -247,8 +248,8 @@
             </COMP>
             <COMP relation="Association">
               <OBJECT>
-                <ID name="" mc="Association" uid="89156df5-ed7e-4b21-bbf4-c790527e8542"/>
-                <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+                <ID name="" mc="Association" uid="31bb754c-cdaf-4f87-8c7c-5f50da43eaf7"/>
+                <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
                 <ATTRIBUTES>
                   <ATT name="Name"></ATT>
                   <ATT name="status">1970354901745664</ATT>
@@ -259,13 +260,43 @@
           </DEPENDENCIES>
         </OBJECT>
       </COMP>
+      <COMP relation="Parent">
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="dea65914-8dcf-443c-9056-860f3583239b"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="Alien-Alien-Value-Type" mc="Class" uid="4e7a69bd-8dab-43fe-9200-82c3b76c9379"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="Generalization" mc="Generalization" uid="98c9d93f-ef82-4f5d-a9b0-c41f0d1960c8"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
+          <ATTRIBUTES>
+            <ATT name="Discriminator"></ATT>
+            <ATT name="Name"><![CDATA[Generalization]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="SuperType">
+              <ID name="Alien-Mem-Block-Type" mc="Class" uid="d10d72d9-a43a-4795-bdf9-fcecc9d7d96a"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
       <LINK relation="Extension">
         <ID name="structure class" mc="Stereotype" uid="5e611141-3bb2-4881-b610-3a1feeb9ef15"/>
       </LINK>
       <COMP relation="DependsOnDependency">
         <OBJECT>
-          <ID name="" mc="Dependency" uid="a035c978-2c81-420c-8a8f-2ddcabea7ba8"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
+          <ID name="" mc="Dependency" uid="9cdf1a83-9a0c-44ae-96e1-35128febf165"/>
+          <PID name="Alien-Array-Type" mc="Class" uid="3756d648-cc14-41f8-979a-fec8549f37f2"/>
           <ATTRIBUTES>
             <ATT name="DependsOnId"></ATT>
             <ATT name="DependsOnName"></ATT>
@@ -275,24 +306,6 @@
           <DEPENDENCIES>
             <LINK relation="DependsOn">
               <ID name="Alien Types" mc="ClassDiagram" uid="f430e71a-eecd-40f3-89f5-a7c4fb5c1f97"/>
-            </LINK>
-            <LINK relation="Extension">
-              <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
-            </LINK>
-          </DEPENDENCIES>
-        </OBJECT>
-        <OBJECT>
-          <ID name="" mc="Dependency" uid="f359e229-8248-4d0e-81aa-3dc245c5aac7"/>
-          <PID name="Alien-Type" mc="Class" uid="7bf2d65f-0bba-40b1-a495-2031d1febd13"/>
-          <ATTRIBUTES>
-            <ATT name="DependsOnId"></ATT>
-            <ATT name="DependsOnName"></ATT>
-            <ATT name="Name"></ATT>
-            <ATT name="status">1970354901745664</ATT>
-          </ATTRIBUTES>
-          <DEPENDENCIES>
-            <LINK relation="DependsOn">
-              <ID name="SB-Alien" mc="ClassDiagram" uid="468ecaba-b309-4a5c-a6af-2fb03ae6e924"/>
             </LINK>
             <LINK relation="Extension">
               <FOREIGNID name="related_diagram" mc="Stereotype" uid="2961d57b-5120-11de-bbaf-00218648fa3d"/>
