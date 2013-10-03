@@ -2,13 +2,12 @@
 
 # Criticisms of the OMG Official Lisp IDL Mappig
 
-_cf.[formal-00-06-02]_
 
 ## Module to Package Mapping - Import Package of Containing Module
 
 cf.
-* [CORBA3.1 Part 1][formal-08-01-04] sublause 7.19, _CORBA Module_
-* [CORBA3.1 Part 1][formal-08-01-04] sublause 7.20, _Names and Scoping_
+* [CORBA 3.1 Part 1][formal-08-01-04] sublause 7.19, _CORBA Module_
+* [CORBA 3.1 Part 1][formal-08-01-04] sublause 7.20, _Names and Scoping_
 * [Lisp IDL Mapping][formal-00-06-02] subclause 2.11, _Mapping of Module_
 
 **Summary**
@@ -55,4 +54,9 @@ interpreter.
 
 It is hoped that this may ultimately serve to be of use within
 reflective procedures by ORB clients, on an object request broker
-implementing this object model.
+implementing this object model - cf [CORBA Reflection][omg-reflec]
+
+
+[formal-08-01-04]: http://www.omg.org/spec/CORBA/3.1/
+[formal-00-06-02]: http://www.omg.org/spec/LISP/1.0/
+[omg-reflec]: http://www.omg.org/spec/RFLEC/
