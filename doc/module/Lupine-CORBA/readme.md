@@ -8,7 +8,9 @@
 cf.
 * [CORBA 3.1 Part 1][formal-08-01-04] sublause 7.19, _CORBA Module_
 * [CORBA 3.1 Part 1][formal-08-01-04] sublause 7.20, _Names and Scoping_
+* [CORBA 3.1 Part 1][formal-08-01-04] sublause 14.5.4, _Container_
 * [Lisp IDL Mapping][formal-00-06-02] subclause 2.11, _Mapping of Module_
+
 
 **Summary**
 
