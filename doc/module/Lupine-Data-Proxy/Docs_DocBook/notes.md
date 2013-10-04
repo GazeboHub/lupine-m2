@@ -13,7 +13,9 @@ Prospective extensions would include support for (onto cl-service-protocol)
     * SPARQL
 	* CORBA IDL mapping for OWL (to do)
 * Networked Object Services
-    * CORBA (updating CLORB to CORBA 3.3 compliance and CCM support, defining an original IDL-to-Lisp mapping utilizing features of CLOS)
+    * CORBA (updating CLORB to CORBA 3.3 compliance and CCM support,
+      defining an original IDL-to-Lisp mapping utilizing features of
+      CLOS) (cf, [OMG Object Management Architecture (OMA)](http://www.omg.org/oma/))
     * SOAP, WSDL, etc (extending CXML, cf. Lupine-M2-XSD, optionally with HTTP integration onto Hunchentoot, if not a new HTTP peer framework under cl-service-protocol)
 * Host Message Bus Frameworks
     * [DBus](http://www.freedesktop.org/wiki/Software/dbus/) message bus framework (cf. desktop frameworks, typically in the Linux desktop domain)
