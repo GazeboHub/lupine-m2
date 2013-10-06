@@ -1,7 +1,6 @@
 
 
-# Criticisms of the OMG Official Lisp IDL Mappig
-
+# Extensions on the OMG Official Lisp IDL Mapping
 
 ## Module to Package Mapping - Import Package of Containing Module
 
