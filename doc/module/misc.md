@@ -5,8 +5,12 @@ Miscellaneous Modules - Notes
 
 ### Summary
 
+[RELAX NG] defines a semantic model for validation of XML markup productions with a deterministic semantics - effectively, an _XML schema language_, in that rolr alternate to [XML Schema] and the [XML DTD] language. A _schema rule_ in the [RELAX NG] model may be encoded within a _RELAX NG schema_ serialized  in _RELAX NG XML schema syntax_ or a _RELAX NG schema_ serialized in _RELAX NG compact syntax_. (FIXME: Denote RELAX NG's coverage for XML semantics - cf. XML elements, attributes in general, ID and IDREF/IDREFS attributes, etc) (FIXME: Also denote how RELAX NG integrates XML Namespaces. Denote, then, how CXML-RNG implements that facet of RELAX NG, cf. `CXML-RNG:NS-NAME`, `CXML-RNG:NAME`, and lastly, `CXML-RNG:PATTERN-NS` from the _pattern_ structure class `CXML-RNG:VALUE`)
+
+[CXML-RNG] defines a model for interpretation of RNG schema in Common Lisp, using CXML as an _XML interpreter_.
+
 [CXML-RNG] interprets an RNG schema element, _A_, as to produce an
-instance _A'_ of a structure class, `cxl-rng:element`
+instance _A'_ of a structure class, `cxl-rng:element`. (It may be assumed that _A_ can then be produced of _A'_, symmetrically. Note that _A'_ is defined for purpose of validating an XML production within a RELAX NG semantics for XML markup schema. RELAX NG represents, effectively, an _XML schema language_, in parallel to the official XML Schema model and its possible extensions, and alternately, XML DTD semantics. )
 
 >>`cxml-rng:element` is a subclass of `%named-pattern`
 >>
@@ -25,8 +29,10 @@ instance _A'_ of a structure class, `cxl-rng:element`
 >> schema model produced by CXML-RNG must be required, in order to
 >> derive any such structural information from the base schema model.
 
-Hypothetically, it may be possible to derive a meataclass, _Ca_ from
+Hypothetically, it may be possible to derive a meataclass, _C(A)_ from
 _A'_. That process may involve:
+
+
 
 * Deriving the target namespace of _A'_, for application of that
   namespace as a _naming_ quality onto _Ca_
