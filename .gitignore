@@ -2,6 +2,7 @@
 *~
 # Eclipse
 .settings/
+target/
 # Java
 *.class
 ## Archives
