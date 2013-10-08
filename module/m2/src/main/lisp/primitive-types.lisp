@@ -122,8 +122,6 @@
 Primitive-Types   "cf. UML 2.4.1 Infrastructure, subclause 13.1.4")
   (:name "String")
   #+NIL (:package "PrimitiveTypes")
-  (:tag "org.omg.xmi.schemaType"
-	"http://www.w3.org/2001/XMLSchema#real")
   (:metaclass primitive-type))
 
 (defclass Primitive-Types:unlimited-natural ()
@@ -132,6 +130,4 @@ Primitive-Types   "cf. UML 2.4.1 Infrastructure, subclause 13.1.4")
    "cf. UML 2.4.1 Infrastructure, subclause 13.1.5")
   (:name "UnlimitedNatural")
   #+NIL (:package "PrimitiveTypes")
-  (:tag "org.omg.xmi.schemaType"
-	"http://www.w3.org/2001/XMLSchema#real")
   (:metaclass primitive-type))
