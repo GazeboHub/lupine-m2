@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Utility" version="3">
+  <DEPS>
+    <ID name="Utility" mc="Package" uid="9932744e-4563-434a-a7b9-c596ff670706"/>
+    <COMPID name="Lisp-Form" mc="DataType" uid="326ec1db-97de-42cc-830a-490dd94a5499"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Utility" mc="Package" uid="9932744e-4563-434a-a7b9-c596ff670706"/>
+    <PID name="lupine corba" mc="Package" uid="f1e5c44d-1e04-4eae-a231-10f3de3ffaca"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Utility]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Lisp-Form" mc="DataType" uid="326ec1db-97de-42cc-830a-490dd94a5499"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

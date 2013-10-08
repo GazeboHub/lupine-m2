@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DII" version="3">
+  <DEPS>
+    <ID name="DII" mc="Package" uid="66870be4-d4dc-4176-98f1-cd529f9564de"/>
+    <COMPID name="CORBA::Request" mc="Interface" uid="8c205ce9-1ff6-4a3e-9e29-948f34e84017"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="DII" mc="Package" uid="66870be4-d4dc-4176-98f1-cd529f9564de"/>
+    <PID name="Client" mc="Package" uid="62cac665-2e77-45cc-bb6f-bde9c43ee420"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[DII]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CORBA::Request" mc="Interface" uid="8c205ce9-1ff6-4a3e-9e29-948f34e84017"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

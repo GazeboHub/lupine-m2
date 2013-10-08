@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="StubImplementation" version="3">
+  <DEPS>
+    <ID name="StubImplementation" mc="Class" uid="c2ad59b8-99f7-47b4-90eb-41fe7cc87d70"/>
+    <EXTID name="InterfaceDefiition" mc="Class" uid="1ddaca3a-9e06-4101-a2a8-127fde159c1d"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="StubImplementation" mc="Class" uid="c2ad59b8-99f7-47b4-90eb-41fe7cc87d70"/>
+    <PID name="Client" mc="Package" uid="62cac665-2e77-45cc-bb6f-bde9c43ee420"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[StubImplementation]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="interfaceDef" mc="AssociationEnd" uid="f1cf053a-9faf-4221-bd67-853f7b168899"/>
+          <PID name="StubImplementation" mc="Class" uid="c2ad59b8-99f7-47b4-90eb-41fe7cc87d70"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[interfaceDef]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="InterfaceDefiition" mc="Class" uid="1ddaca3a-9e06-4101-a2a8-127fde159c1d"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <REFOBJ>
+                <ID name="" mc="AssociationEnd" uid="b04e40a6-8634-47fa-b665-9c3e1eb74f8d"/>
+                <PID name="InterfaceDefiition" mc="Class" uid="1ddaca3a-9e06-4101-a2a8-127fde159c1d"/>
+              </REFOBJ>
+            </COMP>
+            <COMP relation="Association">
+              <REFOBJ>
+                <ID name="" mc="Association" uid="5275cc16-68b1-4965-88d8-77f40afc774a"/>
+                <PID name="InterfaceDefiition" mc="Class" uid="1ddaca3a-9e06-4101-a2a8-127fde159c1d"/>
+              </REFOBJ>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

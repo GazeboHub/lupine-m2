@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine CORBA" version="3">
+  <DEPS>
+    <ID name="Lupine CORBA" mc="AnalystProject" uid="6095f778-a35f-4612-95d7-57444d672cfd"/>
+    <COMPID name="Lupine CORBA" mc="PropertyContainer" uid="d273f583-e67d-4dab-a346-a935c215b14f"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Lupine CORBA" mc="AnalystProject" uid="6095f778-a35f-4612-95d7-57444d672cfd"/>
+    <ATTRIBUTES>
+      <ATT name="Name"><![CDATA[Lupine CORBA]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="PropertyRoot">
+        <COMPID name="Lupine CORBA" mc="PropertyContainer" uid="d273f583-e67d-4dab-a346-a935c215b14f"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

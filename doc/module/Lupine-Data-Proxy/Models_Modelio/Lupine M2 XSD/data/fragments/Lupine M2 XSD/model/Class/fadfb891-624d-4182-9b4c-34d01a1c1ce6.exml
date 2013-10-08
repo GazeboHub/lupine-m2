@@ -339,12 +339,13 @@
           <ID name="Note" mc="Note" uid="b24aabb3-33c9-4a1c-b38b-d51a548a1d27"/>
           <PID name="Alien-Type-Method" mc="Class" uid="fadfb891-624d-4182-9b4c-34d01a1c1ce6"/>
           <ATTRIBUTES>
-            <ATT name="Content"><![CDATA[The Alien-Type-Method class is defined in this model only for purpose of illustration.
+            <ATT name="Content"><![CDATA[The Alien-Type-Method class is defined in this model only for purpose of illustrating a feature of the alien type class model. It does not match any type explicitly defined in the implementation. .
 
 Within the macroexpansion of DEFINE-ALIEN-TYPE-METHOD, An Alien-Type-Method function is assigned to an ALIEN-TYPE-CLASS instance, in a slot value of that instance - cf. *ALIEN-TYPE-CLASES*
 
 The variable *METHOD-SLOT-ALIST* provides a table of shorthand names and full accessor function names for accessors onto ALIEN-TYPE-CLASS, cf #'METHOD-SLOT
-]]></ATT>
+
+The procedures of the alien type class model are dispatched without relying on the method dispatching framework of the Common Lisp Object System]]></ATT>
             <ATT name="Name"><![CDATA[Note]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>

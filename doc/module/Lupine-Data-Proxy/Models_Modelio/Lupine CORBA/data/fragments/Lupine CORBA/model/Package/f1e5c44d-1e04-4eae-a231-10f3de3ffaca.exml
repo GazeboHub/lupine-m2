@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine CORBA" version="3">
+  <DEPS>
+    <ID name="Lupine CORBA" mc="Package" uid="f1e5c44d-1e04-4eae-a231-10f3de3ffaca"/>
+    <COMPID name="CL" mc="Package" uid="429656b6-c46e-47e2-9565-53f86c613cec"/>
+    <COMPID name="CLORB IFR" mc="ClassDiagram" uid="57d90bf6-27ce-4be3-80f2-f6f7d5fc62b0"/>
+    <COMPID name="CORBA Generic Concepts" mc="ClassDiagram" uid="32d12142-da63-411a-b7c1-7a7bd9516669"/>
+    <COMPID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+    <COMPID name="GenericModel" mc="Package" uid="de1f2ce4-b066-4773-ba67-17f58c9bd267"/>
+    <COMPID name="Utility" mc="Package" uid="9932744e-4563-434a-a7b9-c596ff670706"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Lupine CORBA" mc="Package" uid="f1e5c44d-1e04-4eae-a231-10f3de3ffaca"/>
+    <PID name="Lupine CORBA" mc="Project" uid="433a391d-4d3a-4c3f-ae1a-c155318130f7"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Lupine CORBA]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+        <COMPID name="CL" mc="Package" uid="429656b6-c46e-47e2-9565-53f86c613cec"/>
+        <COMPID name="Utility" mc="Package" uid="9932744e-4563-434a-a7b9-c596ff670706"/>
+        <COMPID name="GenericModel" mc="Package" uid="de1f2ce4-b066-4773-ba67-17f58c9bd267"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="CLORB IFR" mc="ClassDiagram" uid="57d90bf6-27ce-4be3-80f2-f6f7d5fc62b0"/>
+        <COMPID name="CORBA Generic Concepts" mc="ClassDiagram" uid="32d12142-da63-411a-b7c1-7a7bd9516669"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

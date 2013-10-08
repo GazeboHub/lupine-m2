@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="ObjectReference" version="3">
+  <DEPS>
+    <ID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+    <EXTID name="POA" mc="Class" uid="ca38de68-ee54-417f-8d66-24b7e33b281d"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+    <PID name="Client" mc="Package" uid="62cac665-2e77-45cc-bb6f-bde9c43ee420"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[ObjectReference]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedEnd">
+        <OBJECT>
+          <ID name="ORB" mc="AssociationEnd" uid="02728ce1-8d26-47be-87df-7bad1ece353a"/>
+          <PID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+          <ATTRIBUTES>
+            <ATT name="Aggregation">KindIsAssociation</ATT>
+            <ATT name="IsChangeable">true</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[*]]></ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[ORB]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Target">
+              <ID name="POA" mc="Class" uid="ca38de68-ee54-417f-8d66-24b7e33b281d"/>
+            </LINK>
+            <COMP relation="Opposite">
+              <OBJECT>
+                <ID name="" mc="AssociationEnd" uid="397bfc7d-75fc-4702-b4dd-218c6e0f4de7"/>
+                <PID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+                <ATTRIBUTES>
+                  <ATT name="Aggregation">KindIsAssociation</ATT>
+                  <ATT name="IsChangeable">true</ATT>
+                  <ATT name="Changeable">ReadWrite</ATT>
+                  <ATT name="IsDerived">false</ATT>
+                  <ATT name="IsOrdered">false</ATT>
+                  <ATT name="IsUnique">false</ATT>
+                  <ATT name="MultiplicityMin"><![CDATA[0]]></ATT>
+                  <ATT name="MultiplicityMax"><![CDATA[*]]></ATT>
+                  <ATT name="Visibility">Public</ATT>
+                  <ATT name="IsClass">false</ATT>
+                  <ATT name="IsAbstract">false</ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <COMP relation="Opposite">
+                    <COMPID name="ORB" mc="AssociationEnd" uid="02728ce1-8d26-47be-87df-7bad1ece353a"/>
+                  </COMP>
+                  <COMP relation="Association">
+                    <OBJECT>
+                      <ID name="Client Invocation" mc="Association" uid="44c5c742-5fba-4777-8a6f-a75195a1df7f"/>
+                      <PID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+                      <ATTRIBUTES>
+                        <ATT name="Name"><![CDATA[Client Invocation]]></ATT>
+                        <ATT name="status">1970354901745664</ATT>
+                      </ATTRIBUTES>
+                      <DEPENDENCIES></DEPENDENCIES>
+                    </OBJECT>
+                  </COMP>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <COMP relation="Association">
+              <OBJECT>
+                <ID name="Client Invocation" mc="Association" uid="44c5c742-5fba-4777-8a6f-a75195a1df7f"/>
+                <PID name="ObjectReference" mc="Class" uid="289c5043-c4da-4217-aeb7-afa396fdd022"/>
+                <ATTRIBUTES>
+                  <ATT name="Name"><![CDATA[Client Invocation]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

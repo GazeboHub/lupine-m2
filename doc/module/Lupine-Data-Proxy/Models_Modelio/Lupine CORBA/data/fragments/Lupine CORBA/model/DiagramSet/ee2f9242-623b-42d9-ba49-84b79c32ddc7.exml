@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Lupine CORBA" version="3">
+  <DEPS>
+    <ID name="Lupine CORBA" mc="DiagramSet" uid="ee2f9242-623b-42d9-ba49-84b79c32ddc7"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Lupine CORBA" mc="DiagramSet" uid="ee2f9242-623b-42d9-ba49-84b79c32ddc7"/>
+    <PID name="Lupine CORBA" mc="Project" uid="433a391d-4d3a-4c3f-ae1a-c155318130f7"/>
+    <ATTRIBUTES>
+      <ATT name="Name"><![CDATA[Lupine CORBA]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

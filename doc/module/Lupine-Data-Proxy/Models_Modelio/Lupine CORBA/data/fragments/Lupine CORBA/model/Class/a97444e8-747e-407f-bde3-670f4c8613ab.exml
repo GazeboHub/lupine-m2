@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Define-Method" version="3">
+  <DEPS>
+    <ID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+    <EXTID name="Macro" mc="Stereotype" uid="f6c328a7-7aec-403d-8285-98145c306979"/>
+    <FOREIGNID name="description" mc="NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+    <FOREIGNID name="string" mc="DataType" uid="00000004-0000-000d-0000-000000000000"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+    <PID name="Lupine CORBA" mc="Package" uid="f1e5c44d-1e04-4eae-a231-10f3de3ffaca"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Define-Method]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedAttribute">
+        <OBJECT>
+          <ID name="Name" mc="Attribute" uid="0bb35017-42de-489e-b13d-9865c9e93bc1"/>
+          <PID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+          <ATTRIBUTES>
+            <ATT name="TypeConstraint"></ATT>
+            <ATT name="Value"></ATT>
+            <ATT name="TargetIsClass">false</ATT>
+            <ATT name="Changeable">ReadWrite</ATT>
+            <ATT name="IsDerived">false</ATT>
+            <ATT name="IsOrdered">false</ATT>
+            <ATT name="IsUnique">false</ATT>
+            <ATT name="MultiplicityMin"><![CDATA[1]]></ATT>
+            <ATT name="MultiplicityMax"><![CDATA[1]]></ATT>
+            <ATT name="Visibility">VisibilityUndefined</ATT>
+            <ATT name="IsClass">false</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="Name"><![CDATA[Name]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Type">
+              <FOREIGNID name="string" mc="DataType" uid="00000004-0000-000d-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <ID name="Macro" mc="Stereotype" uid="f6c328a7-7aec-403d-8285-98145c306979"/>
+      </LINK>
+      <COMP relation="Descriptor">
+        <OBJECT>
+          <ID name="Note" mc="Note" uid="42f37d9a-1c9b-4b63-b673-2ddb27d71b42"/>
+          <PID name="Define-Method" mc="Class" uid="a97444e8-747e-407f-bde3-670f4c8613ab"/>
+          <ATTRIBUTES>
+            <ATT name="Content"><![CDATA[This macro serves  as a utility wrapper on a CLOS DEFMETHOD call, whether to define a "symbol named method" or alternately a "setf method" with a name and body based on the NAME and the destructured body of the macro call.
+
+The NAME is not provided with any sense of scope.
+
+This macro call does not specify any exacting way to define the complimentary generic function for the string NAME input
+
+cf. clorb-ifr.lisp]]></ATT>
+            <ATT name="Name"><![CDATA[Note]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Model">
+              <FOREIGNID name="description" mc="NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

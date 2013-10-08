@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="GenericModel" version="3">
+  <DEPS>
+    <ID name="GenericModel" mc="Package" uid="de1f2ce4-b066-4773-ba67-17f58c9bd267"/>
+    <COMPID name="Client" mc="Package" uid="62cac665-2e77-45cc-bb6f-bde9c43ee420"/>
+    <COMPID name="Server" mc="Package" uid="e4b5e0bf-38fa-4525-8977-6c9e7ff5210f"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="GenericModel" mc="Package" uid="de1f2ce4-b066-4773-ba67-17f58c9bd267"/>
+    <PID name="Lupine CORBA" mc="Package" uid="f1e5c44d-1e04-4eae-a231-10f3de3ffaca"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[GenericModel]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Client" mc="Package" uid="62cac665-2e77-45cc-bb6f-bde9c43ee420"/>
+        <COMPID name="Server" mc="Package" uid="e4b5e0bf-38fa-4525-8977-6c9e7ff5210f"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

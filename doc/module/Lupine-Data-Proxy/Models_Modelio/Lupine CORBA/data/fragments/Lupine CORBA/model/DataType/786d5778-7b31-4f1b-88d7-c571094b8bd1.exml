@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Symbol" version="3">
+  <DEPS>
+    <ID name="Symbol" mc="DataType" uid="786d5778-7b31-4f1b-88d7-c571094b8bd1"/>
+  </DEPS>
+  <OBJECT>
+    <ID name="Symbol" mc="DataType" uid="786d5778-7b31-4f1b-88d7-c571094b8bd1"/>
+    <PID name="CL" mc="Package" uid="429656b6-c46e-47e2-9565-53f86c613cec"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Symbol]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>
