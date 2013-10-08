@@ -1,5 +1,7 @@
 # Text
 *~
+# Eclipse
+.settings/
 # Java
 *.class
 ## Archives
