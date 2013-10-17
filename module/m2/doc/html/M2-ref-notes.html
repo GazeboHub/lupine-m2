@@ -78,6 +78,10 @@
     text-align: center;
   }
 
+  p.No_Spacing {
+    line-height: 100%;
+  }
+
   p.Title {
     font-size: 22pt;
     font-weight: bold;
@@ -283,10 +287,11 @@
     —&nbsp;<a href="#item34">MDA Guide</a>, subclause 1.2
   </blockquote>
 
-  <p>The four part, informal model suggested in the&nbsp;<a href="#item34">MDA
-  Guide</a> – of <i>implementation</i>, <i>integration</i>, <i>maintenance</i>,
-  and <i>testing and simulation</i> – effectively, may be extended as
-  follows.</p>
+  <p>As an albeit broadly general framework for systemsmdevelopment,
+  the&nbsp;<a href="#item34">MDA Guide</a> suggests a general four part model,
+  ofmsome relevance withregarss to model-driven engineering – of
+  <i>implementation</i>, <i>integration</i>, <i>maintenance</i>, and <i>testing
+  and simulation.</i> That model may be extended, such as:</p>
 
   <ul>
     <li>
@@ -320,7 +325,7 @@
     </li>
   </ul>
 
-  <p>Project Lupine is developing an MOF implementation for Common Lisp.</p>
+  <p>Project Lupine is developing an MOF implementation in Common Lisp.</p>
 
   <h2 id="item75">Project Lupine — Development Roadmap</h2>
 
@@ -359,7 +364,7 @@
     </li>
   </ol>
 
-  <p class="To_Do"><b><i>Nota bene</i></b>, Project Lupine is a non-commercial
+  <p class="To_Do"><b><i>N.b</i></b>, Project Lupine is a non-commercial
   project. There is not a formal schedule available, at this time, for the
   completion of the preceding roadmap.</p>
 
@@ -513,19 +518,24 @@
 
   <ul>
     <li>
-      <p>Common Warehouse Metamodel (CWM)</p>
+      <p><i><a href="http://www.omg.org/spec/CWM/">Common Warehouse
+      Metamodel</a></i> (<a href="http://www.omg.org/spec/CWM/">CWM</a>)</p>
     </li>
 
     <li>
-      <p>Software &amp; Systems Process Engineering Meta-Model (SPEM)</p>
+      <p><i><a href="http://www.omg.org/spec/SPEM/">Software &amp; Systems
+      Process Engineering Meta-Model</a></i> (<a href=
+      "http://www.omg.org/spec/SPEM/">SPEM</a>)</p>
     </li>
 
     <li>
-      <p>OMG Systems Modeling Language (SysML)</p>
+      <p><i><a href="http://www.sysml.org/">OMG Systems Modeling
+      Language</a></i> (<a href="http://www.sysml.org/">SysML</a>)</p>
     </li>
 
     <li>
-      <p>OMG Unified Modeling Language (UML)</p>
+      <p><i><a href="http://www.uml.org/">OMG Unified Modeling Language</a></i>
+      (<a href="http://www.uml.org/">UML</a>)</p>
     </li>
   </ul>
 
@@ -935,24 +945,28 @@
 
   <ul>
     <li>
-      <p>Provide CLIM presentations of entities modeled within the Project
-      Lupine MOF implementation</p>
+      <p>Provide CLIM (cf. <a href=
+      "http://common-lisp.net/project/mcclim/">McCLIM</a>) presentation methods
+      for entities modeled within the Project Lupine MOF implementation</p>
     </li>
 
     <li>
-      <p>Provide graphical presentations for the SPEM 2.0 Profile for UML</p>
+      <p>Provide graphical presentations for the <a href=
+      "http://www.omg.org/spec/SPEM/2.0/">SPEM 2.0</a> Profile for UML</p>
     </li>
 
     <li>
-      <p>Integrate with cross-platform object access protocols such as CL+J,
-      for purpose of visual modeling of objects initialized within external
-      object systems</p>
+      <p>Integrate with cross-platform object access protocols such as <a href=
+      "http://common-lisp.net/project/cl-plus-j/">CL+J</a> (cf. <a href=
+      "http://common-lisp.net/project/mkcl/">MKCL</a>) for purpose of visual
+      modeling of objects initialized within external object systems</p>
     </li>
 
     <li>
-      <p>Incorporate distributed object system protocols (e.g CORBA) and
-      transport-layer security (TLS) measures for access to remote model
-      repositories from within the Tioga IDE desktop workspace</p>
+      <p>Incorporate distributed object system protocols (e.g <a href=
+      "http://www.corba.org/">CORBA</a>) and transport-layer security (TLS)
+      measures for access to remote model repositories from within the Tioga
+      IDE desktop workspace</p>
     </li>
 
     <li>
@@ -961,14 +975,17 @@
     </li>
 
     <li>
-      <p>Provide graphical controls for the Coffee Pot protocol, ultimately
-      incorporating I/O frameworks for I2C, SMBus, and other hardware
-      integration technologies</p>
+      <p>Provide graphical controls for the <a href=
+      "http://tools.ietf.org/pdf/rfc2324.pdf">Hypertext Coffee Pot Control
+      Protocol</a>, ultimately incorporating I/O frameworks for I2C, SMBus, and
+      other hardware integration technologies</p>
     </li>
 
     <li>
-      <p>Model MIT CADR's original hardware designs and later VHDL
-      system/circuit representations</p>
+      <p>Model <a href="http://www.unlambda.com/cadr/">MIT CADR</a>, in the
+      CADR Lisp Machine's own original hardware designs and later VHDL
+      system/circuit representations, so far as may not be limited with
+      applicable intellectual property law</p>
     </li>
 
     <li>
@@ -977,27 +994,42 @@
 
       <ul>
         <li>
-          <p>IBM Rational Rose</p>
+          <p>NoMagic Inc's <a href=
+          "http://www.nomagic.com/products/magicdraw.html">MagicDraw</a></p>
         </li>
 
         <li>
-          <p>Sparx Systems Enterprise Architect</p>
+          <p>IBM <a href=
+          "http://www.ibm.com/developerworks/rational/products/rose/">Rational
+          Rose</a></p>
         </li>
 
         <li>
-          <p>Yatta UML Labs</p>
+          <p>Sparx Systems <a href=
+          "http://www.sparxsystems.com.au/products/ea/index.html">Enterprise
+          Architect</a></p>
         </li>
 
         <li>
-          <p>Eclipse Papyrus</p>
+          <p>Yatta <a href="http://www.uml-lab.com/en/uml-lab/">UML Lab</a></p>
         </li>
 
         <li>
-          <p>Modelio</p>
+          <p>Eclipse <a href="http://www.eclipse.org/papyrus/">Papyrus</a></p>
         </li>
 
         <li>
-          <p>ArgoUML (UML 1.4 compatibility)</p>
+          <p><a href="http://www.modeliosoft.com/">Modelio</a></p>
+        </li>
+
+        <li>
+          <p><a href="http://argouml.tigris.org/">ArgoUML</a> (UML 1.4
+          compatibility)</p>
+        </li>
+
+        <li>
+          <p><a href="http://cubetto.semture.de/en/">Cubetto</a> (Mobile and
+          Desktop Editions)</p>
         </li>
       </ul>
     </li>
