@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="UX Write 1.1.6 (build eb2a3ab); iOS 6.1.3">
+
+  <title></title>
+  <style>
+@page {
+    size: letter portrait;
+  }
+
+  blockquote {
+    margin-left: 8%;
+    margin-right: 2%;
+    margin-top: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 2%;
+  }
+
+  body {
+    counter-reset: h1 h2 h3 h4 h5 h6 figure table;
+    margin: 10%;
+    text-align: justify;
+  }
+
+  caption {
+    caption-side: bottom;
+    counter-increment: table;
+  }
+
+  caption::before {
+    content: "Table " counter(table) ": ";
+  }
+
+  h1 {
+    margin-bottom: 2%;
+    margin-top: 12%;
+    text-decoration: underline;
+  }
+
+  h2 {
+    font-style: italic;
+    margin-bottom: 3%;
+    margin-top: 7%;
+    padding-bottom: 2%;
+    padding-top: 2%;
+    text-decoration: underline;
+  }
+
+  h3 {
+    margin-top: 2%;
+    padding-bottom: 2%;
+    padding-top: 2%;
+    text-decoration: underline;
+  }
+
+  nav.tableofcontents::before {
+    content: "Contents";
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: .67em;
+    margin-top: .67em;
+  }
+
+  p.Code_Block {
+    border-left: 2px solid;
+    font-family: monospace;
+    line-height: 100%;
+    padding-left: 7%;
+  }
+
+  p.Info {
+    font-size: 14pt;
+    text-align: center;
+  }
+
+  p.Title {
+    font-size: 22pt;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  p.To_Do {
+    background-color: yellow;
+    border-left: 2px solid;
+    padding-left: 7%;
+  }
+
+  p.toc1 {
+    margin-bottom: 6pt;
+    margin-left: 0pt;
+    margin-top: 12pt;
+  }
+
+  p.toc2 {
+    margin-bottom: 6pt;
+    margin-left: 24pt;
+    margin-top: 6pt;
+  }
+
+  p.toc3 {
+    margin-bottom: 6pt;
+    margin-left: 48pt;
+    margin-top: 6pt;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  td > :first-child, th > :first-child {
+    margin-top: 0;
+  }
+
+  td > :last-child, th > :last-child {
+    margin-bottom: 0;
+  }
+
+  td, th {
+    border: 1px solid black;
+  }
+  </style>
+</head>
+
+<body>
+  <p class="Title">Lupine M2 — Reference</p>
+
+  <p class="Info">(<b>draft</b>)</p>
+
+  <p class="Info">ed. Sean Champ</p>
+
+  <p class="Info">17 October, 2013</p>
+
+  <nav class="tableofcontents">
+    <p class="toc1"><a href="#item53">Preface</a></p>
+
+    <p class="toc2"><a href="#item75">Project Lupine — Development
+    Roadmap</a></p>
+
+    <p class="toc1"><a href="#item50">Models and Diagrams</a></p>
+
+    <p class="toc2"><a href="#item52">Model Concepts</a></p>
+
+    <p class="toc3"><a href="#item61">MOF</a></p>
+
+    <p class="toc3"><a href="#item55">Metamodels</a></p>
+
+    <p class="toc3"><a href="#item88">UML</a></p>
+
+    <p class="toc3"><a href="#item90">Generic Metamodels and Models API</a></p>
+
+    <p class="toc2"><a href="#item82">Diagram Concepts</a></p>
+
+    <p class="toc2"><a href="#item65">Model and Diagram Reference</a></p>
+
+    <p class="toc3"><a href="#item54">[Standard Generic Function]
+    MAKE-MODEL</a></p>
+
+    <p class="toc3"><a href="#item60">[Accessor] MODEL-URI</a></p>
+
+    <p class="toc3"><a href="#item64">[Accessor] MODEL-DIAGRAMS</a></p>
+
+    <p class="toc3"><a href="#item86">[Standard Generic Function]
+    ENSURE-DIAGRAM</a></p>
+
+    <p class="toc3"><a href="#item84">[Accessor] DIAGRAM-NAME</a></p>
+
+    <p class="toc3"><a href="#item87">[Accessor] DIAGRAM-ELEMENTS</a></p>
+
+    <p class="toc1"><a href="#item81">Constraints</a></p>
+
+    <p class="toc2"><a href="#item93">Constraints Concepts</a></p>
+
+    <p class="toc2"><a href="#item96">Constraints Dictionary</a></p>
+
+    <p class="toc1"><a href="#item5">UML Infrastructure Library</a></p>
+
+    <p class="toc2"><a href="#item3">UML Infrastructure Concepts</a></p>
+
+    <p class="toc3"><a href="#item9">UML Primitive Types</a></p>
+
+    <p class="toc3"><a href="#item51">UML Model Elements</a></p>
+
+    <p class="toc3"><a href="#item7">UML Properties</a></p>
+
+    <p class="toc3"><a href="#item48">UML Classifiers</a></p>
+
+    <p class="toc3"><a href="#item26">UML Types</a></p>
+
+    <p class="toc3"><a href="#item4">UML Associations</a></p>
+
+    <p class="toc3"><a href="#item18">UML Namespaces</a></p>
+
+    <p class="toc3"><a href="#item47">UML Packages</a></p>
+
+    <p class="toc3"><a href="#item20">UML Metamodel — Reuse Within MOF</a></p>
+
+    <p class="toc2"><a href="#item1">UML Infrastructure Dictionary — Project
+    Lupine</a></p>
+
+    <p class="toc3"><a href="#item33">[Special Variable] *NAMESPACE*</a></p>
+
+    <p class="toc3"><a href="#item8">[Macro] DEF-UML-TYPE</a></p>
+
+    <p class="toc3"><a href="#item11">[Function] RESOLVE-UML</a></p>
+
+    <p class="toc1"><a href="#item67">MOF</a></p>
+
+    <p class="toc2"><a href="#item74">MOF Concepts</a></p>
+
+    <p class="toc1"><a href="#item68">UML Superstructure</a></p>
+
+    <p class="toc2"><a href="#item71">UML Superstructure Concepts</a></p>
+
+    <p class="toc3"><a href="#item69">UML Diagram Types</a></p>
+
+    <p class="toc1"><a href="#item80">Modeling Platform</a></p>
+
+    <p class="toc2"><a href="#item83">Modeling Platform Concepts</a></p>
+
+    <p class="toc3"><a href="#item63">Integration with the Integrated
+    Development Environment (IDE)</a></p>
+
+    <p class="toc2"><a href="#item85">Modeling Platform Dictionary</a></p>
+
+    <p class="toc1"><a href="#item58">Model Serialization</a></p>
+
+    <p class="toc2"><a href="#item66">Model Serialization Concepts</a></p>
+
+    <p class="toc2"><a href="#item73">Model Serialization Dictionary</a></p>
+
+    <p class="toc3"><a href="#item77">[Standard Generic Function]
+    SERIALIZE-MODEL</a></p>
+
+    <p class="toc3"><a href="#item78">[Standard Generic Function]
+    READ-MODEL</a></p>
+
+    <p class="toc1"><a href="#item72">UML Diagram Interchange</a></p>
+
+    <p class="toc1"><a href="#item23">Bibliography</a></p>
+
+    <p class="toc2"><a href="#item37">Formal Reference Documentation
+    (Normative)</a></p>
+
+    <p class="toc3"><a href="#item28">[UML Infrastructure 2.4.1]</a></p>
+
+    <p class="toc3"><a href="#item38">[UML Superstructure 2.4.1]</a></p>
+
+    <p class="toc3"><a href="#item25">[MOF Core 2.4.1]</a></p>
+
+    <p class="toc3"><a href="#item39">[OCL 2.2]</a></p>
+
+    <p class="toc3"><a href="#item45">[XMI 2.4.1]</a></p>
+
+    <p class="toc3"><a href="#item46">[UML Interchange 2.0]</a></p>
+
+    <p class="toc2"><a href="#item21">Informative Reference Documentation
+    (Non-Normative)</a></p>
+
+    <p class="toc3"><a href="#item34">MDA Guide</a></p>
+  </nav>
+
+  <p><br></p>
+
+  <h1 id="item53">Preface</h1>
+
+  <blockquote>
+    “If we built buildings the way we built software, we would be unable to
+    connect them, change them or even redecorate them easily to fit new uses;
+    and worse, they would constantly be falling down. While this might generate
+    new income for construction workers, it might not be acceptable to those
+    who live and work in those buildings.”
+  </blockquote>
+
+  <blockquote>
+    —&nbsp;<a href="#item34">MDA Guide</a>, subclause 1.2
+  </blockquote>
+
+  <p>The four part, informal model suggested in the&nbsp;<a href="#item34">MDA
+  Guide</a> – of <i>implementation</i>, <i>integration</i>, <i>maintenance</i>,
+  and <i>testing and simulation</i> – effectively, may be extended as
+  follows.</p>
+
+  <ul>
+    <li>
+      <p>Model Design</p>
+
+      <ul>
+        <li>
+          <p>Requirements Specification</p>
+        </li>
+
+        <li>
+          <p>Model Development</p>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <p>Component <b></b>Implementation</p>
+    </li>
+
+    <li>
+      <p>Component/Model Simulation</p>
+    </li>
+
+    <li>
+      <p>Component Integration</p>
+    </li>
+
+    <li>
+      <p>Component Maintenance</p>
+    </li>
+  </ul>
+
+  <p>Project Lupine is developing an MOF implementation for Common Lisp.</p>
+
+  <h2 id="item75">Project Lupine — Development Roadmap</h2>
+
+  <p>The development roadmap for Project Lupine essentially parallels the
+  structure of this document.</p>
+
+  <ol>
+    <li>
+      <p>Develop UML Infrastructure Library implementation</p>
+    </li>
+
+    <li>
+      <p>Develop MOF (M3) implementation</p>
+    </li>
+
+    <li>
+      <p>Develop UML Superstructure implementation</p>
+    </li>
+
+    <li>
+      <p>Develop XMI model serialization framework</p>
+    </li>
+
+    <li>
+      <p>Develop Tioga IDE Integration for Project Lupine components (e.g CLIM
+      presentations for MOF and UML entities)</p>
+    </li>
+
+    <li>
+      <p>Develop Lupine M2 Metamodel for Common Lisp</p>
+    </li>
+
+    <li>
+      <p>Develop other “To Do” items onto Tioga IDE, cf.&nbsp;<a href=
+      "#item32">Tioga IDE</a></p>
+    </li>
+  </ol>
+
+  <p class="To_Do"><b><i>Nota bene</i></b>, Project Lupine is a non-commercial
+  project. There is not a formal schedule available, at this time, for the
+  completion of the preceding roadmap.</p>
+
+  <h1 id="item50">Models and Diagrams</h1>
+
+  <h2 id="item52">Model Concepts</h2>
+
+  <p>UML represents an extension of a four layered modeling architecture onto a
+  context of <i>user objects</i>.</p>
+
+  <table style="width: 60%;" id="item62">
+    <caption>
+      Four Layered Modeling Architecture onto UML
+    </caption>
+
+    <colgroup>
+      <col width="25%">
+      <col width="12%">
+      <col width="40%">
+      <col width="23%">
+    </colgroup>
+
+    <tbody>
+      <tr>
+        <td>
+          <p style="width: 48%;"><b>Layer</b></p>
+        </td>
+
+        <td>
+          <p style="width: 48%;"><b>Mx</b></p>
+        </td>
+
+        <td>
+          <p style="width: 48%;"><b>Specification</b></p>
+        </td>
+
+        <td>
+          <p style="width: 66%;"><b>Source</b></p>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <p>Meta-Metamodel</p>
+        </td>
+
+        <td>
+          <p style="width: 48%; text-align: left;">M3</p>
+        </td>
+
+        <td>
+          <p>MOF</p>
+        </td>
+
+        <td>
+          <p>OMG</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <p>Metamodel</p>
+        </td>
+
+        <td>
+          <p>M2</p>
+        </td>
+
+        <td>
+          <p>UML Metamodel</p>
+        </td>
+
+        <td>
+          <p>OMG</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td>User Model</td>
+
+        <td>M1</td>
+
+        <td>
+          <p>UML User Model</p>
+        </td>
+
+        <td>
+          <p>User</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <p>User Objects</p>
+        </td>
+
+        <td>
+          <p>M0</p>
+        </td>
+
+        <td>
+          <p>Implementation Dependent</p>
+        </td>
+
+        <td>
+          <p>Program</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Notes on Table&nbsp;<a href="#item62">1</a>:</p>
+
+  <ul>
+    <li>
+      <p>In this document, the M3 Layer may be referred to, alternately, as the
+      <i>metamodel modeling</i> layer.</p>
+    </li>
+
+    <li>
+      <p>The M1 Layer is primarily the domain of the <i>modeling
+      platform</i>.</p>
+    </li>
+
+    <li>
+      <p>The M0 layer is primarily the domain of entities and objects as
+      represented in M1</p>
+    </li>
+  </ul>
+
+  <p><br></p>
+
+  <h3 id="item61">MOF</h3>
+
+  <p>The Meta-Object Framework (MOF) represents the baseline
+  <i>meta-metamodeling</i> (alternately, <i>metamodel modeling</i>)
+  specification for metamodels extending on the MOF specification, as
+  formalized by the OMG.</p>
+
+  <p>See Also</p>
+
+  <ul>
+    <li>
+      <p><a href="#item74">MOF Concepts</a></p>
+    </li>
+  </ul>
+
+  <h3 id="item55">Metamodels</h3>
+
+  <p>Metsmodels defined in formal specifications by the OMG include:</p>
+
+  <ul>
+    <li>
+      <p>Common Warehouse Metamodel (CWM)</p>
+    </li>
+
+    <li>
+      <p>Software &amp; Systems Process Engineering Meta-Model (SPEM)</p>
+    </li>
+
+    <li>
+      <p>OMG Systems Modeling Language (SysML)</p>
+    </li>
+
+    <li>
+      <p>OMG Unified Modeling Language (UML)</p>
+    </li>
+  </ul>
+
+  <blockquote>
+    <b><i>Sidebar:</i> <i>Lupine M2 Metamodel for Common Lisp</i></b>
+  </blockquote>
+
+  <blockquote>
+    <b><i></i></b>Project Lupine proposes to develop an additional metamodel
+    for modeling of Common Lisp program elements. The development of that
+    metamodel's formal specification in Project Lupine may be preceded by one
+    or more prototypes in the form of, each, a UML profile for modeling of
+    selected subsets of Common Lisp program elements, in compatible modeling
+    platforms.
+  </blockquote>
+
+  <h3 id="item88">UML</h3>
+
+  <h4 id="item56">UML Metamodel</h4>
+
+  <p>The UML metamodel is defined effectively by the UML infrastructure
+  specification <a href="#item28">[UML Infrastructure 2.4.1]</a>, collectively
+  with the UML Superstructure specification <a href="#item38">[UML
+  Superstructure 2.4.1]</a>. For applications requiring a formal,
+  machine-readable format for interpretation of the structures defined in the
+  UML metamodel, the UML metamodel is published as serialized in XMI
+  format&nbsp;<a href="#item45">[XMI 2.4.1]</a> by the OMG.</p>
+
+  <h4 id="item57">UML Profiles</h4>
+
+  <p>A UML profile provides a means for extending the UML <i>metamodel</i> with
+  domain-specific <i></i> features, within a UML <i>model</i>. In a sense of
+  the semantics of the four-layered modeling architecture, a UML profile may
+  serve effectively as a bridge between the UML user model (M1) and the
+  metamodel modeling layer (M3), such as demonstrated in the SPEM 2.0 profile
+  for UML. Alternately, a UML profile may extend on features defined
+  specifically in the UML metamodel (M2), for modeling of domain-specific
+  entities.</p>
+
+  <p>See also</p>
+
+  <ul>
+    <li>
+      <p>UML Stereotypes</p>
+    </li>
+
+    <li>
+      <p>UML Tagged Values</p>
+    </li>
+  </ul>
+
+  <h4 id="item59">UML Models</h4>
+
+  <h3 id="item90">Generic Metamodels and Models API</h3>
+
+  <h4 id="item94">Model Identification</h4>
+
+  <p class="To_Do">(<b>To Do</b>) Project Lupine should develop a normative
+  protocol for identifying a model by a URI. That protocol should be designed
+  so as to be extensible for model loading and serialization via HTTP
+  (optionally incorportsting WebDAV support) and optionally , CORBA IIOP
+  (commensurate with a definition of an IDL model and implementation for MOF
+  and M2 metamodels — cf. XSLT for transformstion of XMI into other formats,
+  including XSD Schema, RELAX NG Schema, and IDL – and intrgrstion of Project
+  Lupine onto a CORBA service framework.)</p>
+
+  <h4 id="item92">Integration with User Objects</h4>
+
+  <p>See Also</p>
+
+  <ul>
+    <li>
+      <p><a href="#item80">Modeling Platform</a></p>
+    </li>
+  </ul>
+
+  <h2 id="item82">Diagram Concepts</h2>
+
+  <h2 id="item65">Model and Diagram Reference</h2>
+
+  <h3 id="item54">[Standard Generic Function] MAKE-MODEL</h3>
+
+  <h3 id="item60">[Accessor] MODEL-URI</h3>
+
+  <h3 id="item64">[Accessor] MODEL-DIAGRAMS</h3>
+
+  <h3 id="item86">[Standard Generic Function] ENSURE-DIAGRAM</h3>
+
+  <h3 id="item84">[Accessor] DIAGRAM-NAME</h3>
+
+  <h3 id="item87">[Accessor] DIAGRAM-ELEMENTS</h3>
+
+  <h1 id="item81">Constraints</h1>
+
+  <h2 id="item93">Constraints Concepts</h2>
+
+  <p class="To_Do">cf. OCL 2.0, as referenced by&nbsp;<a href="#item28">[UML
+  Infrastructure 2.4.1]</a> . Note, however, that OCL 3.0 represents the most
+  recent edition of OCL – check for an updated UML also.</p>
+
+  <h2 id="item96">Constraints Dictionary</h2>
+
+  <h1 id="item5">UML Infrastructure Library</h1>
+
+  <h2 id="item3">UML Infrastructure Concepts</h2>
+
+  <h3 id="item9">UML Primitive Types</h3>
+
+  <h3 id="item51">UML Model Elements</h3>
+
+  <p>Notes</p>
+
+  <ul>
+    <li>
+      <p>Every UML <i>model</i> <i>element (as specialized)</i> may have one or
+      no <i>container.</i></p>
+    </li>
+  </ul>
+
+  <p>See also</p>
+
+  <ul>
+    <li>
+      <p><a href="#item18">UML Namespaces</a></p>
+    </li>
+  </ul>
+
+  <h3 id="item7">UML Properties</h3>
+
+  <h3 id="item48">UML Classifiers</h3>
+
+  <h3 id="item26">UML Types</h3>
+
+  <h5 id="item19">Named Elements</h5>
+
+  <p>See also:&nbsp;<a href="#item18">UML Namespaces</a></p>
+
+  <h3 id="item4">UML Associations</h3>
+
+  <p>A UML <i>association</i> describes a UML <i>relationship</i> among one or
+  more UML <i>types</i>.</p>
+
+  <h4 id="item13">Binary Associations</h4>
+
+  <h4 id="item15">N-ary Associations</h4>
+
+  <h4 id="item2">Directedness and Navigability</h4>
+
+  <p>The formal semantics of UML Infrastructure&nbsp;<a href="#item28">[UML
+  Infrastructure 2.4.1]</a> <i><u>do not</u></i> require that an
+  <i>association</i> be defined as a <i>directed</i> relation. An
+  <i>association</i> in UML defines, essentially, a relation among properties
+  in the model<i></i>. <i></i></p>
+
+  <p><i>Directedness</i> in a UML <i>association</i> may be implied of the
+  <i>navigability</i> of <i>association</i> <i>member</i> end points.</p>
+
+  <h4 id="item17">Annotation of UML Association Endpoints</h4>
+
+  <ul>
+    <li>
+      <p>Navigable Endpoint: “Lined arrow,” may be used for display of
+      navigable endpoints (optional)</p>
+    </li>
+
+    <li>
+      <p>Composite Endpoint: “Hollow diamond,” used for <i>n-ary
+      association</i>s with <span style=
+      "font-family: monospace;">n&gt;2</span></p>
+    </li>
+
+    <li>
+      <p>Aggregate Endpoint: “Filled diamond,” used for aggregate composite
+      associations</p>
+    </li>
+
+    <li>
+      <p>Specialized association types: Defined in UML superstructure <a href=
+      "#item38">[UML Superstructure 2.4.1]</a> (e.g <i>generalization,
+      realization, dependemcy</i>)</p>
+    </li>
+  </ul>
+
+  <h4 id="item41">Extensibility of UML Associstions</h4>
+
+  <h5 id="item42">Association Member Subsetting</h5>
+
+  <h5 id="item43">Association Member Specialization</h5>
+
+  <h5 id="item44">Association Redefinitions</h5>
+
+  <h3 id="item18">UML Namespaces</h3>
+
+  <p>A UML <i>namespace</i> provides a semantics of naming context to
+  <i>named</i> <i>model</i> <i>elements</i> visible within the
+  <i>namespace</i>.</p>
+
+  <h4 id="item49">Classifiers</h4>
+
+  <p>A UML <i>classifier</i> represents a <i>set</i> or <i>container</i> of
+  <i>model</i> <i>elements</i>, such that <i>elements</i> in the
+  <i>container</i> share a set of common <i>features</i>, as defined by the
+  containing <i>classifier</i>.</p>
+
+  <h5 id="item40">Classifier Visibility</h5>
+
+  <h3 id="item47">UML Packages</h3>
+
+  <h3 id="item20">UML Metamodel — Reuse Within MOF</h3>
+
+  <p><b>See also:</b>&nbsp;<a href="#item25">[MOF Core 2.4.1]</a>, subclause
+  7.4, <i>Reuse of Common Core Packages by UML 2.0 and MOF 2.0</i></p>
+
+  <h2 id="item1">UML Infrastructure Dictionary — Project Lupine</h2>
+
+  <h3 id="item33">[Special Variable] *NAMESPACE*</h3>
+
+  <h4 id="item35">Overview</h4>
+
+  <h4 id="item36">See Also</h4>
+
+  <h3 id="item8">[Macro] DEF-UML-TYPE</h3>
+
+  <h4 id="item10">Syntax</h4>
+
+  <p class="Code_Block">(def-uml name-spec (generalization*)</p>
+
+  <p class="Code_Block">[ (attribute*)</p>
+
+  <p class="Code_Block">[ (association*)</p>
+
+  <p class="Code_Block">[ (constraint*)</p>
+
+  <p class="Code_Block">[ class-arg* ] ] ] )<b></b></p>
+
+  <ul>
+    <li>
+      <p><i>name-spec</i> ::= <i>abs-name-spec || rel-name-spec</i></p>
+    </li>
+
+    <li>
+      <p><i>abs-name-spec</i> ::= “::” <i>name</i> [ “::” <i>rel-name-spec</i>
+      ]</p>
+    </li>
+
+    <li>
+      <p><i>rel-name-spec</i> ::= <i>name</i> [ “::” <i>rel-name-spec</i> ]*
+      <i></i></p>
+    </li>
+
+    <li>
+      <p><i>generalization</i> : <i>name-spec</i></p>
+    </li>
+
+    <li>
+      <p><i>attribute</i> : ( <i>sname type</i> [ <i>cardinality</i> [
+      <i>documentation</i> ] ] )</p>
+    </li>
+
+    <li>
+      <p><i>sname</i> : <i>symbol || name</i></p>
+    </li>
+
+    <li>
+      <p><i>type</i> : <i>sname</i></p>
+    </li>
+
+    <li>
+      <p><i>cardinality</i> ::= <i>range || “*”</i></p>
+    </li>
+
+    <li>
+      <p><i>range</i> ::= “[” bound “..” bound “]”</p>
+    </li>
+
+    <li>
+      <p><i>association</i> : ( <i>sname type</i> [ <i>cardinality</i> [
+      <i>documentation</i> ] ] )</p>
+    </li>
+
+    <li>
+      <p class="To_Do"><i>constraint</i> : <b>{cf. OCL 2.0}</b></p>
+    </li>
+
+    <li>
+      <p><i>class-arg</i> : ( <i>symbol</i> . <i>argv</i> )</p>
+    </li>
+  </ul>
+
+  <h4 id="item14">Arguments</h4>
+
+  <ul>
+    <li>
+      <p class="To_Do">name: a string (FIXME: Syntax of 'name' in MOF / UML
+      ?)</p>
+    </li>
+
+    <li>
+      <p class="To_Do">type</p>
+    </li>
+
+    <li>
+      <p class="To_Do">cardinality</p>
+    </li>
+
+    <li>
+      <p class="To_Do">attribute</p>
+    </li>
+
+    <li>
+      <p class="To_Do">association</p>
+    </li>
+
+    <li>
+      <p class="To_Do">constraint</p>
+    </li>
+
+    <li>
+      <p class="To_Do">class-arg</p>
+    </li>
+  </ul>
+
+  <h4 id="item12">Overview</h4>
+
+  <p class="To_Do">The macro, DEF-UML defines a UML element …</p>
+
+  <h4 id="item22">Attributes</h4>
+
+  <h4 id="item24">Associations</h4>
+
+  <h4 id="item27">Constraints</h4>
+
+  <h4 id="item29">See Also <i></i></h4>
+
+  <h3 id="item11">[Function] RESOLVE-UML</h3>
+
+  <h4 id="item6">Syntax</h4>
+
+  <p class="Code_Block">(resolve-uml name-spec)</p>
+
+  <ul>
+    <li>
+      <p><i>name-spec</i> ::= <i>abs-name-spec || rel-name-spec</i></p>
+    </li>
+
+    <li>
+      <p><i>abs-name-spec</i> ::= “::” <i>name</i> [ “::” <i>rel-name-spec</i>
+      ]</p>
+    </li>
+
+    <li>
+      <p><i>rel-name-spec</i> ::= <i>name</i> [ “::” <i>rel-name-spec</i>
+      ]*</p>
+    </li>
+  </ul>
+
+  <h4 id="item91">Arguments</h4>
+
+  <ul>
+    <li>
+      <p><i>name</i> : a UML <i>composite name</i> or a single UML <i>named
+      element name</i></p>
+    </li>
+  </ul>
+
+  <h4 id="item31">Overview</h4>
+
+  <p class="To_Do">…</p>
+
+  <h4 id="item30">Description</h4>
+
+  <p class="To_Do">…</p>
+
+  <h4 id="item16">See Also</h4>
+
+  <p class="To_Do">…</p>
+
+  <h1 id="item67">MOF</h1>
+
+  <h2 id="item74">MOF Concepts</h2>
+
+  <h1 id="item68">UML Superstructure</h1>
+
+  <h2 id="item71">UML Superstructure Concepts</h2>
+
+  <h3 id="item69">UML Diagram Types</h3>
+
+  <h1 id="item80">Modeling Platform</h1>
+
+  <h2 id="item83">Modeling Platform Concepts</h2>
+
+  <h3 id="item63">Integration with the Integrated Development Environment
+  (IDE)</h3>
+
+  <h4 id="item70">Eclipse Modeling Framework (EMF)</h4>
+
+  <h5 id="item76">ECore Metamodel</h5>
+
+  <h4 id="item32">Tioga IDE</h4>
+
+  <p>The Tioga IDE. at present, is a “Blue Sky” project concept being developed
+  within Project Lupine. As such, Tioga IDE represents a concept towards the
+  development of a central IDE framework in Common Lisp. In an initial draft of
+  the requirements for the Tioga IDE project, the Tioga IDE components for
+  Project Lupine may be designed as to meet a set of requirements including the
+  following, albeit in a “Blue Sky” regards:</p>
+
+  <ul>
+    <li>
+      <p>Provide CLIM presentations of entities modeled within the Project
+      Lupine MOF implementation</p>
+    </li>
+
+    <li>
+      <p>Provide graphical presentations for the SPEM 2.0 Profile for UML</p>
+    </li>
+
+    <li>
+      <p>Integrate with cross-platform object access protocols such as CL+J,
+      for purpose of visual modeling of objects initialized within external
+      object systems</p>
+    </li>
+
+    <li>
+      <p>Incorporate distributed object system protocols (e.g CORBA) and
+      transport-layer security (TLS) measures for access to remote model
+      repositories from within the Tioga IDE desktop workspace</p>
+    </li>
+
+    <li>
+      <p>Provide graphical presentations of systems simulation models extending
+      on metsmodels supported within Project Lupine</p>
+    </li>
+
+    <li>
+      <p>Provide graphical controls for the Coffee Pot protocol, ultimately
+      incorporating I/O frameworks for I2C, SMBus, and other hardware
+      integration technologies</p>
+    </li>
+
+    <li>
+      <p>Model MIT CADR's original hardware designs and later VHDL
+      system/circuit representations</p>
+    </li>
+
+    <li>
+      <p>Support multiple modeling platform vendor practices for XMI model
+      serialization, hypothetically including support for:</p>
+
+      <ul>
+        <li>
+          <p>IBM Rational Rose</p>
+        </li>
+
+        <li>
+          <p>Sparx Systems Enterprise Architect</p>
+        </li>
+
+        <li>
+          <p>Yatta UML Labs</p>
+        </li>
+
+        <li>
+          <p>Eclipse Papyrus</p>
+        </li>
+
+        <li>
+          <p>Modelio</p>
+        </li>
+
+        <li>
+          <p>ArgoUML (UML 1.4 compatibility)</p>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2 id="item85">Modeling Platform Dictionary</h2>
+
+  <h1 id="item58">Model Serialization</h1>
+
+  <h2 id="item66">Model Serialization Concepts</h2>
+
+  <h2 id="item73">Model Serialization Dictionary</h2>
+
+  <h3 id="item77">[Standard Generic Function] SERIALIZE-MODEL</h3>
+
+  <h3 id="item78">[Standard Generic Function] READ-MODEL</h3>
+
+  <h1 id="item72">UML Diagram Interchange</h1>
+
+  <p class="To_Do">(Insert page break for print media)</p>
+
+  <h1 id="item23">Bibliography</h1>
+
+  <h2 id="item37">Formal Reference Documentation (Normative)</h2>
+
+  <h3 id="item28">[UML Infrastructure 2.4.1]</h3>
+
+  <p><i>UML Infrastructure Specification</i>, version 2.4.1. 2011: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/11–08–05</span></p>
+
+  <h3 id="item38">[UML Superstructure 2.4.1]</h3>
+
+  <p>UML Superstructure Specification, version 2.4.1. 2011: OMG</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/11–08–06</span></p>
+
+  <h3 id="item25">[MOF Core 2.4.1]</h3>
+
+  <p><i>MOF Core Specification</i>, version 2.4.1. 2011: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/11–08–07</span></p>
+
+  <h3 id="item39">[OCL 2.2]</h3>
+
+  <p><i>Object Constraint Language</i>, version 2.2. 2010: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/</span><span style=
+  "font-family: monospace;">2010-02-01</span></p>
+
+  <h3 id="item45">[XMI 2.4.1]</h3>
+
+  <p><i>XMI Metadata Interchange</i>, version 2.4.1. 2011: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/2011-08-09</span></p>
+
+  <h3 id="item46">[UML Interchange 2.0]</h3>
+
+  <p><i>UML 2.0 Diagram Interchange</i>. 2006: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">formal/06-04-04</span></p>
+
+  <h2 id="item21">Informative Reference Documentation (Non-Normative)</h2>
+
+  <h3 id="item34">MDA Guide</h3>
+
+  <p><i>MDA Guide</i> Version 1.0.1, ed. Joaquin Miller and Jishnu Mukerji.
+  2003: OMG.</p>
+
+  <p>OMG document number: <span style=
+  "font-family: monospace;">omg/2003-06-01</span></p>
+
+  <p><span style="font-family: monospace;"></span><br></p>
+</body>
+</html>
