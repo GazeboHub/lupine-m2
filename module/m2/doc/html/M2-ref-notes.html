@@ -67,9 +67,10 @@
   }
 
   p.Code_Block {
-    border-left: 2px solid;
+    border-left: 6px solid;
     font-family: monospace;
     line-height: 100%;
+    margin-left: 3%;
     padding-left: 7%;
   }
 
@@ -215,6 +216,12 @@
 
     <p class="toc3"><a href="#item11">[Function] RESOLVE-UML</a></p>
 
+    <p class="toc3"><a href="#item106">[Condition Type] NAME-ERROR</a></p>
+
+    <p class="toc3"><a href="#item113">[Function] NAME-ERROR-NAME</a></p>
+
+    <p class="toc3"><a href="#item104">[Condition Type] NAME-NOT-FOUND</a></p>
+
     <p class="toc1"><a href="#item67">MOF</a></p>
 
     <p class="toc2"><a href="#item74">MOF Concepts</a></p>
@@ -238,6 +245,8 @@
 
     <p class="toc2"><a href="#item66">Model Serialization Concepts</a></p>
 
+    <p class="toc3"><a href="#item72">Diagram Interchange</a></p>
+
     <p class="toc2"><a href="#item73">Model Serialization Dictionary</a></p>
 
     <p class="toc3"><a href="#item77">[Standard Generic Function]
@@ -245,8 +254,6 @@
 
     <p class="toc3"><a href="#item78">[Standard Generic Function]
     READ-MODEL</a></p>
-
-    <p class="toc1"><a href="#item72">UML Diagram Interchange</a></p>
 
     <p class="toc1"><a href="#item23">Bibliography</a></p>
 
@@ -763,7 +770,7 @@
 
   <h4 id="item10">Syntax</h4>
 
-  <p class="Code_Block">(def-uml name-spec (generalization*)</p>
+  <p class="Code_Block">(def-uml-type name-spec (generalization*)</p>
 
   <p class="Code_Block">[ (attribute*)</p>
 
@@ -771,7 +778,7 @@
 
   <p class="Code_Block">[ (constraint*)</p>
 
-  <p class="Code_Block">[ class-arg* ] ] ] )<b></b></p>
+  <p class="Code_Block">[ class-option* ] ] ] )<b></b></p>
 
   <ul>
     <li>
@@ -806,11 +813,11 @@
     </li>
 
     <li>
-      <p><i>cardinality</i> ::= <i>range || “*”</i></p>
+      <p><i>cardinality</i> ::= <i>range ||</i> :*</p>
     </li>
 
     <li>
-      <p><i>range</i> ::= “[” bound “..” bound “]”</p>
+      <p><i>range</i> : ( bound bound )</p>
     </li>
 
     <li>
@@ -823,7 +830,11 @@
     </li>
 
     <li>
-      <p><i>class-arg</i> : ( <i>symbol</i> . <i>argv</i> )</p>
+      <p><i>class-option</i> : ( <i>symbol</i> . <i>rest</i> )</p>
+    </li>
+
+    <li>
+      <p class="To_Do"><i>profile</i> : ???</p>
     </li>
   </ul>
 
@@ -860,7 +871,9 @@
     </li>
   </ul>
 
-  <h4 id="item12">Overview</h4>
+  <h4 id="item12">Description</h4>
+
+  <p class="To_Do">A UML <i>type</i> …</p>
 
   <p class="To_Do">The macro, DEF-UML defines a UML element …</p>
 
@@ -876,7 +889,7 @@
 
   <h4 id="item6">Syntax</h4>
 
-  <p class="Code_Block">(resolve-uml name-spec)</p>
+  <p class="Code_Block">(resolve-uml name-spec &amp;optional errorp)</p>
 
   <ul>
     <li>
@@ -898,22 +911,81 @@
 
   <ul>
     <li>
-      <p><i>name</i> : a UML <i>composite name</i> or a single UML <i>named
-      element name</i></p>
+      <p><i>name</i> : a UML <i>composite name</i> or an individual UML
+      <i>named element name</i></p>
+    </li>
+
+    <li>
+      <p><i>errorp</i> : a <i>generalized boolean</i>; default value is
+      <i>true</i></p>
+
+      <p><br></p>
     </li>
   </ul>
 
-  <h4 id="item31">Overview</h4>
-
-  <p class="To_Do">…</p>
-
   <h4 id="item30">Description</h4>
 
-  <p class="To_Do">…</p>
+  <p class="To_Do">UML named elements …</p>
+
+  <p class="To_Do">The&nbsp;<i>value space</i> of UML <i>named
+  elements</i>…</p>
+
+  <h4 id="item101">Exceptional Situations</h4>
+
+  <p>If the <i>name-spec,</i> when <i>resolved</i> within <i>containing</i>
+  <i>namespaces</i>, does not identify a UML <i>named element</i> and <i>error
+  is true,</i> <b>resolve-uml</b> signals an error of type <b><a href=
+  "#item104">[Condition Type] NAME-NOT-FOUND</a></b></p>
 
   <h4 id="item16">See Also</h4>
 
-  <p class="To_Do">…</p>
+  <ul>
+    <li>
+      <p><a href="#item8">[Macro] DEF-UML-TYPE</a></p>
+    </li>
+
+    <li>
+      <p class="To_Do">{Add element to model — function}</p>
+    </li>
+  </ul>
+
+  <h3 id="item106">[Condition Type] NAME-ERROR</h3>
+
+  <h4 id="item111">Class Precedence List</h4>
+
+  <p>name-error, error, serious-condition, condition, t</p>
+
+  <h4 id="item118">See Also</h4>
+
+  <ul>
+    <li>
+      <p><a href="#item113">[Function] NAME-ERROR-NAME</a></p>
+    </li>
+  </ul>
+
+  <h3 id="item113">[Function] NAME-ERROR-NAME</h3>
+
+  <h4 id="item114">Syntax</h4>
+
+  <p class="Code_Block">(name-error-name condition) =&gt; name</p>
+
+  <h4 id="item116">Arguments and Values</h4>
+
+  <ul>
+    <li>
+      <p><i>condition</i> : a <i>condition</i> of type <i>name error</i></p>
+    </li>
+
+    <li>
+      <p><i>name</i> : a <i>string</i></p>
+    </li>
+  </ul>
+
+  <h3 id="item104">[Condition Type] NAME-NOT-FOUND</h3>
+
+  <h4 id="item108">Class Precedence List</h4>
+
+  <p>name-not-found, name-error, error, serious-condition, condition, t</p>
 
   <h1 id="item67">MOF</h1>
 
@@ -1043,13 +1115,17 @@
 
   <h2 id="item66">Model Serialization Concepts</h2>
 
+  <h3 id="item72">Diagram Interchange</h3>
+
+  <h4 id="item95">Diagram Abstract Syntax</h4>
+
+  <h4 id="item98">Diagram Graphics</h4>
+
   <h2 id="item73">Model Serialization Dictionary</h2>
 
   <h3 id="item77">[Standard Generic Function] SERIALIZE-MODEL</h3>
 
   <h3 id="item78">[Standard Generic Function] READ-MODEL</h3>
-
-  <h1 id="item72">UML Diagram Interchange</h1>
 
   <p class="To_Do">(Insert page break for print media)</p>
 
