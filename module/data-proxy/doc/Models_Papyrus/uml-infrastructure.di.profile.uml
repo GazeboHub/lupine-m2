@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_dQzvcC_NEeOM36joGrlgrw" name="Profile" metamodelReference="_dQzvcS_NEeOM36joGrlgrw">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_dQzvcS_NEeOM36joGrlgrw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_0"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_dQzvci_NEeOM36joGrlgrw">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_VtA78C_PEeOM36joGrlgrw" name="PrimitiveTypes" URI="http://www.omg.org/spec/PrimitiveTypes/20110701"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_6jmpMC_PEeOM36joGrlgrw" name="PrimitiveTypes" URI="http://www.omg.org/spec/PrimitiveTypes/20110701">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_SJIJAC_QEeOM36joGrlgrw">
+      <body>org.omg.xmi.nsPrefix
+primitives</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_5HO8YC_QEeOM36joGrlgrw">
+      <body>http://www.w3.org/2001/XMLSchema#boolean</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_EYvs4C_REeOM36joGrlgrw">
+      <body>http://www.w3.org/2001/XMLSchema#integer</body>
+    </ownedComment>
+    <ownedComment xmi:type="uml:Comment" xmi:id="_HddbEC_REeOM36joGrlgrw">
+      <body>http://www.w3.org/2001/XMLSchema#double</body>
+    </ownedComment>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="__5skIC_PEeOM36joGrlgrw" name="Boolean"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_BcCgoC_QEeOM36joGrlgrw" name="Integer"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_CtObsC_QEeOM36joGrlgrw" name="Real"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_EUvMEC_QEeOM36joGrlgrw" name="String"/>
+    <packagedElement xmi:type="uml:PrimitiveType" xmi:id="_F0r74C_QEeOM36joGrlgrw" name="UnlimitedNatural"/>
+  </packagedElement>
+</uml:Profile>

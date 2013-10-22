@@ -8,5 +8,5 @@
   	<version>1.0.1-SNAPSHOT</version>
   	<artifactId>lupine</artifactId>
   </parent>
-  <artifactId>data-proxy</artifactId>
+  <artifactId>xmi</artifactId>
 </project>
