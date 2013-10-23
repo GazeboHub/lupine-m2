@@ -14,13 +14,17 @@
 
 (in-package #:asdf-user)
 
-#-:lupine-asdf ;; defpackage
-(operate 'load-op #:lupine-asdf)
+#-:lupine-asdf
+(asdf:find-system '#:lupine-pmmt)  ;; defpackage
 
 (in-package #:lupine/system)
 
-(defsystem lupine-mop-module
-	:class 'lupine-system/system
-	:project #:lupine ;; FIXME: DEFPROJECT #:LUPINE; DEFSYSTEM LUPINE-PMP
-	:defsystem-depends-on #:lupine-asdf
-	)
+(defsystem #:lupine-mop
+  :depends-on (#:closer-mop #:lupine-aux)
+  :components
+  ((:file "package")
+   (:file "null-unbound-slotd"
+    :depends-on ("package"))
+   (:file "ext-std-class"
+    :depends-on ("null-unbound-slotd" "package"))
+   ))

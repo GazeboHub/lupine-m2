@@ -1,4 +1,4 @@
-#|                                                      -*- lisp -*-
+#|
 
   Copyright (c) 2013, Sean Champ. All rights reserved.
 
@@ -9,6 +9,24 @@
 
 |#
 
-(in-package #:lupine/system)
+(in-package #:lupine/pmmt)
 
 (defgeneric component-project (component))
+
+(defclass component (asdf:component)
+  ((project
+    :initarg :project
+    :accessor component-project)
+   ;; make URI available for system, component identification
+   (uri
+    :initarg :uri
+    :type uri
+    :accessor component-uri)
+   ))
+
+(defmethod component-project :around ((component component))
+  (cond
+    ((slot-boundp component 'project)
+     (call-next-method))
+    (t
+     (component-project (component-parent component)))))

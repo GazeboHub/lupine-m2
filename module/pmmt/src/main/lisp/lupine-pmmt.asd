@@ -14,18 +14,18 @@
 
 (in-package #:asdf-user)
 
-#-:lupine-asdf ;; defpackage
-(operate 'load-op #:lupine-asdf)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+(defpackage #:lupine/system
+  (:use #:asdf #:cl)
+))
 
 (in-package #:lupine/system)
 
-(defsystem lupine-pmmt
-	;; FIXME: This system will need the namespace support provided by lupine-xd, and will be used by lupine-dm, such that thismsytem definition would ultimately use. There is a concern with regards to circular dependencies. It needs a system definition bootstrap procedure, such as:
-	;; *) define and load lupine-pmmt system
-	;; *) define and load lupine project definition
-	;; *) define and load lupine-dm
-	;; *) index lupine-pmmt system as a module within lupine projct definition (cannot be done in lupine-pmmt system definition)
-	:class 'lupine-system/system
-	:project #:lupine ;; FIXME: DEFPROJECT #:LUPINE; DEFSYSTEM LUPINE-PMP
-	:defsystem-depends-on #:lupine-asdf
-	)
+(defsystem #:lupine-pmmt
+  ;; :class 'lupine-system/system
+  ;; :project #:lupine ;; FIXME: DEFPROJECT #:LUPINE
+  :depends-on (#:puri #:lupine-aux)
+  :components
+  ((:file "package")
+   (:file "project" :depends-on ("package"))
+   ))
