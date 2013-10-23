@@ -30,6 +30,110 @@
 (defclass transformation-model ()
   ())
 
+#| NB: Types and Refinment within XMI Serialized UML Element Definitions
+
+cf. results of shell command
+
+ grep "xmi:type" UML.xmi |
+  sed 's|<||g' | awk '{print $1 " " $2}' |
+  sort | uniq
+
+There are exactly three types of packagedElement defined
+  in UML.xmi:
+
+  packagedElement[@xmi:type="uml:Association"]
+  packagedElement[@xmi:type="uml:Class"]
+  packagedElement[@xmi:type="uml:Enumeration"]
+
+The set of possible types of definitions that may be validly specified
+in the 'packagedElement' relation is constrained in UML itself. Note
+the 'PackageableElement' feature in the following - from UML.xmi, in
+the definition of the type 'uml:Package'
+
+ <ownedAttribute xmi:type="uml:Property"
+   xmi:id="Package-packagedElement"
+   name="packagedElement"
+   visibility="public"
+   type="PackageableElement"
+   aggregation="composite"
+   subsettedProperty="Namespace-ownedMember"
+   association="A_packagedElement_owningPackage">  ... </ownedAttribute>
+
+The 'xmi:type' attribute describes the type of the definition in the
+'ownedAttribute' declaration itself. The 'type' value within that
+'ownedAttribute' declaration - that 'type' attribute having the same
+XML namesapace as the 'ownedAttribute' declaration - that attribute
+may be understood as constraining the type of the value that may be
+denoted in the 'ownedAttribute' property.
+
+So, in essence, the 'packageableElement' itself is defined with a
+fixed range on the possible types that can occur in its xmi:type
+element. The value of the xmi:type element would specify a refinement
+on that type, as well as identifying the exact (CL) metaclass or (UML)
+type of the element defined in the element definition.
+
+
+It may be understood that a packagedElement relation is itself
+a relation between a UML Package definition and UML PackageableElement
+definition.
+
+It may be understood, likewise, that packagedElement and
+PackageableElement both may represent types of UML "core" model
+elements that should be manually supported in Project Lupine, if
+simply for the sake of being able to load the UML model itself, in its
+normative XMI encoding (UML.xmi).
+
+There are exactly 21 unique such element/type relations visible in
+UML.xmi:
+
+  defaultValue xmi:type="uml:InstanceValue"
+  defaultValue xmi:type="uml:LiteralBoolean"
+  defaultValue xmi:type="uml:LiteralInteger"
+  defaultValue xmi:type="uml:LiteralUnlimitedNatural"
+
+  generalization xmi:type="uml:Generalization"
+
+  lowerValue xmi:type="uml:LiteralInteger"
+
+  mofext:Tag xmi:type="mofext:Tag"
+
+  ownedAttribute xmi:type="uml:Property"
+
+  ownedComment xmi:type="uml:Comment"
+
+  ownedEnd xmi:type="uml:Property"
+
+  ownedLiteral xmi:type="uml:EnumerationLiteral"
+
+  ownedOperation xmi:type="uml:Operation"
+
+  ownedParameter xmi:type="uml:Parameter"
+
+  ownedRule xmi:type="uml:Constraint"
+
+  packagedElement xmi:type="uml:Association"
+  packagedElement xmi:type="uml:Class"
+  packagedElement xmi:type="uml:Enumeration"
+  packageImport xmi:type="uml:PackageImport"
+
+  specification xmi:type="uml:OpaqueExpression"
+
+  uml:Package xmi:type="uml:Package"
+
+  upperValue xmi:type="uml:LiteralUnlimitedNatural"
+
+
+|#
+
+(defclass transformation-model-component ()
+  ((model
+    :initarg :model
+    :type transformation-model
+    :accessor component-transformation-model)
+
+   ))
+
+
 (declaim (type transformation-model *xmi-unmarshalling-model*))
 
 (defvar *xmi-unmarshalling-model*)
@@ -38,12 +142,16 @@
 
 (defgeneric apply-type-transform (transform source))
 
-(defclass type-transform ()
-  ((containing-element
+(defclass type-transform (transformation-model-componen)
+  ((source-element-local-name
     ;; containing element for a typed model quality serialized in XMI
     ;; e.g "uml:ownedAttribute"; "uml:generalization"; "uml:packagedElement"
-    :initarg :element
+    :initarg :soruce-element-lname
     :type string ;; ?? FIXME: namespace qualified strings ??
+    )
+   (source-element-namespace
+    :initarg :source-element-ns
+    :type string ;; ?? FIXME: represent a namespace as an interned URI ??
     )
    (type
     ;; type of a typed model quaity serialized in XMI
