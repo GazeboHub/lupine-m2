@@ -13,7 +13,7 @@
 (in-package #:cl-user)
 
 (defpackage #:lupine/xmi
-    (:use #:cxml #:lupine/mop #:cl)
+    (:use #:cxml #:lupine/mop #:puri #:cl)
     #+(or CMU SBCL)
     (:shadowing-import-from
      #+sbcl #:sb-pcl

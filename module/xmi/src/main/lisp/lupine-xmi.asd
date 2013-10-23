@@ -23,8 +23,15 @@
   ;; :class 'lupine-system/system
   ;; :project #:lupine
   ;; :defsystem-depends-on #:lupine-asdf
-  :depends-on (#:cxml #:lupine-mop #:lupine-aux)
+  :depends-on (#:cxml #:lupine-mop #:puri #:lupine-aux)
   :components
   ((:file "package")
-   (:file "transform" :depends-on ("package"))
-   )
+   (:file "transform" :depends-on ("package")
+   (:file "types-cxml" :depends-on ("package"))
+   (:file "uri" :depends-on ("package"))
+   (:file "model" :depends-on ("package" "uri"))
+   (:file "transform-klacks" :depends-on ("package"
+					  "transform"
+					  "model"
+					  "types-cxml"))
+   ))

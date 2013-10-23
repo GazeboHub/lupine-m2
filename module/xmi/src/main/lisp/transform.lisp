@@ -27,10 +27,21 @@
 
 ;;; * Element transformation proto.
 
-(defgeneric find-element-transform (element context))
+(defclass transformation-model ()
+  ())
+
+(declaim (type transformation-model *xmi-unmarshalling-model*))
+
+(defvar *xmi-unmarshalling-model*)
+
+(defgeneric find-type-transform (element tmodel))
+
+(defgeneric find-element-transform (element tmodel))
+
+(defgeneric apply-element-transform (model transform source))
 
 (defclass element-transform ()
-  ((element
+  ((element ;; e.g "uml:ownedAttribute" or "uml:generalization"
     :initarg :element
     :type string)))
 
@@ -53,8 +64,8 @@
 
 ;;; * UML-Class
 
+(def-uml-package "UML") ;; ?
 
-(deftransform-namespace)
 
 (defclass uml-class (uml-transform-class)
   ((owned-attributes
@@ -80,10 +91,12 @@
 
   (:metaclass uml-tranform-class)
 
+  (:tmodel *xmi-unmarshalling-model*)
+
   (:namespaces
    ("uml" "http://www.omg.org/spec/UML/20110701"))
 
-  (:uml-name . "Class")
+  (:uml-name . "UML::Class")
 
   (:transform-type . "uml:Class"))
 
