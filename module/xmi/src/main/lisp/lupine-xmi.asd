@@ -15,15 +15,16 @@
 (in-package #:asdf-user)
 
 #-:lupine-asdf ;; defpackage
-(operate 'load-op #:lupine-asdf)
+(asdf:find-system '#:lupine-pmmt)
 
 (in-package #:lupine/system)
 
 (defsystem lupine-xmi
-	:class 'lupine-system/system
-	:project #:lupine ;; FIXME: DEFPROJECT #:LUPINE; DEFSYSTEM LUPINE-PMP
-	:defsystem-depends-on #:lupine-asdf
-	:depends-on (#:cxml)
-	:components
-	((:file "package")
-	)
+  ;; :class 'lupine-system/system
+  ;; :project #:lupine
+  ;; :defsystem-depends-on #:lupine-asdf
+  :depends-on (#:cxml #:lupine-mop #:lupine-aux)
+  :components
+  ((:file "package")
+   (:file "transform" :depends-on ("package"))
+   )

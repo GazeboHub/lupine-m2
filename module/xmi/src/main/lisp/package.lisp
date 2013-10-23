@@ -13,7 +13,7 @@
 (in-package #:cl-user)
 
 (defpackage #:lupine/xmi
-    (:use #:cxml #:cl)
-    (#:export
+    (:use #:cxml #:lupine/mop #:cl)
+    (:export
 
     ))
