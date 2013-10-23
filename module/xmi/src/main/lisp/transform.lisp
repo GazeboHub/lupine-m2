@@ -34,31 +34,40 @@
 
 (defvar *xmi-unmarshalling-model*)
 
-(defgeneric find-type-transform (element tmodel))
+(defgeneric find-type-transform (element type tmodel))
 
-(defgeneric find-element-transform (element tmodel))
+(defgeneric apply-type-transform (transform source))
 
-(defgeneric apply-element-transform (model transform source))
-
-(defclass element-transform ()
-  ((element ;; e.g "uml:ownedAttribute" or "uml:generalization"
+(defclass type-transform ()
+  ((containing-element
+    ;; containing element for a typed model quality serialized in XMI
+    ;; e.g "uml:ownedAttribute"; "uml:generalization"; "uml:packagedElement"
     :initarg :element
-    :type string)))
+    :type string ;; ?? FIXME: namespace qualified strings ??
+    )
+   (type
+    ;; type of a typed model quaity serialized in XMI
+    ;; e.g. "uml:Property", "uml:Comment", "uml:Operation", "uml:Constraint", "uml:Package"
+    :initag :type
+    :type string ;; ?? FIXME: namespace qualified strings ??
+    )
+   ;; ...
+   ))
 
 
 ;;; * Slot Definitions
 
 
 (defclass element-tranform-slot-definition
-    (element-transform slot-definition)
+    (type-transform slot-definition)
   ())
 
 (defclass direct-element-tranform-slot-definition
-    (element-transform-slot-definition standard-direct-slot-definition)
+    (type-transform-slot-definition standard-direct-slot-definition)
   ())
 
 (defclass effective-element-tranform-slot-definition
-    (element-transform-slot-definition standard-effective-slot-definition)
+    (type-transform-slot-definition standard-effective-slot-definition)
   ())
 
 
@@ -68,6 +77,8 @@
 
 
 (defclass uml-class (uml-transform-class)
+  ;; NOTE: This class represents the main initial use-case for the
+  ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
     :element "uml:ownedAttribute"
     :initarg :owned-attributes
