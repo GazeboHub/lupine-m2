@@ -34,7 +34,7 @@
 
 (defvar *xmi-unmarshalling-model*)
 
-(defgeneric find-type-transform (element type tmodel))
+(defgeneric find-type-transform (namespace element type tmodel))
 
 (defgeneric apply-type-transform (transform source))
 

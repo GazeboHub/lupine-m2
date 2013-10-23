@@ -30,15 +30,18 @@ See also:
       (klacks:make-tapping-source source sax-handler)
       (cxml:make-source source)))
 
-(defun read-xmi (source &key sax-handler (model-class 'standard-model))
+(defun make-standard-model (&optional source)
+  (make-instance 'standard-model :source source))
+
+(defun read-xmi (source &key sax-handler
+			  (transform-model (make-standard-model source)))
+  ;; FIXME: should this just
+  ;; 'MAKE-MODEL SOURCE &REST OTHERSTUFF' ?
   (declare (type parser-input-source source)
 	   (values model boolean &optional))
   ;; cf. `cxml-rng:parse-schema' for some klacks usage reference
   ;; also <http://common-lisp.net/project/cxml/klacks.html#sources>
-  (let ((m (make-instance model-class
-			  ;; FIXME: should this just
-			  ;; 'MAKE-MODEL SOURCE &REST OTHERSTUFF' ?
-			  :source (compute-uri source))))
+  (let (*container*)
     (klacks:with-open-source (s (make-xmi-source source sax-handler))
       (handler-case
 	  (block klacks-parse
@@ -46,25 +49,57 @@ See also:
 	      (multiple-value-bind (event-type &rest event-data)
 		  (klacks:consume s)
 		(ecase event-type
-		  (null (return-from klacks-parse (values m nil)))
+		  ((nil)
+		   ;; return model as created so far.
+		   ;; second value indicates "did not complete document"
+		   (return-from klacks-parse (values m nil)))
 		  (:start-document
 		   )
 		  (:dtd
 		   )
 		  (:start-element
-		   ;; call klacks:map-attributes, looking for xmi:type.
-		   ;; one finding the xmi:type attribute,
-		   ;; (let ((trans (find-type-transform type transform-model)))
-		   )
+		   (destructuring-bind (namespace lname qname) event-data
+		     (declare (ignore qname))
+		     (setq *container* (allocate-instance
+					;; FIXME: should this use namespace,
+					;; qname in the element class query?
+					;;
+					;; FIXME: should this also
+					;; use *container* ?
+					(model-default-element-class transform-model)))
+
+		     ;; dispatch on attributes
+		     ;; cf. klacks:map-attributes
+
+		     ;; @xmi:type
+		     (let ((trans (find-type-transform
+				   namespace lname type transform-model)))
+		       ;; FIXME: should do more than "Change class," here
+		       (change-class *container* trans))
+
+		     ;; @id = needs to be stored, for reference, in
+		     ;; the result model (TO DO)
+
+		     ;; 2. "dispatch" onto element contents
 		  (:end-element
+		   ;; "close" *container*
+		   (initialize-instance *container*) ;; (?)
 		   )
-		  (:characters
+		  (:characters ;; contents for *container*
 		   )
-		  (:processing-instruction
+		  (:processing-instruction ;; use special PI handling
+		   ;; (non-normative)
 		   )
-		  (:comment
+		  (:comment ;; use comment handling
+		   ;; (non-normative)
 		   )
 		  (:end-document
+		   ;; 1. finalize model
+
+		   ;; (?)
+
+		   ;; 2. then return - second value indicates
+		   ;; "Completed document"
 		   (return-from klacks-parse (values m t)))
 		  ))))
 	;; handle errors that the klacks parser might produce...
