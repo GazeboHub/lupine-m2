@@ -8,5 +8,11 @@
   <packaging>pom</packaging>
   <modules>
   	<module>module/data-proxy</module>
+  	<module>module/aux</module>
+  	<module>module/mop</module>
+  	<module>module/asdf</module>
+  	<module>module/pmmt</module>
+  	<module>module/xd</module>
+  	<module>module/m2</module>
   </modules>
 </project>

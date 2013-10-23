@@ -8,5 +8,5 @@
   	<version>1.0.1-SNAPSHOT</version>
   	<artifactId>lupine</artifactId>
   </parent>
-  <artifactId>mop-module</artifactId>
+  <artifactId>aux</artifactId>
 </project>
