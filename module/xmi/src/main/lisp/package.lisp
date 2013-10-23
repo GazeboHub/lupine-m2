@@ -14,6 +14,16 @@
 
 (defpackage #:lupine/xmi
     (:use #:cxml #:lupine/mop #:cl)
+    #+(or CMU SBCL)
+    (:shadowing-import-from
+     #+sbcl #:sb-pcl
+     #+cmu #:pcl
+     #:validate-superclass)
+    (:shadowing-import-from
+     #:c2mop
+     #:defmethod
+     #:defgeneric
+     #:standard-generic-function)
     (:export
 
-    ))
+     ))
