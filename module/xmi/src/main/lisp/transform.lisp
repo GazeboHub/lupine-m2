@@ -11,6 +11,8 @@
 
 (in-package #:lupine/xmi)
 
+;;; * Metaclasses
+
 (defgeneric class-transform-type (class))
 
 (defclass transform-class (standard-class)
@@ -19,16 +21,42 @@
     :type string
     :accessor class-transform-type)))
 
-(defclass UML-tranform-class (transform-class)
+(defclass uml-transform-class (transform-class)
    ((uml-name :initarg :uml-name :type string)
     (uml-packge :initarg :uml-package)))
 
-(defclass element-tranform-slot-definition (slot-definition)
-  ((element :initarg :element)))
+;;; * Element transformation proto.
 
-(deftransform-namespace "uml" "http://www.omg.org/spec/UML/20110701")
+(defgeneric find-element-transform (element context))
 
-(defclass UML-class (UML-tranform-class)
+(defclass element-transform ()
+  ((element
+    :initarg :element
+    :type string)))
+
+
+;;; * Slot Definitions
+
+
+(defclass element-tranform-slot-definition
+    (element-transform slot-definition)
+  ())
+
+(defclass direct-element-tranform-slot-definition
+    (element-transform-slot-definition standard-direct-slot-definition)
+  ())
+
+(defclass effective-element-tranform-slot-definition
+    (element-transform-slot-definition standard-effective-slot-definition)
+  ())
+
+
+;;; * UML-Class
+
+
+(deftransform-namespace)
+
+(defclass uml-class (uml-transform-class)
   ((owned-attributes
     :element "uml:ownedAttribute"
     :initarg :owned-attributes
@@ -36,19 +64,28 @@
     :accessor class-direct-owned-attributes)
    (owned-rules
     :element "uml:ownedRule"
-    #|...initargs...|# )
+    #|...initargs...|#
+    )
    (uml-generalizations
     :element "uml:generalization"
-    #|...initargs...|# )
+    #|...initargs...|#
+    )
    (documentation-stub
-    #|...initargs...|# )
+    #|...initargs...|#
+    )
    (owned-comments
     :element "uml:ownedComment"
-    #|...initargs...|# ))
+    #|...initargs...|#
+    ))
 
-  (:metaclass UML-tranform-class)
-  (:uml-name "Class")
-  (:transform-type "uml:Class"))
+  (:metaclass uml-tranform-class)
+
+  (:namespaces
+   ("uml" "http://www.omg.org/spec/UML/20110701"))
+
+  (:uml-name . "Class")
+
+  (:transform-type . "uml:Class"))
 
 (let ((c (find-class 'uml-class)))
   (change-class c c))
