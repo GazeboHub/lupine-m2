@@ -45,46 +45,79 @@ There are exactly three types of packagedElement defined
   packagedElement[@xmi:type="uml:Class"]
   packagedElement[@xmi:type="uml:Enumeration"]
 
+## Metamodels and Types, in Pratice
+
 The set of possible types of definitions that may be validly specified
-in the 'packagedElement' relation is constrained in UML itself. Note
-the 'PackageableElement' feature in the following - from UML.xmi, in
-the definition of the type 'uml:Package'
+in the `packagedElement` relation is constrained in UML itself. Note
+the `PackageableElement` feature in the following - from UML.xmi, in
+the definition of the type `uml:Package`
 
- <ownedAttribute xmi:type="uml:Property"
-   xmi:id="Package-packagedElement"
-   name="packagedElement"
-   visibility="public"
-   type="PackageableElement"
-   aggregation="composite"
-   subsettedProperty="Namespace-ownedMember"
-   association="A_packagedElement_owningPackage">  ... </ownedAttribute>
+   <ownedAttribute xmi:type="uml:Property"
+     xmi:id="Package-packagedElement"
+     name="packagedElement"
+     visibility="public"
+     type="PackageableElement"
+     aggregation="composite"
+     subsettedProperty="Namespace-ownedMember"
+     association="A_packagedElement_owningPackage">  ... </ownedAttribute>
 
-The 'xmi:type' attribute describes the type of the definition in the
-'ownedAttribute' declaration itself. The 'type' value within that
-'ownedAttribute' declaration - that 'type' attribute having the same
-XML namesapace as the 'ownedAttribute' declaration - that attribute
-may be understood as constraining the type of the value that may be
-denoted in the 'ownedAttribute' property.
+The `xmi:type` attribute describes the type of the definition
+represented by  the `ownedAttribute` declaration itself. As such,
+the xmi:type attribute essentially describes the type of the
+definition as a metamodel feature.
 
-So, in essence, the 'packageableElement' itself is defined with a
-fixed range on the possible types that can occur in its xmi:type
-element. The value of the xmi:type element would specify a refinement
-on that type, as well as identifying the exact (CL) metaclass or (UML)
-type of the element defined in the element definition.
+The `type` value within that `ownedAttribute` declaration - the
+`type` attribute having the same XML namesapace as the
+`ownedAttribute` declaration - that attribute may be understood as
+describing the type of the value that may be contained in such a
+relation as defined in the `ownedAttribute` property. Essentially, it
+denotes the type of the model feature described by the metmodel
+feature in its XMI encoding.
 
 
-It may be understood that a packagedElement relation is itself
-a relation between a UML Package definition and UML PackageableElement
-definition.
+## Discussion of Types in the XMI Specification
 
-It may be understood, likewise, that packagedElement and
-PackageableElement both may represent types of UML "core" model
-elements that should be manually supported in Project Lupine, if
-simply for the sake of being able to load the UML model itself, in its
-normative XMI encoding (UML.xmi).
+In reference to [XMI 2.4.1], subclause 7.6.3:
 
-There are exactly 21 unique such element/type relations visible in
-UML.xmi:
+  "The type attribute is used to specify the type of object being
+  serialized, when the type is not known from the model"
+
+Likewise, from subclause 7.8.1:
+
+  "The name for XML tags corresponding to model Properties is the
+  short name of the property. The name of XML attributes corresponding
+  to model properties (DataType-typed or Class-typed) is the short
+  name of the property, since each tag in XML has its own naming context"
+
+Albeit, there may not appear be a lot of guidance in that, for
+integration with components implementing other semantically
+complimentary OMG specifications. As far as "Proof of concept,"
+however...
+
+## Core Model Features
+
+In order for the UML metamodel defined in UML.xmi to be interpreted, a
+corresponding UML implementation may be developed manually, such as to
+implement the program and semantics necessary for unmarshaling that
+UML metamodel. (Once the UML metamodel defined in UML.xmi can be
+interpeted competely, it may serve to add features to the initial
+"Boostrap" or "Core" model defined for its intepretation)
+
+## Pakaged Elements
+
+A `packagedElement` relation represents a relation between a UML
+Package definition and a definition of a UML element of type
+PackageableElement.
+
+The `packagedElement` and `PackageableElement` both may represent
+types of UML "core" model elements, such that should be manually
+supported in the UML interpreter, if simply for the sake of being able
+to load the UML model itself, in its normative XMI encoding (cf. UML.xmi).
+
+## Core Model Metamodel Types
+
+There are exactly 21 unique element/type relations visible in
+UML.xmi - sorted in alphabetical order:
 
   defaultValue xmi:type="uml:InstanceValue"
   defaultValue xmi:type="uml:LiteralBoolean"
@@ -114,6 +147,7 @@ UML.xmi:
   packagedElement xmi:type="uml:Association"
   packagedElement xmi:type="uml:Class"
   packagedElement xmi:type="uml:Enumeration"
+
   packageImport xmi:type="uml:PackageImport"
 
   specification xmi:type="uml:OpaqueExpression"
@@ -122,6 +156,11 @@ UML.xmi:
 
   upperValue xmi:type="uml:LiteralUnlimitedNatural"
 
+
+## Prototype
+
+The UML-CLASS class represents the first working prototype of a "stub"
+class for unmarshalling the UML metadmodel described in UML.xmi
 
 |#
 
@@ -143,18 +182,14 @@ UML.xmi:
 (defgeneric apply-type-transform (transform source))
 
 (defclass type-transform (transformation-model-componen)
-  ((source-element-local-name
-    ;; containing element for a typed model quality serialized in XMI
-    ;; e.g "uml:ownedAttribute"; "uml:generalization"; "uml:packagedElement"
+  ((source-element-qname
     :initarg :soruce-element-lname
-    :type string ;; ?? FIXME: namespace qualified strings ??
-    )
-   (source-element-namespace
-    :initarg :source-element-ns
-    :type string ;; ?? FIXME: represent a namespace as an interned URI ??
+    :type qname ;; FIXME: namespace qualified strings - see ensure-qname
     )
    (type
-    ;; type of a typed model quaity serialized in XMI
+    ;; type of a typed model quality serialized in XMI (see notes, in
+    ;; the previous)
+    ;;
     ;; e.g. "uml:Property", "uml:Comment", "uml:Operation", "uml:Constraint", "uml:Package"
     :initag :type
     :type string ;; ?? FIXME: namespace qualified strings ??

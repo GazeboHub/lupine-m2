@@ -74,11 +74,15 @@ See also:
 		     ;; @xmi:type
 		     (let ((trans (find-type-transform
 				   namespace lname type transform-model)))
-		       ;; FIXME: should do more than "Change class," here
+		       ;; FIXME: should do more than "Change class," here?
 		       (change-class *container* trans))
 
 		     ;; @id = needs to be stored, for reference, in
 		     ;; the result model (TO DO)
+
+		     ;; availablity of other attributes, in a
+		     ;; conforming model, will depend on {NAMESPACE, LNAME}
+		     ;; e.g @name = may or may not be available
 
 		     ;; 2. "dispatch" onto element contents
 		  (:end-element
