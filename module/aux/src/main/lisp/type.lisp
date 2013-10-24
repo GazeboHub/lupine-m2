@@ -44,3 +44,22 @@
 ;; => "Three", 0
 ;; (member-typep 'bignum '("Three" 2 1))
 ;; => NIL, NIL
+
+
+(defun simplify-string (str)
+  (declare (type string str)
+	   (values (or simple-string simple-base-string)
+		   &optional))
+  (handler-case
+      (coerce str 'simple-base-string)
+    (type-error ()
+      (coerce str 'simple-string))))
+
+
+#|
+ (type-of (simplify-string "FOO"))
+
+ (type-of
+ (simplify-string (make-array 31 :element-type 'character :adjustable t
+		       :initial-element (code-char #x3C0))))
+|#

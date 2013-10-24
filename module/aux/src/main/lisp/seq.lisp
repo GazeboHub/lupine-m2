@@ -11,20 +11,23 @@
 
 (in-package #:lupine/aux)
 
-(defun simplify-string (str)
-  (declare (type string str)
-	   (values (or simple-string simple-base-string)
-		   &optional))
-  (handler-case
-      (coerce str 'simple-base-string)
-    (type-error ()
-      (coerce str 'simple-string))))
+(deftype array-dimension-index ()
+  `(mod #.array-dimension-limit))
+
+(deftype array-length ()
+  `(integer 0 #.array-dimension-limit))
 
 
-#|
- (type-of (simplify-string "FOO"))
+(defmacro do-vector ((var vector &optional retv) &body body)
+  (with-gensyms (%vector %len %n)
+    `(let* ((,%vector ,vector)
+	    (,%len (length ,%vector))
+	    (,%n 0))
+       (declare (type vector ,%vector)
+		(type array-length ,%len)
+		(type array-dimension-index ,%n))
+       (dotimes (,%n ,%len ,retv)
+	 (let ((,var (aref ,%vector ,%n)))
+	   ,@body)))))
 
- (type-of
- (simplify-string (make-array 31 :element-type 'character :adjustable t
-		       :initial-element (code-char #x3C0))))
-|#
+;; (do-vector (c "FOO" 412) (format t "Char ~s~%" c))

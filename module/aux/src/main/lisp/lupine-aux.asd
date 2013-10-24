@@ -17,8 +17,10 @@
   ((:file "package")
    (:file "type"
     :depends-on ("package"))
+   (:file "macro"
+    :depends-on ("package" "type"))
    (:file "seq"
-    :depends-on ("package"))
+    :depends-on ("package" "macro"))
    (:file "condition"
     :depends-on ("package"))
    ))
