@@ -19,6 +19,7 @@
    #:compute-class
    #:type-designator
    #:member-typep
+   #:simplify-string
    ;; conditions.lisp
    #:simple-style-warning
    ;; macro.lisp
