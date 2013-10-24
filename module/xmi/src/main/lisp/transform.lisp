@@ -16,14 +16,14 @@
 (defgeneric class-transform-type (class))
 
 (defclass transform-class (standard-class)
-  ((transform-type
+  ((transform-type ;; ?
     :initarg :transform-type
     :type string
     :accessor class-transform-type)))
 
 (defclass uml-transform-class (transform-class)
    ((uml-name :initarg :uml-name :type string)
-    (uml-packge :initarg :uml-package)))
+    (uml-package :initarg :uml-package)))
 
 ;;; * Element transformation proto.
 
@@ -83,14 +83,14 @@ denotes the type of the model feature described by the metmodel
 feature in its XMI encoding.
 
 
-## Discussion of Types in the XMI Specification
+## Discussion of Types and Element Names in the XMI Specification
 
 In reference to [XMI 2.4.1], subclause 7.6.3:
 
   "The type attribute is used to specify the type of object being
   serialized, when the type is not known from the model"
 
-Likewise, from subclause 7.8.1:
+Regarding element names, from subclause 7.8.1:
 
   "The name for XML tags corresponding to model Properties is the
   short name of the property. The name of XML attributes corresponding
@@ -185,7 +185,7 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 
 (defvar *xmi-unmarshalling-model*)
 
-(defclass type-transform (transformation-model-componen)
+(defclass type-transform (transformation-model-component)
   ((source-element-qname
     :initarg :soruce-element-lname
     :type qname ;; FIXME: namespace qualified strings - see ensure-qname
@@ -205,15 +205,15 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 ;;; * Slot Definitions
 
 
-(defclass element-tranform-slot-definition
+(defclass property-transform-slot-definition
     (type-transform slot-definition)
   ())
 
-(defclass direct-element-tranform-slot-definition
+(defclass direct-property-transform-slot-definition
     (type-transform-slot-definition standard-direct-slot-definition)
   ())
 
-(defclass effective-element-tranform-slot-definition
+(defclass effective-property-transform-slot-definition
     (type-transform-slot-definition standard-effective-slot-definition)
   ())
 
@@ -262,6 +262,8 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 
   (:namespaces
    ;; namespaces for qnames
+   ;; i.e. use these namespace prefixes when resolving qnames denoted
+   ;; in the slot definitions and in class options
    ("uml" "http://www.omg.org/spec/UML/20110701" ))
 
   ;; UML composite name
