@@ -186,10 +186,19 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 (defvar *xmi-unmarshalling-model*)
 
 (defclass type-transform (transformation-model-component)
-  ((source-element-qname
-    :initarg :soruce-element-lname
-    :type qname ;; FIXME: namespace qualified strings - see ensure-qname
-    )
+  ((source-local-name
+    :initarg :source-local-name
+    ;; FIXME: validate local-name as an XML name
+    :type string ;; FIXME: namespace qualified strings? - see ensure-qname (?)
+    :reader type-transform-source-local-name)
+   (source-element-p
+    :initarg :source-element-p
+    :type boolean
+    :reader type-transform-source-local-element-p)
+   (source-attribute-p
+    :initarg :source-element-p
+    :type boolean
+    :reader type-transform-source-attribute-p)
    (type
     ;; type of a typed model quality serialized in XMI (see notes, in
     ;; the previous)
@@ -223,44 +232,36 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 (def-uml-package "UML") ;; ?
 
 
-(defclass uml-class (uml-transform-class)
+
+(defclass uml-class (classifier uml-transform-class)
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
-    :element "uml:ownedAttribute" ;; qname
+    :source-element-p t
+    :source-local-name "ownedAttribute" ;; qname (?)
     :initarg :owned-attributes
     ;; NB: access to values of slot containing property-table types
     ;; may be faciliated with a special slot definition extension
     :type property-table
     :accessor class-direct-owned-attributes-table)
-   (owned-rules
-    :element "uml:ownedRule"
-    :initarg :owned-rules
-    :type property-table
-    :accessor class-direct-owned-rules-table
-    )
-   (generalizations
-    :element "uml:generalization"
-    :initarg :generalizations
-    :type property-table
-    :accessor class-direct-generalizations-table
-    )
    (documentation-stub
     :initarg :documentation-stub
     :type simple-string
     :accessor class-documentation-stub
     )
-   (owned-comments
-    :element "uml:ownedComment"
-    :type property-table
-    :accessor class-direct-owned-comments-table
-    ))
+   (is-abstract
+    :source-attribute-p t
+    :source-local-name "isAbstract"
+    :initarg :is-abstract
+    :type boolean)
+   )
 
   (:metaclass uml-tranform-class)
 
+  ;; FIXME: add :MODEL to other class definitions (?)
   (:model *xmi-unmarshalling-model*)
 
-  (:namespaces
+  (:namespace
    ;; namespaces for qnames
    ;; i.e. use these namespace prefixes when resolving qnames denoted
    ;; in the slot definitions and in class options
@@ -282,3 +283,50 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 
 (let ((c (find-class 'uml-class)))
   (change-class c c))
+
+
+;;; * Post Hoc
+
+
+(defclass element ()
+  ((owned-comments
+    :source-element-p t
+    :source-local-name "ownedComment"
+    :initarg :owned-comments
+    :type property-table
+    :accessor class-direct-owned-comments-table))
+  (:metaclass uml-class)
+  (:namespace
+   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:uml-name "UML::Element")
+  (:is-absract . t))
+
+
+(defclass namespace ()
+  ((owned-rules
+    :source-element-p t
+    :source-local-name "ownedRule"
+    :initarg :owned-rules
+    :type property-table
+    :accessor class-direct-owned-rules-table
+    ))
+  (:metaclass uml-class)
+  (:namespace
+   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:uml-name "UML::Namespace")
+  (:is-absract . t))
+
+
+(defclass classifier (namespace type)
+  ((generalizations
+    :source-element-p t
+    :source-local-name "generalization"
+    :initarg :generalizations
+    :type property-table
+    :accessor class-direct-generalizations-table
+    ))
+  (:metaclass uml-class)
+  (:namespace
+   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:uml-name "UML::Classifier")
+  (:is-absract . t))
