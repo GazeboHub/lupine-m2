@@ -33,8 +33,7 @@ refer to ./transform.md
     (uml-package :initarg :uml-package)
     ;; ^ FIXME: define package structure and ensure referencing to
     ;; this slot
-
-    )))
+    ))
 
 ;;; * Element transformation proto.
 
@@ -119,7 +118,7 @@ refer to ./transform.md
     ;; the previous)
     ;;
     ;; e.g. "uml:Property", "uml:Comment", "uml:Operation", "uml:Constraint", "uml:Package"
-    :initag :type
+    :initarg :type
     :type string ;; ?? FIXME: namespace qualified strings ??
     )
    ;; ...
@@ -145,7 +144,6 @@ refer to ./transform.md
 ;;; * UML-Class
 
 (def-uml-package "UML") ;; ?
-
 
 
 (defclass uml-class (classifier uml-transform-class)
@@ -203,6 +201,7 @@ refer to ./transform.md
 ;;; * Post Hoc
 
 
+
 (defclass element ()
   ((owned-comments
     :source-element-p t
@@ -215,10 +214,25 @@ refer to ./transform.md
   (:namespace
    ("uml" "http://www.omg.org/spec/UML/20110701" ))
   (:uml-name "UML::Element")
-  (:is-absract . t))
+  (:is-abstract . t))
 
 
-(defclass namespace ()
+(defclass named-element (element)
+  ((name
+    :source-attribute-p t
+    :source-local-name "name"
+    :initarg :name
+    :type simple-string
+    :accessor named-element-name))
+  (:metaclass uml-class)
+  (:model *uml-stub-metamodel*)
+  (:namespace
+   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:uml-name "UML::NamedElement")
+  (:is-abstract . t))
+
+
+(defclass namespace (named-element)
   ((owned-rules
     :source-element-p t
     :source-local-name "ownedRule"
@@ -231,7 +245,7 @@ refer to ./transform.md
   (:namespace
    ("uml" "http://www.omg.org/spec/UML/20110701" ))
   (:uml-name "UML::Namespace")
-  (:is-absract . t))
+  (:is-abstract . t))
 
 
 (defclass classifier (namespace type)
@@ -247,4 +261,4 @@ refer to ./transform.md
   (:namespace
    ("uml" "http://www.omg.org/spec/UML/20110701" ))
   (:uml-name "UML::Classifier")
-  (:is-absract . t))
+  (:is-abstract . t))
