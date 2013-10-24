@@ -27,11 +27,11 @@
   :components
   ((:file "package")
    (:file "transform" :depends-on ("package")
-   (:file "types-cxml" :depends-on ("package"))
+   (:file "util-cxml" :depends-on ("package"))
    (:file "uri" :depends-on ("package"))
    (:file "model" :depends-on ("package" "uri"))
    (:file "transform-klacks" :depends-on ("package"
 					  "transform"
 					  "model"
-					  "types-cxml"))
+					  "util-cxml"))
    ))
