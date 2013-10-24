@@ -1,4 +1,4 @@
-#|                                                      -*- lisp -*-
+#|
 
   Copyright (c) 2013, Sean Champ. All rights reserved.
 
