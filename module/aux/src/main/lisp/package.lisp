@@ -8,4 +8,5 @@
    #:class-designator
    #:compute-class
    #:type-designator
-   #:member-typep))
+   #:member-typep
+   #:simplify-string))
