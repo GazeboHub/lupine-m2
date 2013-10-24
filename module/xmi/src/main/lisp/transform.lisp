@@ -28,7 +28,15 @@
 ;;; * Element transformation proto.
 
 (defclass transformation-model ()
+  ;; effectively a container for XMI -> Common Lisp transformation descriptors
   ())
+
+(defgeneric add-transformation (transformation model))
+
+(defgeneric find-transformation (namespace element type model))
+;; ^ ? too broad ?
+
+(defgeneric apply-transform (transformation source))
 
 #| NB: Types and Refinment within XMI Serialized UML Element Definitions
 
@@ -177,10 +185,6 @@ class for unmarshalling the UML metadmodel described in UML.xmi
 
 (defvar *xmi-unmarshalling-model*)
 
-(defgeneric find-type-transform (namespace element type tmodel))
-
-(defgeneric apply-type-transform (transform source))
-
 (defclass type-transform (transformation-model-componen)
   ((source-element-qname
     :initarg :soruce-element-lname
@@ -223,36 +227,56 @@ class for unmarshalling the UML metadmodel described in UML.xmi
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
-    :element "uml:ownedAttribute"
+    :element "uml:ownedAttribute" ;; qname
     :initarg :owned-attributes
-    :type list
-    :accessor class-direct-owned-attributes)
+    ;; NB: access to values of slot containing property-table types
+    ;; may be faciliated with a special slot definition extension
+    :type property-table
+    :accessor class-direct-owned-attributes-table)
    (owned-rules
     :element "uml:ownedRule"
-    #|...initargs...|#
+    :initarg :owned-rules
+    :type property-table
+    :accessor class-direct-owned-rules-table
     )
-   (uml-generalizations
+   (generalizations
     :element "uml:generalization"
-    #|...initargs...|#
+    :initarg :generalizations
+    :type property-table
+    :accessor class-direct-generalizations-table
     )
    (documentation-stub
-    #|...initargs...|#
+    :initarg :documentation-stub
+    :type simple-string
+    :accessor class-documentation-stub
     )
    (owned-comments
     :element "uml:ownedComment"
-    #|...initargs...|#
+    :type property-table
+    :accessor class-direct-owned-comments-table
     ))
 
   (:metaclass uml-tranform-class)
 
-  (:tmodel *xmi-unmarshalling-model*)
+  (:model *xmi-unmarshalling-model*)
 
   (:namespaces
-   ("uml" "http://www.omg.org/spec/UML/20110701"))
+   ;; namespaces for qnames
+   ("uml" "http://www.omg.org/spec/UML/20110701" ))
 
+  ;; UML composite name
+  ;;
+  ;; This needs a "UML" package defined for appropriate resolution,
+  ;; however.
+  ;;
+  ;; This class option would effectively denote a packagedElement
+  ;; definition for the defining class.
   (:uml-name . "UML::Class")
 
-  (:transform-type . "uml:Class"))
+  ;; "uml" in the following item denotes the namespace URI assigned
+  ;; tot he prefix "uml"
+  (:transform-type . "uml:Class")  ;; cf. @xmi:type="uml:Class"
+  )
 
 (let ((c (find-class 'uml-class)))
   (change-class c c))
