@@ -144,7 +144,8 @@
   (declare (type simple-string prefix)
 	   (type namespace namespace)
 	   (values (or null simple-string) &optional))
-  (find prefix (namespace-prefix-table namespace)))
+  (find prefix (namespace-prefix-table namespace)
+	:test #'string=))
 
 
 (defstruct (qname
@@ -310,8 +311,7 @@ FINALIZED-P"
 	  ((and ns-p (string= (namespace-string ns-p) urix))
 	   (return-from local-binding
 	     (values ns-p pf-p)))
-	  ((and ns-p
-		(instance-finalized-p namespace))
+	  ((and ns-p (instance-finalized-p ns-p))
 	   (error "Unable to add prefix ~s to ~
 finalized namespace ~s"
 		  pf-p ns-p))
@@ -377,5 +377,18 @@ finalized namespace ~s"
   (values (eq pfx *foo*) ns )
   )
 
+
+(ensure-prefix "bar" *foo.ex* *r*)
+;; ^ call multiple times, should not be duplicating prefixes
+
+(handler-case
+    (ensure-prefix "bar" "http://bar.example.com/" *r*)
+  (namespace-prefix-unbind ()
+    (error "Caught unbind before return - OK")))
+
+(handler-case
+    (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
+  (namespace-prefix-bind ()
+    (error "Caught bind - OK")))
 
 |#
