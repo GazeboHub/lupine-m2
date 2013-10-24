@@ -17,4 +17,6 @@
   ((:file "package")
    (:file "type"
     :depends-on ("package"))
+   (:file "condition"
+    :depends-on ("package"))
    ))

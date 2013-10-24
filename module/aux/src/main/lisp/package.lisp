@@ -9,4 +9,8 @@
    #:compute-class
    #:type-designator
    #:member-typep
-   #:simplify-string))
+   #:simplify-string
+   ;; conditions.lisp
+   #:simple-style-warning
+   )
+  )
