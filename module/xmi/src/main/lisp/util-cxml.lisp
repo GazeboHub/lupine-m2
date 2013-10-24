@@ -114,19 +114,19 @@
      ns-string
      (puri:intern-uri ns-string *qname-ns-registry*))))
 
-(defun ensure-qname-string (qname registry) ;; FIXME: rename arg qname => ncname
+(defun ensure-qname-string (ncname registry)
   #+NCNAMES (locally (declare (inline ncname-p)))
-    (declare (type string qname)
-	     (type namespace registry)
-	     (values simple-ncname &optional))
-    (let ((qname-s (simplify-string qname))
-	  (table (namespace-local-names-table registry)))
-      (or (gethash qname-s table)
-	  (progn
-	    #+NCNAMES
-	    (unless (ncname-p qname)
-	      (error 'type-error :expected-type 'qname :datum qname))
-	    (setf (gethash qname-s table) qname-s)))))
+  (declare (type string ncname)
+	   (type namespace registry)
+	   (values simple-ncname &optional))
+  (let ((ncname-s (simplify-string ncname))
+	(table (namespace-local-names-table registry)))
+    (or (gethash ncname-s table)
+	(progn
+	  #+NCNAMES
+	  (unless (ncname-p ncname)
+	    (error 'type-error :expected-type 'ncname :datum ncname))
+	  (setf (gethash ncname-s table) ncname-s)))))
 
 #|
 
