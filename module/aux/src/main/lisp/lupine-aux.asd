@@ -17,6 +17,8 @@
   ((:file "package")
    (:file "type"
     :depends-on ("package"))
+   (:file "seq"
+    :depends-on ("package"))
    (:file "condition"
     :depends-on ("package"))
    ))
