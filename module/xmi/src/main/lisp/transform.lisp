@@ -22,18 +22,6 @@ refer to ./transform.md
 
 (defgeneric class-transform-type (class))
 
-(defclass transform-class (standard-class)
-  ((transform-type ;; ?
-    :initarg :transform-type
-    :type string
-    :accessor class-transform-type)))
-
-(defclass uml-transform-class (transform-class)
-   ((uml-name :initarg :uml-name :type string) ;; must map to XML local name
-    (uml-package :initarg :uml-package)
-    ;; ^ FIXME: define package structure and ensure referencing to
-    ;; this slot
-    ))
 
 ;;; * Element transformation proto.
 
@@ -47,35 +35,34 @@ refer to ./transform.md
     :accessor transformation-model-namespaces
     )
    (ns-registry
-    :type qname-meta-registry
+    :type namespace-registry
     :accessor tranformation-model-ns-registry)
    ))
 
 (defmethod shared-initialize :after ((instance transformation-model)
 				     slots &rest initargs
 				     &key &allow-other-keys)
-  (when (and (or (member 'ns-registry slots :test #'eq)
-		 (not (slot-boundp instance 'ns-registry))))
+  (when (or (not (slot-boundp instance 'ns-registry))
+	    (and (listp slots)
+		 (member 'ns-registry (the list slots) :test #'eq)))
     (cond
       ((slot-boundp instance 'namespaces)
        (let ((namespaces (slot-value instance  'namespaces)))
 	 (when namespaces
-	   (let ((mregistry (make-meta-registry)))
+	   (let ((nsreg (make-namespace-registry)))
 	     (dolist (ns namespaces)
 	       (destructuring-bind (prefix . uri) ns
 		 ;; FIXME: integrate further with qname utils, when
-		 ;; adding elements to the transformation model, etc - avoid duplcation of qname strings, esp.
-		 (handler-case
-		     (ensure-prefix prefix uri mregistry)
-		   (namespace-prefix-bind ()) ;; no-op
-		   )))
+		 ;; adding elements to the transformation model, etc -
+		 ;; avoid duplcation of qname strings, esp.
+		 (ensure-prefix prefix uri nsreg)))
 	     (setf (tranformation-model-ns-registry instance)
-		   mregistry)))))
+		   nsreg)))))
       (t
        (simple-style-warning
-	"Instance 'namespaces' slot not bound, unable to initialize ns-registry: ~s"
+	"Instance 'namespaces' slot not bound, unable to initialize ~
+ns-registry slot, in ~s"
 	instance)))))
-
 
 
 (defgeneric add-transformation (transformation model))
@@ -86,38 +73,45 @@ refer to ./transform.md
 (defgeneric apply-transform (transformation source))
 
 (defclass transformation-model-component ()
+  ;; used in METAMODEL-TRANSFORM and in TRANSFORM-CLASS
   ((model
     :initarg :model
     :type transformation-model
     :accessor component-transformation-model)
-
    ))
 
 ;;; * ...
 
-(declaim (type transformation-model *uml-stub-metamodel*))
+(declaim (type transformation-model *uml-stub-model*))
 
-(defvar *uml-stub-metamodel*)
+(defvar *uml-stub-model* ;; name ??
+  (make-instance 'transformation-model
+		 :namespaces
+		 '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
 
-(defclass type-transform (transformation-model-component)
-  ((source-local-name
-    :initarg :source-local-name
+
+(defclass metamodel-transform (transformation-model-component)
+  ((local-name ;; how differs from TYPE ?
+    ;; ^ local name for type of metamodel serialiation?
+    :initarg :local-name
     ;; FIXME: validate local-name as an XML name
     :type string ;; FIXME: namespace qualified strings? - see ensure-qname (?)
-    :reader type-transform-source-local-name)
-   (source-element-p
-    :initarg :source-element-p
+    :accessor transform-local-name)
+   (namespace
+    :initarg namespace
+    :type namespace
+    :accessor transform-namespace)
+   (element-p
+    :initarg :element-p
     :type boolean
-    :reader type-transform-source-local-element-p)
-   (source-attribute-p
-    :initarg :source-element-p
+    :accessor transform-element-p)
+   (attribute-p
+    :initarg :attribute-p
     :type boolean
-    :reader type-transform-source-attribute-p)
+    :accessor transform-attribute-p)
    (type
-    ;; type of a typed model quality serialized in XMI (see notes, in
-    ;; the previous)
-    ;;
-    ;; e.g. "uml:Property", "uml:Comment", "uml:Operation", "uml:Constraint", "uml:Package"
+    ;; cf. xmi:type attribute value in UML
+    ;; (FIXME: Decouple that from the metamodel?)
     :initarg :type
     :type string ;; ?? FIXME: namespace qualified strings ??
     )
@@ -129,16 +123,40 @@ refer to ./transform.md
 
 
 (defclass property-transform-slot-definition
-    (type-transform slot-definition)
+    (metamodel-transform slot-definition)
   ())
 
 (defclass direct-property-transform-slot-definition
-    (type-transform-slot-definition standard-direct-slot-definition)
+    (metamodel-transform-slot-definition standard-direct-slot-definition)
   ())
 
 (defclass effective-property-transform-slot-definition
-    (type-transform-slot-definition standard-effective-slot-definition)
+    (metamodel-transform-slot-definition standard-effective-slot-definition)
   ())
+
+;; * Trasform-Class
+
+(defclass transform-class (transformation-model-component standard-class)
+  ((transform-type
+    :initarg :transform-type
+    :type qname)))
+
+#+NIL ;; FIXME: register TRANSFORM-TYPE in the appropriate namespace in MODEL
+(defmethod shared-initialize :around ((instance transform-class) slots
+				      &rest initargs
+				      &key (transform-type nil tp)
+				      &allow-other-keys)
+  (cond
+    (tp
+     )
+    (t (call-next-method))))
+
+
+(defclass uml-transform-class (transform-class)
+  ((uml-source-package
+    )
+   (uml-element-name
+    )))
 
 
 ;;; * UML-Class
@@ -172,13 +190,7 @@ refer to ./transform.md
   (:metaclass uml-transform-class)
 
   ;; FIXME: add :MODEL to other class definitions (?)
-  (:model *uml-stub-metamodel*)
-
-  (:namespace
-   ;; namespaces for qnames
-   ;; i.e. use these namespace prefixes when resolving qnames denoted
-   ;; in the slot definitions and in class options
-   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:model *uml-stub-model*)
 
   ;; UML composite name
   ;;
@@ -191,7 +203,7 @@ refer to ./transform.md
 
   ;; "uml" in the following item denotes the namespace URI assigned
   ;; tot he prefix "uml"
-  (:transform-type . "uml:Class")  ;; cf. @xmi:type="uml:Class"
+  (:transform-type  "uml:Class")  ;; cf. @xmi:type="uml:Class"
   )
 
 (let ((c (find-class 'uml-class)))
@@ -201,6 +213,8 @@ refer to ./transform.md
 ;;; * Post Hoc
 
 
+;; FIXME: Can't use UML-CLASS as a :METACLASS util it's finalized,
+;; and it won't be finalized until after DEFCLASS CLASSIFIER
 
 (defclass element ()
   ((owned-comments
@@ -209,12 +223,11 @@ refer to ./transform.md
     :initarg :owned-comments
     :type property-table
     :accessor class-direct-owned-comments-table))
-  (:metaclass uml-class)
-  (:model *uml-stub-metamodel*)
-  (:namespace
-   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:metaclass uml-transform-class)
+  (:model *uml-stub-model*)
   (:uml-name "UML::Element")
-  (:is-abstract . t))
+  (:transform-type  "uml:Class")
+  (:is-abstract t))
 
 
 (defclass named-element (element)
@@ -224,12 +237,11 @@ refer to ./transform.md
     :initarg :name
     :type simple-string
     :accessor named-element-name))
-  (:metaclass uml-class)
-  (:model *uml-stub-metamodel*)
-  (:namespace
-   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:metaclass uml-transform-class)
+  (:model *uml-stub-model*)
   (:uml-name "UML::NamedElement")
-  (:is-abstract . t))
+  (:transform-type  "uml:Class")
+  (:is-abstract t))
 
 
 (defclass namespace (named-element)
@@ -240,12 +252,11 @@ refer to ./transform.md
     :type property-table
     :accessor class-direct-owned-rules-table
     ))
-  (:metaclass uml-class)
-  (:model *uml-stub-metamodel*)
-  (:namespace
-   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:metaclass uml-transform-class)
+  (:model *uml-stub-model*)
   (:uml-name "UML::Namespace")
-  (:is-abstract . t))
+  (:transform-type  "uml:Class")
+  (:is-abstract t))
 
 
 (defclass classifier (namespace type)
@@ -256,9 +267,8 @@ refer to ./transform.md
     :type property-table
     :accessor class-direct-generalizations-table
     ))
-  (:metaclass uml-class)
-  (:model *uml-stub-metamodel*)
-  (:namespace
-   ("uml" "http://www.omg.org/spec/UML/20110701" ))
+  (:metaclass uml-transform-class)
+  (:model *uml-stub-model*)
+  (:transform-type "uml:Class")
   (:uml-name "UML::Classifier")
-  (:is-abstract . t))
+  (:is-abstract t))
