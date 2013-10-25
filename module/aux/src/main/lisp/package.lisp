@@ -15,6 +15,7 @@
   (:use #:cl)
   (:export
    ;; type.lisp
+   #:array-index
    #:class-designator
    #:compute-class
    #:type-designator
