@@ -120,14 +120,14 @@
   (find prefix (namespace-prefix-table namespace)
 	:test #'string=))
 
-
+#+QNAMES
 (defstruct (qname
 	    (:constructor %make-qname (namespace name)))
   ;; FIXME: back-reference to a containing qname registry?
   (namespace "" :type simple-string)
   (name "" :type simple-string))
 
-
+#+QNAMES
 (defgeneric ensure-qname (name namespace)
   (:method ((name string) (namespace namespace))
     (values (%make-qname (namespace-string registry)
@@ -171,8 +171,9 @@
   (setf (namespace-registry-namespace-table instance)
 	...))
 
-
+#+QNAMES
 (declaim (type namespace-registry *namespace-registry*))
+#+QNAMES ;; used in ENSURE-QNAME (STRING STRING)
 (defvar *namespace-registry*)
 
 (defun ensure-namespace (namespace registry)
@@ -204,12 +205,11 @@ finalized registry ~s"
 	       (values reg t))))))))
 
 
-
+#+QNAMES
 (defmethod ensure-qname ((name string) (namespace string))
   "Ensure that the NAME is registered to a namespace denoted by
 STRING, within `*NAMESPACE-REGISTRY*'. Returns the simplified NAME
 and its contsining NAMESPACE object"
-  ;; FIXME: "Elide *namespace-registry* to /dev/null"
   (let ((ns (ensure-namespace namespace *namespace-registry*)))
     (values (ensure-qname name ns)
 	    ns)))
