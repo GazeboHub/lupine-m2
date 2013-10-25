@@ -88,13 +88,13 @@
      ns-string
      (puri:intern-uri ns-string *qname-ns-registry*))))
 
-(defun ensure-qname-string (ncname registry)
+(defun ensure-qname-string (ncname ns)
   (declare (type string ncname)
-	   (type namespace registry)
+	   (type namespace ns)
 	   (values simple-ncname &optional))
   (locally (declare (inline cxml::valid-ncname-p))
     (let ((ncname-s (simplify-string ncname))
-	  (table (namespace-local-names-table registry)))
+	  (table (namespace-local-names-table ns)))
       (or (gethash ncname-s table)
 	  (progn
 	    (unless (cxml::valid-ncname-p ncname)
