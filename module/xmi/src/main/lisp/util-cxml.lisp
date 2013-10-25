@@ -63,6 +63,14 @@
 		      :size #.+qname-buffer-extent+)
    :type hash-table))
 
+(defmethod print-object ((instance namespace) stream)
+  (print-unreadable-object (instance stream :type t :identity t)
+    (princ (namespace-prefix-table instance) stream)
+    (write-char #\Space stream)
+    (princ (namespace-string instance) stream)
+    (write-char #\Space stream)
+    (princ (instance-finalized-p instance) stream)))
+
 (defmethod finalize ((instance namespace))
   ;; FIXME: call FINALIZE sometime after model initialization
   ;;
@@ -149,6 +157,13 @@
 			       :adjustable t
 			       :fill-pointer 0)
    :type (or (vector namespace) simple-vector)))
+
+(defmethod print-object ((instance namespace-registry) stream)
+  (print-unreadable-object (instance stream :type t :identity t)
+    (princ (length (namespace-registry-namespace-table instance))
+	   stream)
+    (write-char #\Space stream)
+    (princ (instance-finalized-p instance) stream)))
 
 
 (defmethod finalize ((instance namespace-registry))
@@ -259,6 +274,25 @@ and its contsining NAMESPACE object"
 		 (namespace (namespace-string ns))
 		 (t ns)))))))
 
+(defun resolve-prefix-namespace (prefix registry &optional (errorp t))
+  (declare (type string prefix)
+	   (type namespace-registry regisry)
+	   (values (or namespace null)
+		   (or string null)
+		   &optional))
+  (let ((namespaces (namespace-registry-namespace-table registry))
+	ns-p pf-p)
+    (do-vector (ns namespaces (cond
+				(errorp
+				 (error "Prefix ~s not found in ~s"
+					prefix registry))
+				(t (values nil nil))))
+      (declare (type namespace ns))
+      (let ((p (find-prefix prefix ns)))
+	(when p
+	  (return (values ns p)))))))
+
+
 (defun ensure-prefix (prefix uri registry)
   "Ensure that the namespace prefix PREFIX is registered uniquely to the
 namespace URI in namespace-registry REGISTRY.
@@ -361,39 +395,64 @@ finalized namespace ~s"
 
 #|
 
-(defparameter *r* (make-namespace-registry))
+ (defparameter *r* (make-namespace-registry))
 
-(defparameter  *foo* (simplify-string "foo"))
+ (defparameter  *foo* (simplify-string "foo"))
 
-(defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
+ (defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
 
-(eq (ensure-namespace *foo.ex* *r*)
-    (ensure-namespace *foo.ex* *r*))
-;; => T
-
-(multiple-value-bind (ns pfx)
-    (ensure-prefix *foo* *foo.ex* *r*)
-  (values (eq pfx *foo*) ns )
-  )
- ;; => T, #<structure-object ...>
+ (eq (ensure-namespace *foo.ex* *r*)
+     (ensure-namespace *foo.ex* *r*))
+ ;; => T
 
 
-(ensure-prefix "bar" *foo.ex* *r*)
-;; ^ call multiple times, should not be duplicating prefixes
+ (multiple-value-bind (ns pfx)
+     (ensure-prefix *foo* *foo.ex* *r*)
+   (values (eq pfx *foo*) ns )
+   )
+  ;; => T, #<structure-object ...>
 
-(handler-case
-    (ensure-prefix "bar" "http://bar.example.com/" *r*)
-  (namespace-prefix-unbind (c)
-    (warn "Caught unbind signal: ~s" c)
-    (continue c)))
-;; expect, then:
-;;  (= (length (namespace-registry-namespace-table *r*)) 2)
+;; (resolve-prefix-namespace "foo" *r*) ;; OK
+;; (resolve-prefix-namespace "wtf" *r*) ;; expect error
+;; (resolve-prefix-namespace "wtf" *r* nil) ;; expect NIL, NIL
 
-(handler-case
-    (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
-  (namespace-prefix-bind (c)
-    (warn "Caught bind signal: ~s" c)
-    (continue c)))
+;; (aref (namespace-registry-namespace-table *r*) 0)
+
+
+ (ensure-prefix "bar" *foo.ex* *r*)
+ ;; ^ call multiple times, should not be duplicating prefixes
+
+ (handler-case
+     (ensure-prefix "bar" "http://bar.example.com/" *r*)
+   (namespace-prefix-unbind (c)
+     (warn "Caught unbind signal: ~s" c)
+     (continue c)))
+ ;; expect, then (after first call)
+ ;;   (length (namespace-registry-namespace-table *r*))
+;;    => 2
+
+ (handler-case
+     (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
+   (namespace-prefix-bind (c)
+     (warn "Caught bind signal: ~s" c)
+     (continue c)))
 
 
 |#
+
+
+(defun ensure-qname (cname registry)
+  (declare (type string cname) (type namespace-registry registry)
+	   (values simple-string simple-string &optional))
+  (multiple-value-bind (prefix name)
+      (split-string-1 #\: cname)
+    (unless (cxml::valid-ncname-p prefix)
+      (type-error :expected-type 'ncname :datum prefix))
+    (unless (cxml::valid-ncname-p name)
+      (type-error :expected-type 'ncname :datum name))
+    ;; FIXME: define RESOLVE-PREFIX-NAMESPACE
+    (let ((ns (resolve-prefix-namespace prefix registry)))
+      (unless ns
+	(error "Prefix ~s is not registered in ~s" prefix registry))
+      (values (ensure-qname-string name ns)
+	      ns))))
