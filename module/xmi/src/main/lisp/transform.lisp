@@ -40,12 +40,17 @@ refer to ./transform.md
     ;; when this class' definition is initially evaluted
     :type (vector uml-package)
     :initform (make-array #.+package-buffer-extent+
-			  :element-type uml-package
+			  :element-type 'uml-package
 			  :fill-pointer 0
 			  :adjustable t)
    )))
 
 
+(defgeneric add-element (element model))
+
+(defgeneric find-element (name model))
+
+(defgeneric apply-element-transform (element source)) ;; ??
 
 
 (defmethod shared-initialize :after ((instance bootstrap-model)
@@ -67,12 +72,7 @@ refer to ./transform.md
 	    (ensure-prefix prefix uri nsreg)))))))
 
 
-;; FIXME: Use or discard these three generic functions.
-;; see also: transform-klacks.lisp
-(defgeneric add-transformation (transformation model))
-(defgeneric find-transformation (namespace element type model))
-;; ^ ? too broad ?
-(defgeneric apply-transform (transformation source))
+
 
 
 (declaim (type bootstrap-model *boostrap-model*))
@@ -105,6 +105,62 @@ refer to ./transform.md
 ;; ^ return local-name
 
 (defgeneric resolve-composite-name (name model &optional errorp))
+
+(defgeneric resolve-cname (name model &optional errorp)
+  (:method ((name string) (model bootstrap-model) &optional (errorp t))
+    (let ((ns-reg (bootstrap-model-ns-registry model)))
+      (multiple-value-bind (pfx lname)
+	  ;; FIXME: allow for "foo" as well as "bar:foo"
+	  ;; i.e. "Null namespace" (but note: program mus make account
+	  ;; for containing namespaces during element processing,
+	  ;;
+	  ;; e.g.  at least in regards to how UML.xmi is serialized,
+	  ;; namespace of quux may not be the null namespacce, but
+	  ;; rather the namespace of prefix 'foo' in
+	  ;;
+	  ;;  <foo:bar xmlns:foo="http://foo.example.com/"><quux/></foo:bar>
+	  ;;
+	  ;; ...though that might seem ambigous in regards to XML
+	  ;; namespaces, in which 'quux' could seem to assume the
+	  ;; default namespace (such that would be the null namespace,
+	  ;; in that example). There being some ambiguity there,
+	  ;; perhaps, it may be thought that 'quux' assumes the
+	  ;; namespace of the containing element, though 'quux' is
+	  ;; itself not qualified with a namesapce, in that example.
+	  ;;
+	  ;; cf. XML names
+	  ;; <http://www.w3.org/TR/xml-names/>
+	  ;;
+	  ;; also cf. XML parser behaviors
+	  ;; What does CXML denote as the namespace of the 'quux'
+	  ;; element, in that example? (and in which XML processing models?)
+	  (split-string-1 #\: name)
+	(cond
+	  (pfx
+	   (let ((ns (resolve-prefix-namespace pfx )))
+	     (cond
+	       (ns
+		(let ((ln-p (gethash lname (namespace-local-names-table ns))))
+		  (cond
+		    (ln-p (values ln-p))
+		    (errorp
+		     (error "Local name ~s not registered in namespace ~s" ns))
+		    (t (values nil ns)))))
+	       (errorp
+		(error "No namepace registered for prefix ~s in ~s ns-registry ~s"
+		       pfx model nsreg))
+	       (t (values nil nil)))))
+	  (t  ;; element name was not qualified with a prefix
+	   (error "???") ;; What to do, here?
+	   ;; Option 1): Search for a "default namespace" in the
+	   ;; registry, and "Use it" (even if that namespace has no
+	   ;; URI assigned to it)
+	   ;;
+	   ;; Option 2): If there's a "containing element" context,
+	   ;; use its namespace - whether that  namespace is assigned
+	   ;; by namespace defaulting or by explicit qualified name
+	   ;; declaration
+	   )))
 
 (defmethod shared-initialize ((instance bootstrap-model-component)
 			      slots &rest initargs
@@ -280,7 +336,7 @@ refer to ./transform.md
   ;;
   ;; This class option would effectively denote a packagedElement
   ;; definition for the defining class.
-  (:cname "UML::Class")
+  (:cname "UML:Class")
 
   ;; "uml" in the following item denotes the namespace URI assigned
   ;; to the prefix "uml"
@@ -308,7 +364,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML::Element")
+  (:cname "UML:Element")
   (:is-abstract t))
 
 
@@ -332,7 +388,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML::NamedElement")
+  (:cname "UML:NamedElement")
   (:is-abstract t))
 
 
@@ -347,7 +403,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML::Namespace")
+  (:cname "UML:Namespace")
   (:is-abstract t))
 
 
@@ -398,7 +454,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:cname "UML::Classifier")
+  (:cname "UML:Classifier")
   (:is-abstract t))
 
 
@@ -417,4 +473,4 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:cname "UML::Package"))
+  (:cname "UML:Package"))
