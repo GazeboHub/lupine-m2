@@ -31,3 +31,19 @@
 	   ,@body)))))
 
 ;; (do-vector (c "FOO" 412) (format t "Char ~s~%" c))
+
+
+(defun split-string-1 (c str)
+  (declare (type character c)
+	   (type string str)
+	   (values (or string null) string &optional))
+  (let ((n (position c str :test #'char=)))
+    (declare (type (or array-index null) n))
+    (cond
+      (n (values (subseq str 0 n)
+		 (subseq str (1+ (the array-index n)))))
+      (t (values nil str)))))
+
+;; (split-string-1 #\: "FOO:BAR")
+
+;; (split-string-1 #\: "FOOBAR")

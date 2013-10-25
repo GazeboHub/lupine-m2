@@ -29,5 +29,6 @@
    #:array-dimension-index
    #:array-length
    #:do-vector
+   #:split-string-1
    )
   )
