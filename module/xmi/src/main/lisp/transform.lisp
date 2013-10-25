@@ -25,6 +25,7 @@ refer to ./transform.md
 
 ;;; * Element transformation proto.
 
+(defconstant +package-buffer-extent+ 1)
 
 (defclass bootstrap-model ()
   ;; effectively a container for XMI -> Common Lisp transformation
@@ -34,7 +35,17 @@ refer to ./transform.md
     ;; NB: This slot consumes the :namespaces instance initarg
     :type namespace-registry
     :accessor bootstrap-model-ns-registry)
-   ))
+   (root-packages
+    ;; Notice that UML-PACKAGE will not yet have been defined,
+    ;; when this class' definition is initially evaluted
+    :type (vector uml-package)
+    :initform (make-array #.+package-buffer-extent+
+			  :element-type uml-package
+			  :fill-pointer 0
+			  :adjustable t)
+   )))
+
+
 
 
 (defmethod shared-initialize :after ((instance bootstrap-model)
@@ -72,16 +83,56 @@ refer to ./transform.md
 
 
 (defclass bootstrap-model-component ()
-  ;; used in METAMODEL-TRANSFORM and in TRANSFORM-CLASS
+  ;; used in METAMODEL-TRANSFORM and in metamodel-stub-class
   ((model
     :initarg :model
     :type bootstrap-model
     :initform *bootstrap-model*
-    :accessor component-bootstrap-model)
-   ))
+    :accessor component-model)
+   (namespace
+   :type namespace
+   :initarg :namespace
+   :accessor component-namespace
+    )
+   (local-name
+    ;; ^ local name for type of metamodel serialiation. (Note that that
+    ;; name will identify a single metamodel element type)
+    :initarg :local-name
+    :type string ;; FIXME: namespace qualified strings - see ensure-qname
+    :accessor component-local-name)))
+
+(defgeneric (setf resolve-composite-name) (new-value name model))
+;; ^ return local-name
+
+(defgeneric resolve-composite-name (name model &optional errorp))
+
+(defmethod shared-initialize ((instance bootstrap-model-component)
+			      slots &rest initargs
+			      &key &allow-other-keys)
+  (macrolet ((uncadr (name)
+	       (with-gensyms (it)
+		 (let ((,it (getf initargs ,name)))
+		   (cond
+		     ((and ,it (consp ,it))
+		      (setf (getf initargs ,name)
+			    (cadr ,it)))
+		     (t (values ,it)))))))
+    (let ((model (uncadr :model))
+	  (name (uncadr :cname)))
+      (when name
+      ;; FIXME: split cname into name, prefix. resolve.
+	(setf (getf initargs :cname)
+	      (simplify-string name)))
+      (prog1 (apply #'call-next-method instance slots initargs)
+	(when (and name model)
+	  (let ((local-name
+		  (setf (resolve-composite-name name model)
+			instance)))
+	    (setf (component-local-name instance)
+		  local-name)))))))
+
 
 ;;; * ...
-
 
 
 (defclass metamodel-transform (bootstrap-model-component)
@@ -90,13 +141,9 @@ refer to ./transform.md
   ;; the 'type' slot and the corredponding @xmi:type attribute, with
   ;; regards to "simple" metamodel unmarshaling
 
-  ((local-name
-    ;; ^ local name for type of metamodel serialiation. (Note that that
-    ;; name will identify a single metamodel element type)
-    :initarg :local-name
-    :type string ;; FIXME: namespace qualified strings - see ensure-qname
-    :accessor transform-local-name)
-   (namespace
+  (
+   (namespace ;; ??
+
     ;; XML namespace URI for the element in the metamodel
     ;; serialization, likewise may the URI of a UML package containing
     ;; the element
@@ -144,45 +191,33 @@ refer to ./transform.md
 
 ;; * Trasform-Class
 
-(defclass transform-class (bootstrap-model-component standard-class)
+(defclass metamodel-stub-class (bootstrap-model-component standard-class)
   ((model-metaclass
     :initarg :model-metaclass
     :types simple-string
     :accessor class-model-metaclass
     )
-   (composite-name
-    ;; ??? specific to UML, but needs to be handled during class
-    ;; init. However, in order for it to be appropriately handleed,
-    ;; the system must have NAMESPACE and NAMED-ELEMENT defined.
-    ;;
-    ;; so, FIXME: during CHANGE-CLASS or somesuch, be sure to resolve
-    ;; COMPOSITE-NAME to its NAME and CONTAINING-PACKAGE(s) components
-    :initarg :comopsite-name
-    :type simple-string
-    :accessor class-composite-name
-    )))
+   ))
 
 
-(defmethod shared-initialize ((instance transform-class)
+(defmethod shared-initialize ((instance metamodel-stub-class)
 			      slots &rest initargs
 			      &key &allow-other-keys)
   (macrolet ((uncadr (name)
 	       (with-gensyms (it)
 		 (let ((,it (getf initargs ,name)))
-		   (when ,it
+		   (when (and ,it (consp ,it))
 		     (setf (getf initargs ,name)
 			   (cadr ,it)))))))
     ;; FIXME: resolve MODEL-METACLASS (as a QName) onto model
     ;; namespace registry (prefix/ns bindings) in MODEL
     (uncadr :model-metaclass)
-    (uncadr :model)
-    (uncadr :composite-name)
     ;; FIXME: resolve COMPOSITE-NAME ...
     (apply #'call-next-method instance slots initargs)
     ))
 
 
-(defmethod direct-slot-definition-class ((class transform-class)
+(defmethod direct-slot-definition-class ((class metamodel-stub-class)
 					 &rest initargs)
   (destructuring-bind (&key source-local-name &allow-other-keys)
       initargs
@@ -191,7 +226,7 @@ refer to ./transform.md
        (find-class 'direct-property-transform-slot-definition))
       (t (call-next-method)))))
 
-(defmethod effective-slot-definition-class ((class transform-class)
+(defmethod effective-slot-definition-class ((class metamodel-stub-class)
 					    &rest initargs)
   (destructuring-bind (&key name &allow-other-keys)
       initargs
@@ -205,22 +240,12 @@ refer to ./transform.md
 	(t (call-next-method))))))
 
 
-#+nil
-(defclass uml-transform-class (transform-class)
-  ;; moreso representstive of a named element and a relation to its
-  ;; containing package
-  ((uml-source-package
-    )
-   (uml-element-name
-    )))
-
-
 ;;; * UML-Class
 
 (def-uml-package "UML") ;; ?
 
 
-(defclass uml-class (classifier transform-class)
+(defclass uml-class (classifier metamodel-stub-class)
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
@@ -243,7 +268,7 @@ refer to ./transform.md
     :type boolean)
    )
 
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
 
   ;; FIXME: add :MODEL to other class definitions (?)
   (:model *boostrap-model*)
@@ -255,7 +280,7 @@ refer to ./transform.md
   ;;
   ;; This class option would effectively denote a packagedElement
   ;; definition for the defining class.
-  (::composite-name "UML::Class")
+  (:cname "UML::Class")
 
   ;; "uml" in the following item denotes the namespace URI assigned
   ;; to the prefix "uml"
@@ -280,10 +305,10 @@ refer to ./transform.md
     :initarg :owned-comments
     :type property-table
     :accessor class-direct-owned-comments-table))
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:composite-name "UML::Element")
+  (:cname "UML::Element")
   (:is-abstract t))
 
 
@@ -304,10 +329,10 @@ refer to ./transform.md
     :accessor named-element-namespace
     )
    )
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:composite-name "UML::NamedElement")
+  (:cname "UML::NamedElement")
   (:is-abstract t))
 
 
@@ -319,10 +344,10 @@ refer to ./transform.md
     :type property-table
     :accessor class-direct-owned-rules-table
     ))
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:composite-name "UML::Namespace")
+  (:cname "UML::Namespace")
   (:is-abstract t))
 
 
@@ -346,12 +371,19 @@ refer to ./transform.md
 		    #.(simplify-string "::")
 		    (compute-coposite-name ns)))
       (t (values  name)))))
+#+NIL
+(defmethod (setf resolve-composite-name) ((new-value bootstrap-model-component)
+					  (name string)
+					  (model bootstrap-model)
+					  )
+  ;; FIXME: complete this method definition
+  )
 
-#+FIXME ;; TO DO
-(defun resolve-composite-name (name &optional (errorp t))
-  (declare (type string name)
-	   (values (or named-element null) &optional))
-
+#+NIL
+(defmethod resolve-composite-name ((name string)
+				   (model bootstrap-model)
+				   &optional (errorp t))
+  ;; FIXME: complete this method definition
   )
 
 
@@ -363,10 +395,10 @@ refer to ./transform.md
     :type property-table
     :accessor class-direct-generalizations-table
     ))
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:composite-name "UML::Classifier")
+  (:cname "UML::Classifier")
   (:is-abstract t))
 
 
@@ -382,7 +414,7 @@ refer to ./transform.md
     :local-name "packagedElement"
     :type property-table
     :accessor uml-package-packaged-elements))
-  (:metaclass transform-class)
+  (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:composite-name "UML::Package"))
+  (:cname "UML::Package"))
