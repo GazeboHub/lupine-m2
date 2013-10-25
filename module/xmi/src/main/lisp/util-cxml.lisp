@@ -308,10 +308,16 @@ finalized namespace ~s"
 		  pf-p ns-p))
 	  (ns-p
 	   ;; FIXME: Thread safety....?
-	   (delete pf-p table :test #'eq)
-	   (signal 'namespace-prefix-unbind
-		   :namespace ns-p
-		   :prefix pf-p)))) ;; ns-prefix
+	   (delete pf-p (namespace-prefix-table  ns-p)
+		   :test #'eq)
+	   (restart-case
+	       (signal 'namespace-prefix-unbind
+		       :namespace ns-p
+		       :prefix pf-p)
+	     (continue))
+	   ))) ;; block ns-prefix
+      ;; FIXME: try to wrap the following in a restart (?)
+      ;; cf.  non-loal exit when the NAMESPACE-PREFIX-UNBIND signal is caught
       (block ns-uri
 	;; 1) check for URI in Registry
 	;; 1.A) if not, create namespace, initial prefix binding,
@@ -332,9 +338,11 @@ finalized namespace ~s"
 		      ;; FIXME: Thread safety....?
 		      (vector-push-extend pfx (namespace-prefix-table ns)
 					  #.+qname-buffer-extent+)
-		      (signal 'namespace-prefix-bind
-			      :namespace ns
-			      :prefix pfx)
+		      (restart-case
+			  (signal 'namespace-prefix-bind
+				  :namespace ns
+				  :prefix pfx)
+			(continue))
 		      (values ns pfx)))))
 	    (cond
 	      (new-p (add-prefix))
@@ -376,19 +384,16 @@ finalized namespace ~s"
 (handler-case
     (ensure-prefix "bar" "http://bar.example.com/" *r*)
   (namespace-prefix-unbind (c)
-    (error "Caught unbind signal: ~s" c)))
+    (warn "Caught unbind signal: ~s" c)
+    (continue c)))
+;; expect, then:
+;;  (= (length (namespace-registry-namespace-table *r*)) 2)
 
 (handler-case
     (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
-  ;; FIXME: Note that this results in the binding not being completed
   (namespace-prefix-bind (c)
     (warn "Caught bind signal: ~s" c)
+    (continue c)))
 
-    #+NIL
-    (let ((r (find-restart 'continue c)))
-      (warn "Caught bind - OK: ~s" c)
-      (when r
-	(warn "Invoking restart: ~s" r)
-	(invoke-restart r)))))
 
 |#
