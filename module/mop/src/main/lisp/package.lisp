@@ -13,7 +13,12 @@
    #:defmethod
    #:defgeneric
    #:standard-generic-function
-   ))
+   )
+   (:export
+    #:class-designator
+    #:compute-class
+    #:compute-direct-slot-definitions)
+   )
 
 (let ((p (find-package '#:lupine/mop)))
   (do-external-symbols (s '#:c2mop)

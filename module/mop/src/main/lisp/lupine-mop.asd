@@ -23,8 +23,13 @@
   :depends-on (#:closer-mop #:lupine-aux)
   :components
   ((:file "package")
+   (:file "aux" :depends-on ("package"))
+
+   #+NULL-UNBOUND-SLOTS
+   ;; unused - FIXME, move into a seperate module
    (:file "null-unbound-slotd"
     :depends-on ("package"))
+   #+NULL-UNBOUND-SLOTS
    (:file "ext-std-class"
-    :depends-on ("null-unbound-slotd" "package"))
+    :depends-on ("null-unbound-slotd" "aux" "package"))
    ))
