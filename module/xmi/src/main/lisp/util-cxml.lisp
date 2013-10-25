@@ -18,43 +18,17 @@
 
 ;;; * Utils for Name Validation
 
-#+NCNAMES
-(defun ncname-rune-p (rune) ;; Fixme: Test this.
+;; This needs the cxml-ncname-patch.diff onto CXML
+;; for (fboundp #'cxml::valid-ncname-p) => T
 
-  ;; NB, rune is character in SBCL, so this won't work.
-  ;;
-  ;; and CXML's xml-name-rune-p code is not all accessible after the
-  ;; file is loaded
-
-  (locally (declare #.cxml::*fast*)) ;; (locally?)
-  (declare (type runes:rune rune)
-	   (values boolean &optional))
-  (or (cxml::letter-rune-p rune)
-      (= rune #.(char-code #\-))
-      (= rune #.(char-code #\.))
-      (= rune #.(char-code #\_))
-      (cxml::digit-rune-p* rune)
-      (cxml::combining-rune-p rune)
-      (cxml::extender-rune-p rune)))
-
-#+NCNAMES
-(defun ncname-p (rod)
-  (locally (declare #.cxml::*fast*)
-    (inline cxml::name-start-rune-p ncname-rune-p)) ;; (locally?)
-  (declare (type runes:rod rod)
-	   (values boolean &optional))
-  ;; pattern = \i\c* ∩ [\i[:]][\c[:]]
-  ;; whiteSpace = collapse
-  (and (not (zerop (length rod)))
-       (cxml::name-start-rune-p (aref rod 0))
-       (every #'ncname-rune-p rod)))
-#+NCNAMES
 (deftype ncname ()
-  '(and string (satisfies ncname-p))) ;; alternately, rod??
+  ;; FIXME: Compatibility with Closure RUNES - needs to be further
+  ;; integrated into this system, for supporting non-UTF lisp
+  ;; implementations
+  '(and runes:rod (satisfies cxml::valid-ncname-p)))
 
-#+NCNAMES
 (deftype simple-ncname ()
-  '(and simple-string (satisfies ncname-p))) ;; alternately, rod??
+  '(and (simple-array runes:rune) ncname))
 
 
 ;;; * Namespace Qualified Names (QNames)
@@ -115,18 +89,17 @@
      (puri:intern-uri ns-string *qname-ns-registry*))))
 
 (defun ensure-qname-string (ncname registry)
-  #+NCNAMES (locally (declare (inline ncname-p)))
   (declare (type string ncname)
 	   (type namespace registry)
 	   (values simple-ncname &optional))
-  (let ((ncname-s (simplify-string ncname))
-	(table (namespace-local-names-table registry)))
-    (or (gethash ncname-s table)
-	(progn
-	  #+NCNAMES
-	  (unless (ncname-p ncname)
-	    (error 'type-error :expected-type 'ncname :datum ncname))
-	  (setf (gethash ncname-s table) ncname-s)))))
+  (locally (declare (inline cxml::valid-ncname-p))
+    (let ((ncname-s (simplify-string ncname))
+	  (table (namespace-local-names-table registry)))
+      (or (gethash ncname-s table)
+	  (progn
+	    (unless (cxml::valid-ncname-p ncname)
+	      (error 'type-error :expected-type 'ncname :datum ncname))
+	    (setf (gethash ncname-s table) ncname-s))))))
 
 #|
 
@@ -252,21 +225,39 @@ and its contsining NAMESPACE object"
     :initarg :prefix
     :reader prefix-condition-prefix)))
 
+(defmethod print-object ((instance namespace-prefix-condition) stream)
+  (print-unreadable-object (instance stream :type t :identity t)
+    (write-string (prefix-condition-prefix instance) stream)
+    (write-char #\Space stream)
+    (let ((ns (namespace-condition-namespace instance)))
+      (typecase ns
+	;; fixme: frobbed dispatching
+	(namespace (write-string (namespace-string ns) stream))
+	(t (princ ns stream))))))
+
 (define-condition namespace-prefix-bind (namespace-prefix-condition)
   ()
   (:report
    (lambda (c s)
-     (format s "prefix ~s bound to ~a"
-	     (prefix-condition-prefix c)
-	     (namespace-condition-namespace c)))))
+     (let ((ns (namespace-condition-namespace c)))
+       (format s "prefix ~s bound to ~a"
+	       (prefix-condition-prefix c)
+	       (typecase ns
+		 ;; fixme: frobbed dispatching
+		 (namespace (namespace-string ns))
+		 (t ns)))))))
 
 (define-condition namespace-prefix-unbind (namespace-prefix-condition)
   ()
   (:report
    (lambda (c s)
-     (format s "prefix ~s unbond from ~a"
-	     (prefix-condition-prefix c)
-	     (namespace-condition-namespace c)))))
+     (let ((ns (namespace-condition-namespace c)))
+       (format s "prefix ~s unbound from ~a"
+	       (prefix-condition-prefix c)
+	       (typecase ns
+		 ;; fixme: frobbed dispatching
+		 (namespace (namespace-string ns))
+		 (t ns)))))))
 
 (defun ensure-prefix (prefix uri registry)
   "Ensure that the namespace prefix PREFIX is registered uniquely to the
@@ -335,7 +326,7 @@ finalized namespace ~s"
 		   (cond
 		     ((instance-finalized-p ns)
 		      (error "Unable to add prefix ~s to ~
-	finalized namespace ~s"
+finalized namespace ~s"
 			     pfx ns))
 		     (t
 		      ;; FIXME: Thread safety....?
@@ -376,6 +367,7 @@ finalized namespace ~s"
     (ensure-prefix *foo* *foo.ex* *r*)
   (values (eq pfx *foo*) ns )
   )
+ ;; => T, #<structure-object ...>
 
 
 (ensure-prefix "bar" *foo.ex* *r*)
@@ -383,12 +375,20 @@ finalized namespace ~s"
 
 (handler-case
     (ensure-prefix "bar" "http://bar.example.com/" *r*)
-  (namespace-prefix-unbind ()
-    (error "Caught unbind before return - OK")))
+  (namespace-prefix-unbind (c)
+    (error "Caught unbind signal: ~s" c)))
 
 (handler-case
     (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
-  (namespace-prefix-bind ()
-    (error "Caught bind - OK")))
+  ;; FIXME: Note that this results in the binding not being completed
+  (namespace-prefix-bind (c)
+    (warn "Caught bind signal: ~s" c)
+
+    #+NIL
+    (let ((r (find-restart 'continue c)))
+      (warn "Caught bind - OK: ~s" c)
+      (when r
+	(warn "Invoking restart: ~s" r)
+	(invoke-restart r)))))
 
 |#
