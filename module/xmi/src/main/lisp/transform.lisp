@@ -20,96 +20,104 @@ refer to ./transform.md
 
 ;;; * Metaclasses
 
-(defgeneric class-transform-type (class))
+(defgeneric class-model-metaclass (class))
 
 
 ;;; * Element transformation proto.
 
 
-(defclass transformation-model ()
-  ;; FIXME: differentiate this class w.r.t `MODEL' (see "here documentation", previous)
-
-  ;; effectively a container for XMI -> Common Lisp transformation descriptors
-  ((namespaces
-    :initarg :namespaces
-    :accessor transformation-model-namespaces
-    )
-   (ns-registry
+(defclass bootstrap-model ()
+  ;; effectively a container for XMI -> Common Lisp transformation
+  ;; descriptors, so far as to unmarshal the full UML metamodel
+  ;; serialized in UML.xmi
+  ((ns-registry
+    ;; NB: This slot consumes the :namespaces instance initarg
     :type namespace-registry
-    :accessor tranformation-model-ns-registry)
+    :accessor bootstrap-model-ns-registry)
    ))
 
-(defmethod shared-initialize :after ((instance transformation-model)
+
+(defmethod shared-initialize :after ((instance bootstrap-model)
 				     slots &rest initargs
-				     &key &allow-other-keys)
-  (when (or (not (slot-boundp instance 'ns-registry))
-	    (and (listp slots)
-		 (member 'ns-registry (the list slots) :test #'eq)))
-    (cond
-      ((slot-boundp instance 'namespaces)
-       (let ((namespaces (slot-value instance  'namespaces)))
-	 (when namespaces
-	   (let ((nsreg (make-namespace-registry)))
-	     (dolist (ns namespaces)
-	       (destructuring-bind (prefix . uri) ns
-		 ;; FIXME: integrate further with qname utils, when
-		 ;; adding elements to the transformation model, etc -
-		 ;; avoid duplcation of qname strings, esp.
-		 (ensure-prefix prefix uri nsreg)))
-	     (setf (tranformation-model-ns-registry instance)
-		   nsreg)))))
-      (t
-       (simple-style-warning
-	"Instance 'namespaces' slot not bound, unable to initialize ~
-ns-registry slot, in ~s"
-	instance)))))
+				     &key namespaces &allow-other-keys)
+  (declare (ignore slots initargs))
+  (when namespaces
+    (flet ((ensure-nsreg ()
+	     (cond
+	       ((slot-boundp instance 'ns-registry)
+		(bootstrap-model-ns-registry instance))
+	       (t
+		(let ((nsreg (make-namespace-registry)))
+		  (setf (bootstrap-model-ns-registry instance)
+			nsreg))))))
+      (let ((nsreg (ensure-nsreg)))
+	(dolist (ns namespaces)
+	  (destructuring-bind (prefix . uri) ns
+	    (ensure-prefix prefix uri nsreg)))))))
 
 
+;; FIXME: Use or discard these three generic functions.
+;; see also: transform-klacks.lisp
 (defgeneric add-transformation (transformation model))
-
 (defgeneric find-transformation (namespace element type model))
 ;; ^ ? too broad ?
-
 (defgeneric apply-transform (transformation source))
 
-(defclass transformation-model-component ()
-  ;; used in METAMODEL-TRANSFORM and in TRANSFORM-CLASS
-  ((model
-    :initarg :model
-    :type transformation-model
-    :accessor component-transformation-model)
-   ))
 
-;;; * ...
-
-(declaim (type transformation-model *uml-stub-model*))
-
-(defvar *uml-stub-model* ;; name ??
-  (make-instance 'transformation-model
+(declaim (type bootstrap-model *boostrap-model*))
+(defvar *boostrap-model* ;; name ??
+  (make-instance 'bootstrap-model
 		 :namespaces
 		 '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
 
 
-(defclass metamodel-transform (transformation-model-component)
-  ((local-name ;; how differs from TYPE ?
-    ;; ^ local name for type of metamodel serialiation?
+(defclass bootstrap-model-component ()
+  ;; used in METAMODEL-TRANSFORM and in TRANSFORM-CLASS
+  ((model
+    :initarg :model
+    :type bootstrap-model
+    :initform *bootstrap-model*
+    :accessor component-bootstrap-model)
+   ))
+
+;;; * ...
+
+
+
+(defclass metamodel-transform (bootstrap-model-component)
+
+  ;; this may be subject to some revision - note the irrelevance of
+  ;; the 'type' slot and the corredponding @xmi:type attribute, with
+  ;; regards to "simple" metamodel unmarshaling
+
+  ((local-name
+    ;; ^ local name for type of metamodel serialiation. (Note that that
+    ;; name will identify a single metamodel element type)
     :initarg :local-name
-    ;; FIXME: validate local-name as an XML name
-    :type string ;; FIXME: namespace qualified strings? - see ensure-qname (?)
+    :type string ;; FIXME: namespace qualified strings - see ensure-qname
     :accessor transform-local-name)
    (namespace
+    ;; XML namespace URI for the element in the metamodel
+    ;; serialization, likewise may the URI of a UML package containing
+    ;; the element
     :initarg namespace
     :type namespace
     :accessor transform-namespace)
    (element-p
+    ;; whether the metamodel element is known to be serialized as an
+    ;; XML element
     :initarg :element-p
     :type boolean
     :accessor transform-element-p)
    (attribute-p
+    ;; whether the metamodel element is known to be serialized as an
+    ;; XML attribute
     :initarg :attribute-p
     :type boolean
     :accessor transform-attribute-p)
-   (type
+
+   #+NIL ;; not needed in the metamodel
+   (type ;; type of the model element object to be unmarshaled
     ;; cf. xmi:type attribute value in UML
     ;; (FIXME: Decouple that from the metamodel?)
     :initarg :type
@@ -136,23 +144,71 @@ ns-registry slot, in ~s"
 
 ;; * Trasform-Class
 
-(defclass transform-class (transformation-model-component standard-class)
-  ((transform-type
-    :initarg :transform-type
-    :type qname)))
+(defclass transform-class (bootstrap-model-component standard-class)
+  ((model-metaclass
+    :initarg :model-metaclass
+    :types simple-string
+    :accessor class-model-metaclass
+    )
+   (composite-name
+    ;; ??? specific to UML, but needs to be handled during class
+    ;; init. However, in order for it to be appropriately handleed,
+    ;; the system must have NAMESPACE and NAMED-ELEMENT defined.
+    ;;
+    ;; so, FIXME: during CHANGE-CLASS or somesuch, be sure to resolve
+    ;; COMPOSITE-NAME to its NAME and CONTAINING-PACKAGE(s) components
+    :initarg :comopsite-name
+    :type simple-string
+    :accessor class-composite-name
+    )))
 
-#+NIL ;; FIXME: register TRANSFORM-TYPE in the appropriate namespace in MODEL
-(defmethod shared-initialize :around ((instance transform-class) slots
-				      &rest initargs
-				      &key (transform-type nil tp)
-				      &allow-other-keys)
-  (cond
-    (tp
-     )
-    (t (call-next-method))))
+
+(defmethod shared-initialize ((instance transform-class)
+			      slots &rest initargs
+			      &key &allow-other-keys)
+  (macrolet ((uncadr (name)
+	       (with-gensyms (it)
+		 (let ((,it (getf initargs ,name)))
+		   (when ,it
+		     (setf (getf initargs ,name)
+			   (cadr ,it)))))))
+    ;; FIXME: resolve MODEL-METACLASS (as a QName) onto model
+    ;; namespace registry (prefix/ns bindings) in MODEL
+    (uncadr :model-metaclass)
+    (uncadr :model)
+    (uncadr :composite-name)
+    ;; FIXME: resolve COMPOSITE-NAME ...
+    (apply #'call-next-method instance slots initargs)
+    ))
 
 
+(defmethod direct-slot-definition-class ((class transform-class)
+					 &rest initargs)
+  (destructuring-bind (&key source-local-name &allow-other-keys)
+      initargs
+    (cond
+      (source-local-name
+       (find-class 'direct-property-transform-slot-definition))
+      (t (call-next-method)))))
+
+(defmethod effective-slot-definition-class ((class transform-class)
+					    &rest initargs)
+  (destructuring-bind (&key name &allow-other-keys)
+      initargs
+    (let ((dslots (compute-direct-slot-definitions name class)))
+      (delare (type cons dslots))
+      (cond
+	((some #'(lambda (sl)
+		   (typep sl 'direct-property-transform-slot-definition))
+	       dslots)
+	 (find-class 'effective-property-transform-slot-definition))
+	(t (call-next-method))))))
+
+
+#+nil
 (defclass uml-transform-class (transform-class)
+  ;; moreso representstive of a named element and a relation to its
+  ;; containing package
   ((uml-source-package
     )
    (uml-element-name
@@ -164,12 +220,12 @@ ns-registry slot, in ~s"
 (def-uml-package "UML") ;; ?
 
 
-(defclass uml-class (classifier uml-transform-class)
+(defclass uml-class (classifier transform-class)
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
-    :source-element-p t
-    :source-local-name "ownedAttribute" ;; qname (?)
+    :element-p t
+    :local-name "ownedAttribute" ;; qname (?)
     :initarg :owned-attributes
     ;; NB: access to values of slot containing property-table types
     ;; may be faciliated with a special slot definition extension
@@ -181,16 +237,16 @@ ns-registry slot, in ~s"
     :accessor class-documentation-stub
     )
    (is-abstract
-    :source-attribute-p t
-    :source-local-name "isAbstract"
+    :attribute-p t
+    :local-name "isAbstract"
     :initarg :is-abstract
     :type boolean)
    )
 
-  (:metaclass uml-transform-class)
+  (:metaclass transform-class)
 
   ;; FIXME: add :MODEL to other class definitions (?)
-  (:model *uml-stub-model*)
+  (:model *boostrap-model*)
 
   ;; UML composite name
   ;;
@@ -199,13 +255,14 @@ ns-registry slot, in ~s"
   ;;
   ;; This class option would effectively denote a packagedElement
   ;; definition for the defining class.
-  (:uml-name . "UML::Class")
+  (::composite-name "UML::Class")
 
   ;; "uml" in the following item denotes the namespace URI assigned
-  ;; tot he prefix "uml"
-  (:transform-type  "uml:Class")  ;; cf. @xmi:type="uml:Class"
+  ;; to the prefix "uml"
+  (:model-metaclass  "uml:Class")  ;; cf. @xmi:type="uml:Class"
   )
 
+#+Nil ;; FIXME: do this CHANGE-CLASS for all elements in the *boostrap-model* after loading
 (let ((c (find-class 'uml-class)))
   (change-class c c))
 
@@ -213,62 +270,119 @@ ns-registry slot, in ~s"
 ;;; * Post Hoc
 
 
-;; FIXME: Can't use UML-CLASS as a :METACLASS util it's finalized,
+;; N.B: Can't use UML-CLASS as a :METACLASS util it's finalized,
 ;; and it won't be finalized until after DEFCLASS CLASSIFIER
 
 (defclass element ()
   ((owned-comments
-    :source-element-p t
-    :source-local-name "ownedComment"
+    :element-p t
+    :local-name "ownedComment"
     :initarg :owned-comments
     :type property-table
     :accessor class-direct-owned-comments-table))
-  (:metaclass uml-transform-class)
-  (:model *uml-stub-model*)
-  (:uml-name "UML::Element")
-  (:transform-type  "uml:Class")
+  (:metaclass transform-class)
+  (:model *boostrap-model*)
+  (:model-metaclass  "uml:Class")
+  (:composite-name "UML::Element")
   (:is-abstract t))
 
 
 (defclass named-element (element)
   ((name
-    :source-attribute-p t
-    :source-local-name "name"
+    :attribute-p t
+    :local-name "name"
     :initarg :name
-    :type simple-string
-    :accessor named-element-name))
-  (:metaclass uml-transform-class)
-  (:model *uml-stub-model*)
-  (:uml-name "UML::NamedElement")
-  (:transform-type  "uml:Class")
+    :type simple-string ;; fixme: NCName
+    :accessor named-element-name)
+   (namespace
+    ;; not directly encoded in XMI, rather derived from when a
+    ;; named-element is contained in a packagedElement relation (as
+    ;; that relation entailing a subset of Namespace.ownedMember)
+    ;; cf UML.xmi#A_ownedMember_namespace
+    :intiarg :namespace
+    :type namespace
+    :accessor named-element-namespace
+    )
+   )
+  (:metaclass transform-class)
+  (:model *boostrap-model*)
+  (:model-metaclass  "uml:Class")
+  (:composite-name "UML::NamedElement")
   (:is-abstract t))
 
 
 (defclass namespace (named-element)
   ((owned-rules
-    :source-element-p t
-    :source-local-name "ownedRule"
+    :element-p t
+    :local-name "ownedRule"
     :initarg :owned-rules
     :type property-table
     :accessor class-direct-owned-rules-table
     ))
-  (:metaclass uml-transform-class)
-  (:model *uml-stub-model*)
-  (:uml-name "UML::Namespace")
-  (:transform-type  "uml:Class")
+  (:metaclass transform-class)
+  (:model *boostrap-model*)
+  (:model-metaclass  "uml:Class")
+  (:composite-name "UML::Namespace")
   (:is-abstract t))
 
 
-(defclass classifier (namespace type)
+
+(defun compute-composite-name (named)
+  ;; FIXME: note that the PrimitiveTypes package is the singleton
+  ;; denoted with "::" as a prefix part. The InfrastructureLibrary
+  ;; package, for instance, i not denoted with the "::" prefix in the
+  ;; UML 2.4.1 specification, though it may be understood as
+  ;; representing a "top level" package
+  ;;
+  ;; This implementation will skip the prefix "::" altogether
+  (declare (type named-element named)
+	   (values simple-string &optional))
+  (let ((ns (when (slot-boundp named 'namespace)
+	      (named-element-namespace named)))
+	(name (named-element-name named)))
+    (cond
+      (ns
+       (concatenate 'simple-string name
+		    #.(simplify-string "::")
+		    (compute-coposite-name ns)))
+      (t (values  name)))))
+
+#+FIXME ;; TO DO
+(defun resolve-composite-name (name &optional (errorp t))
+  (declare (type string name)
+	   (values (or named-element null) &optional))
+
+  )
+
+
+(defclass classifier (namespace #+NIL type)
   ((generalizations
-    :source-element-p t
-    :source-local-name "generalization"
+    :element-p t
+    :local-name "generalization"
     :initarg :generalizations
     :type property-table
     :accessor class-direct-generalizations-table
     ))
-  (:metaclass uml-transform-class)
-  (:model *uml-stub-model*)
-  (:transform-type "uml:Class")
-  (:uml-name "UML::Classifier")
+  (:metaclass transform-class)
+  (:model *boostrap-model*)
+  (:model-metaclass "uml:Class")
+  (:composite-name "UML::Classifier")
   (:is-abstract t))
+
+
+(defclass uml-package (namespace)
+  ((uri ;; FIXME: intern as namespace in containing model
+    :attribute-p t
+    :local-name "URI"
+    :initarg :uri
+    :type string
+    :accessor uml-package-uri)
+   (packaged-elements
+    :element-p t
+    :local-name "packagedElement"
+    :type property-table
+    :accessor uml-package-packaged-elements))
+  (:metaclass transform-class)
+  (:model *boostrap-model*)
+  (:model-metaclass "uml:Class")
+  (:composite-name "UML::Package"))
