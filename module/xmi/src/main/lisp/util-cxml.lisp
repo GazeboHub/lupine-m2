@@ -317,39 +317,31 @@ FINALIZED-P"
 	(urix (simplify-string uri)))
     (declare (type simple-string pfx urix))
     (block local-binding
-      (let ((table (namespace-registry-namespace-table registry))
-	    ns-p pf-p)
-	(block ns-prefix
-	  ;; 0) check for prefix in registry (locating namespace
-	  ;;    if available)
-	  ;; 0.A) If so: Check for string equivalence to URI
-	  ;; 0.A.A) If so, return
-	  ;; 0.A.B) If not: remove prefix, emit signal PREFIX-UNBIND
-	  (do-vector (ns table)
-	    (declare (type namespace ns))
-	    (let ((p (find-prefix pfx ns)))
-	      (when p
-		(setq ns-p ns
-		      pf-p p)
-		(return-from ns-prefix nil)))))
-	(cond
-	  ((and ns-p (string= (namespace-string ns-p) urix))
-	   (return-from local-binding
-	     (values ns-p pf-p)))
-	  ((and ns-p (instance-finalized-p ns-p))
-	   (error "Unable to add prefix ~s to ~
+      (block ns-prefix
+	;; 0) check for prefix in registry (locating namespace
+	;;    if available)
+	;; 0.A) If so: Check for string equivalence to URI
+	;; 0.A.A) If so, return
+	;; 0.A.B) If not: remove prefix, emit signal PREFIX-UNBIND
+	(multiple-value-bind (ns-p pf-p)
+	    (resolve-prefix-namespace pfx registry nil)
+	  (cond
+	    ((and ns-p (string= (namespace-string ns-p) urix))
+	     (return-from local-binding
+	       (values ns-p pf-p)))
+	    ((and ns-p (instance-finalized-p ns-p))
+	     (error "Unable to add prefix ~s to ~
 finalized namespace ~s"
-		  pf-p ns-p))
-	  (ns-p
-	   ;; FIXME: Thread safety....?
-	   (delete pf-p (namespace-prefix-table  ns-p)
-		   :test #'eq)
-	   (restart-case
-	       (signal 'namespace-prefix-unbind
-		       :namespace ns-p
-		       :prefix pf-p)
-	     (continue))
-	   ))) ;; block ns-prefix
+		    pf-p ns-p))
+	    (ns-p
+	     ;; FIXME: Thread safety....?
+	     (delete pf-p (namespace-prefix-table ns-p)
+		     :test #'eq)
+	     (restart-case
+		 (signal 'namespace-prefix-unbind
+			 :namespace ns-p
+			 :prefix pf-p)
+	       (continue)))))) ;; block ns-prefix
       ;; FIXME: try to wrap the following in a restart (?)
       ;; cf.  non-loal exit when the NAMESPACE-PREFIX-UNBIND signal is caught
       (block ns-uri
@@ -388,8 +380,7 @@ finalized namespace ~s"
 		    (return-from local-binding
 		      (values ns pf-p)))
 		   (t (add-prefix))))
-	       )
-	      ))) ;; block ns-uri
+	       )))) ;; block ns-uri
 	)  ;; block local-binding
       ))) ;; defun
 
@@ -427,9 +418,9 @@ finalized namespace ~s"
    (namespace-prefix-unbind (c)
      (warn "Caught unbind signal: ~s" c)
      (continue c)))
- ;; expect, then (after first call)
+ ;; expect, always - noting that the signal should happen only once
  ;;   (length (namespace-registry-namespace-table *r*))
-;;    => 2
+ ;;    => 2
 
  (handler-case
      (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
