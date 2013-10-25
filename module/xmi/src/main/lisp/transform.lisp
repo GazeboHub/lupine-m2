@@ -106,7 +106,7 @@ refer to ./transform.md
 
 (defgeneric resolve-composite-name (name model &optional errorp))
 
-(defgeneric resolve-cname (name model &optional errorp)
+(defgeneric resolve-qname (name model &optional errorp)
   (:method ((name string) (model bootstrap-model) &optional (errorp t))
     (let ((ns-reg (bootstrap-model-ns-registry model)))
       (multiple-value-bind (pfx lname)
@@ -174,10 +174,10 @@ refer to ./transform.md
 			    (cadr ,it)))
 		     (t (values ,it)))))))
     (let ((model (uncadr :model))
-	  (name (uncadr :cname)))
+	  (name (uncadr :qname)))
       (when name
-      ;; FIXME: split cname into name, prefix. resolve.
-	(setf (getf initargs :cname)
+      ;; FIXME: split qname into name, prefix. resolve.
+	(setf (getf initargs :qname)
 	      (simplify-string name)))
       (prog1 (apply #'call-next-method instance slots initargs)
 	(when (and name model)
@@ -336,7 +336,7 @@ refer to ./transform.md
   ;;
   ;; This class option would effectively denote a packagedElement
   ;; definition for the defining class.
-  (:cname "UML:Class")
+  (:qname "UML:Class")
 
   ;; "uml" in the following item denotes the namespace URI assigned
   ;; to the prefix "uml"
@@ -364,7 +364,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML:Element")
+  (:qname "UML:Element")
   (:is-abstract t))
 
 
@@ -373,7 +373,7 @@ refer to ./transform.md
     :attribute-p t
     :local-name "name"
     :initarg :name
-    :type simple-string ;; fixme: NCName
+    :type simple-string ;; fixme: NQname
     :accessor named-element-name)
    (namespace
     ;; not directly encoded in XMI, rather derived from when a
@@ -388,7 +388,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML:NamedElement")
+  (:qname "UML:NamedElement")
   (:is-abstract t))
 
 
@@ -403,7 +403,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass  "uml:Class")
-  (:cname "UML:Namespace")
+  (:qname "UML:Namespace")
   (:is-abstract t))
 
 
@@ -454,7 +454,7 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:cname "UML:Classifier")
+  (:qname "UML:Classifier")
   (:is-abstract t))
 
 
@@ -473,4 +473,4 @@ refer to ./transform.md
   (:metaclass metamodel-stub-class)
   (:model *boostrap-model*)
   (:model-metaclass "uml:Class")
-  (:cname "UML:Package"))
+  (:qname "UML:Package"))
