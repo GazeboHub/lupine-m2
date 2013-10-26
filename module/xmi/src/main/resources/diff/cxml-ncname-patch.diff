@@ -1,0 +1,150 @@
+diff --git a/xml/xml-name-rune-p.lisp b/xml/xml-name-rune-p.lisp
+index 44d27ea..260cab4 100644
+--- a/xml/xml-name-rune-p.lisp
++++ b/xml/xml-name-rune-p.lisp
+@@ -7,8 +7,8 @@
+ 
+ (in-package :cxml)
+ 
+-#.(funcall 
+-   (compile 
++#.(funcall
++   (compile
+     nil
+     '(lambda ()
+       (let ((+max+ #xD800)
+@@ -100,11 +100,11 @@
+ 	     #((#x00B7 #x00B7) (#x02D0 #x02D0) (#x02D1 #x02D1) (#x0387 #x0387)
+ 	       (#x0640 #x0640) (#x0E46 #x0E46) (#x0EC6 #x0EC6) (#x3005 #x3005)
+ 	       (#x3031 #x3035) (#x309D #x309E) (#x30FC #x30FE))))
+-        (labels
+-            ((rune-in-range-p (code range-vector)
++	(labels
++	    ((rune-in-range-p (code range-vector)
+ 	       (declare (type simple-vector range-vector))
+ 	       ;;we were always dealing with a sorted vector... bin search it
+- 
++
+ 	       (let ((start 0)
+ 		     (end (length range-vector)))
+ 		 (while (< start end)
+@@ -118,68 +118,84 @@
+ 			   (setf end mid-index))
+ 			 (t
+ 			   (return t))))))))
+-	     
++
+ 	     (name-start-rune-p (rune)
+-               (or (letter-rune-p rune)
+-                   (= #.(char-code #\_) rune)
+-                   (= #.(char-code #\:) rune)))
++	       (or (letter-rune-p rune)
++		   (= rune #.(char-code #\_) )
++		   (= rune #.(char-code #\:))))
+ 
+-             (name-rune-p (rune)
+-               (or (letter-rune-p rune)
+-                   (digit-rune-p* rune)
+-                   (= rune #.(char-code #\.))
+-                   (= rune #.(char-code #\-))
+-                   (= rune #.(char-code #\_))
+-                   (= rune #.(char-code #\:))
+-                   (combining-rune-p rune)
+-                   (extender-rune-p rune)))
++	     (ncname-rune-p (rune)
++	       (or (letter-rune-p rune)
++		   (digit-rune-p* rune)
++		   (= rune #.(char-code #\.))
++		   (= rune #.(char-code #\-))
++		   (= rune #.(char-code #\_))
++		   (combining-rune-p rune)
++		   (extender-rune-p rune)))
+ 
+-             (letter-rune-p (rune)
+-               (or (base-rune-p rune)
+-                   (ideographic-rune-p rune)))
++	     (name-rune-p (rune)
++	       (or (ncname-rune-p rune)
++		   (= rune #.(char-code #\:))))
+ 
+-             (digit-rune-p* (rune)
+-               (rune-in-range-p rune digit-ranges))
++	     (letter-rune-p (rune)
++	       (or (base-rune-p rune)
++		   (ideographic-rune-p rune)))
+ 
++	     (digit-rune-p* (rune)
++	       (rune-in-range-p rune digit-ranges))
+ 
+-             (combining-rune-p (rune)
+-               (rune-in-range-p rune combining-char-ranges))
++	     (combining-rune-p (rune)
++	       (rune-in-range-p rune combining-char-ranges))
+ 
+-             (extender-rune-p (rune)
+-               (rune-in-range-p rune extender-ranges))
++	     (extender-rune-p (rune)
++	       (rune-in-range-p rune extender-ranges))
+ 
+-             (base-rune-p (rune)
+-               (rune-in-range-p rune base-char-ranges))
++	     (base-rune-p (rune)
++	       (rune-in-range-p rune base-char-ranges))
+ 
+-             (ideographic-rune-p (rune)
+-               (rune-in-range-p rune ideographic-ranges))
++	     (ideographic-rune-p (rune)
++	       (rune-in-range-p rune ideographic-ranges))
+ 
+ 
+-             (predicate-to-bv (p)
+-               (let ((r (make-array +max+ :element-type 'bit :initial-element 0)))
+-                 (dotimes (i +max+ r)
+-                   (when (funcall p i)
+-                     (setf (aref r i) 1))))) )
++	     (predicate-to-bv (p)
++	       (let ((r (make-array +max+ :element-type 'bit :initial-element 0)))
++		 (dotimes (i +max+ r)
++		   (when (funcall p i)
++		     (setf (aref r i) 1))))) )
+ 
+-          `(progn
++	  `(progn
+ 	    (DEFINLINE NAME-RUNE-P (RUNE)
+ 	      (SETF RUNE (RUNE-CODE RUNE))
+ 	      (LOCALLY (DECLARE (OPTIMIZE (SAFETY 0) (SPEED 3))
+-				(type fixnum rune))
++				(type (unsigned-byte 16) rune))
+ 		(AND (<= 0 RUNE ,+max+)
+ 		     (= 1 (SBIT ',(predicate-to-bv #'name-rune-p)
+ 				RUNE)))))
+ 	    (DEFINLINE NAME-START-RUNE-P (RUNE)
+ 	      (SETF RUNE (RUNE-CODE RUNE))
+ 	      (LOCALLY (DECLARE (OPTIMIZE (SAFETY 0) (SPEED 3))
+-				(type fixnum rune))
++				(type (unsigned-byte 16) rune))
+ 		(AND (<= 0 RUNE ,+MAX+)
+ 		     (= 1 (SBIT ',(predicate-to-bv #'name-start-rune-p)
+ 				RUNE)))))
++	    (DEFINLINE NCNAME-RUNE-P (RUNE)
++	      (SETF RUNE (RUNE-CODE RUNE))
++	      (LOCALLY (DECLARE (OPTIMIZE (SAFETY 0) (SPEED 3))
++				(type (unsigned-byte 16) rune))
++		(AND (<= 0 RUNE ,+max+)
++		     (= 1 (SBIT ',(predicate-to-bv #'ncname-rune-p)
++				RUNE)))))
+ 	    (definline valid-name-p (rod)
++	      (declare (type rod rod))
+ 	      (and (plusp (length rod))
+ 		   (name-start-rune-p (elt rod 0))
+ 		   (every #'name-rune-p rod)))
++	    (definline valid-ncname-p (rod)
++	      (declare (type rod rod))
++	      (and (plusp (length rod))
++		   (every #'ncname-rune-p rod)))
+ 	    (definline valid-nmtoken-p (rod)
++	      (declare (type rod rod))
+ 	      (and (plusp (length rod))
+-		   (every #'name-rune-p rod)))))))))
++		   (every #'name-rune-p rod)))
++	    ))))))
