@@ -11,7 +11,7 @@
 
 (in-package #:lupine/xmi)
 
-(defun make-xmi-source (source &key
+(defun make-event-source (source &key
 				 sax-handler
 				 (tmodel *xmi-unmarshalling-model*))
   "Generate an appropriate `KLACKS:SOURCE' handler for parsing SOURCE.
@@ -42,7 +42,7 @@ See also:
   ;; cf. `cxml-rng:parse-schema' for some klacks usage reference
   ;; also <http://common-lisp.net/project/cxml/klacks.html#sources>
   (let (*container*)
-    (klacks:with-open-source (s (make-xmi-source source sax-handler))
+    (klacks:with-open-source (s (make-event-source source sax-handler))
       (handler-case
 	  (block klacks-parse
 	    (loop

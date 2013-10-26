@@ -114,12 +114,15 @@ refer to ./transform.md
 	;; * once every such metsclass is defined in Lisp and furthermore is registered to the bootstrap-metamodel, the bootstrap-metamodel may then be used for unmarshallimg the entire UML metamodel serialized in UML.xmi. (That unmarshaling procedure may result in discrete modifications onto the same metaclasses used in unmarshalling that metamodel, or alternately it would result in the production of an objectively distinct model, however whose metaclasses may inherit from metsclasses defined in the bootstrap-metamodel)
 	;; * once the UML metamodel is completely defined, then it may be presented for graphical operations via CLIM presemtation methods
 	;;
-	;; That outline basically describes the design intention underlying the implementation of the Lupine-XMI components. 
-	;; 
+	;; That outline basically describes the design intention underlying the implementation of the Lupine-XMI components.
+	;;
 	;; In the implementation of the Lupine-XMI metamodel unmarshaling model, as denoted in the previous outline, a design issue has been noticed, as would be denoted in Namespaces.md
-	
-	
-  (:method ((name string) (model bootstrap-metamodel) &optional (errorp t))
+
+  (:method ((name string) model &optional (errorp t))
+    (resolve-qname (simplify-string string) model errorp))
+
+  (:method ((name simple-string) (model bootstrap-metamodel)
+	    &optional (errorp t))
     (let ((ns-reg (bootstrap-metamodel-ns-registry model)))
       (multiple-value-bind (pfx lname)
 	  ;; FIXME: allow for "foo" as well as "bar:foo"
