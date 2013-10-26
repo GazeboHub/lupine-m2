@@ -27,14 +27,14 @@ refer to ./transform.md
 
 (defconstant +package-buffer-extent+ 1)
 
-(defclass bootstrap-model ()
+(defclass bootstrap-metamodel ()
   ;; effectively a container for XMI -> Common Lisp transformation
   ;; descriptors, so far as to unmarshal the full UML metamodel
   ;; serialized in UML.xmi
   ((ns-registry
     ;; NB: This slot consumes the :namespaces instance initarg
     :type namespace-registry
-    :accessor bootstrap-model-ns-registry)
+    :accessor bootstrap-metamodel-ns-registry)
    (root-packages
     ;; Notice that UML-PACKAGE will not yet have been defined,
     ;; when this class' definition is initially evaluted
@@ -53,7 +53,7 @@ refer to ./transform.md
 (defgeneric apply-element-transform (element source)) ;; ??
 
 
-(defmethod shared-initialize :after ((instance bootstrap-model)
+(defmethod shared-initialize :after ((instance bootstrap-metamodel)
 				     slots &rest initargs
 				     &key namespaces &allow-other-keys)
   (declare (ignore slots initargs))
@@ -61,10 +61,10 @@ refer to ./transform.md
     (flet ((ensure-nsreg ()
 	     (cond
 	       ((slot-boundp instance 'ns-registry)
-		(bootstrap-model-ns-registry instance))
+		(bootstrap-metamodel-ns-registry instance))
 	       (t
 		(let ((nsreg (make-namespace-registry)))
-		  (setf (bootstrap-model-ns-registry instance)
+		  (setf (bootstrap-metamodel-ns-registry instance)
 			nsreg))))))
       (let ((nsreg (ensure-nsreg)))
 	(dolist (ns namespaces)
@@ -75,19 +75,19 @@ refer to ./transform.md
 
 
 
-(declaim (type bootstrap-model *boostrap-model*))
+(declaim (type bootstrap-metamodel *boostrap-model*))
 (defvar *boostrap-model* ;; name ??
-  (make-instance 'bootstrap-model
+  (make-instance 'bootstrap-metamodel
 		 :namespaces
 		 '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
 
 
-(defclass bootstrap-model-component ()
+(defclass bootstrap-metamodel-component ()
   ;; used in METAMODEL-TRANSFORM and in metamodel-stub-class
   ((model
     :initarg :model
-    :type bootstrap-model
-    :initform *bootstrap-model*
+    :type bootstrap-metamodel
+    :initform *bootstrap-metamodel*
     :accessor component-model)
    (namespace
    :type namespace
@@ -107,33 +107,25 @@ refer to ./transform.md
 (defgeneric resolve-composite-name (name model &optional errorp))
 
 (defgeneric resolve-qname (name model &optional errorp)
-  (:method ((name string) (model bootstrap-model) &optional (errorp t))
-    (let ((ns-reg (bootstrap-model-ns-registry model)))
+	;; some axioms:
+	;; * before this function is called, MODEL must contain a set of (URL, predix+) namespace bindings
+	;; * every element used in a serialized metamodel (i.e every metamodel element) represents a model element or a feature of a model element
+	;; * every metamodel element supported in the stub metamodel - that is, the bootsrap-metamodel - may be represented with a metaclass or a slot definition contained by such a metaclass, such that may be registered to the bootstrap-metamodel when or after the metaclass is defined
+	;; * once every such metsclass is defined in Lisp and furthermore is registered to the bootstrap-metamodel, the bootstrap-metamodel may then be used for unmarshallimg the entire UML metamodel serialized in UML.xmi. (That unmarshaling procedure may result in discrete modifications onto the same metaclasses used in unmarshalling that metamodel, or alternately it would result in the production of an objectively distinct model, however whose metaclasses may inherit from metsclasses defined in the bootstrap-metamodel)
+	;; * once the UML metamodel is completely defined, then it may be presented for graphical operations via CLIM presemtation methods
+	;;
+	;; That outline basically describes the design intention underlying the implementation of the Lupine-XMI components. 
+	;; 
+	;; In the implementation of the Lupine-XMI metamodel unmarshaling model, as denoted in the previous outline, a design issue has been noticed, as would be denoted in Namespaces.md
+	
+	
+  (:method ((name string) (model bootstrap-metamodel) &optional (errorp t))
+    (let ((ns-reg (bootstrap-metamodel-ns-registry model)))
       (multiple-value-bind (pfx lname)
 	  ;; FIXME: allow for "foo" as well as "bar:foo"
-	  ;; i.e. "Null namespace" (but note: program mus make account
-	  ;; for containing namespaces during element processing,
-	  ;;
-	  ;; e.g.  at least in regards to how UML.xmi is serialized,
-	  ;; namespace of quux may not be the null namespacce, but
-	  ;; rather the namespace of prefix 'foo' in
-	  ;;
-	  ;;  <foo:bar xmlns:foo="http://foo.example.com/"><quux/></foo:bar>
-	  ;;
-	  ;; ...though that might seem ambigous in regards to XML
-	  ;; namespaces, in which 'quux' could seem to assume the
-	  ;; default namespace (such that would be the null namespace,
-	  ;; in that example). There being some ambiguity there,
-	  ;; perhaps, it may be thought that 'quux' assumes the
-	  ;; namespace of the containing element, though 'quux' is
-	  ;; itself not qualified with a namesapce, in that example.
-	  ;;
-	  ;; cf. XML names
-	  ;; <http://www.w3.org/TR/xml-names/>
-	  ;;
-	  ;; also cf. XML parser behaviors
-	  ;; What does CXML denote as the namespace of the 'quux'
-	  ;; element, in that example? (and in which XML processing models?)
+	  ;; i.e. "Null namespace" (but note: program must make
+	  ;; account for containing namespaces during element
+	  ;; processing) (see Namespaces.md)
 	  (split-string-1 #\: name)
 	(cond
 	  (pfx
@@ -162,7 +154,7 @@ refer to ./transform.md
 	   ;; declaration
 	   )))
 
-(defmethod shared-initialize ((instance bootstrap-model-component)
+(defmethod shared-initialize ((instance bootstrap-metamodel-component)
 			      slots &rest initargs
 			      &key &allow-other-keys)
   (macrolet ((uncadr (name)
@@ -191,7 +183,7 @@ refer to ./transform.md
 ;;; * ...
 
 
-(defclass metamodel-transform (bootstrap-model-component)
+(defclass metamodel-transform (bootstrap-metamodel-component)
 
   ;; this may be subject to some revision - note the irrelevance of
   ;; the 'type' slot and the corredponding @xmi:type attribute, with
@@ -247,7 +239,7 @@ refer to ./transform.md
 
 ;; * Trasform-Class
 
-(defclass metamodel-stub-class (bootstrap-model-component standard-class)
+(defclass metamodel-stub-class (bootstrap-metamodel-component standard-class)
   ((model-metaclass
     :initarg :model-metaclass
     :types simple-string
@@ -428,16 +420,16 @@ refer to ./transform.md
 		    (compute-coposite-name ns)))
       (t (values  name)))))
 #+NIL
-(defmethod (setf resolve-composite-name) ((new-value bootstrap-model-component)
+(defmethod (setf resolve-composite-name) ((new-value bootstrap-metamodel-component)
 					  (name string)
-					  (model bootstrap-model)
+					  (model bootstrap-metamodel)
 					  )
   ;; FIXME: complete this method definition
   )
 
 #+NIL
 (defmethod resolve-composite-name ((name string)
-				   (model bootstrap-model)
+				   (model bootstrap-metamodel)
 				   &optional (errorp t))
   ;; FIXME: complete this method definition
   )
