@@ -171,6 +171,63 @@
   (setf (namespace-registry-namespace-table instance)
 	...))
 
+;;; * Condition Types NAME-CONDITION, NAMESPACE-CONDITION
+
+(define-condition name-condition ()
+  ((name
+    :initarg :name
+    :reader name-condition-name)))
+
+
+(define-condition namespace-condition ()
+  ((namespace
+    :initarg :namespace
+    :reader namespace-condition-namespace)))
+
+;;; * Condition Type Protocol: NAME-NOT-FOUND
+
+(define-condition name-not-found (name-condition namespace-condition)
+  ()
+  (:report
+   (lambda (c s)
+     (format s "Name ~s not found in ~s"
+	     (name-condition-name c)
+	     (namespace-condition-namespace c)))))
+
+(define-condition name-not-found-error (error name-not-found)
+  ())
+
+(define-condition simple-name-not-found-error (simple-condition
+					       name-not-found-error)
+  ()
+  (:report
+   (lambda (c s)
+     (format s "Name ~s not found in ~s ~?"
+	     (name-condition-name c)
+	     (namespace-condition-namespace c)
+	     (simple-condition-format-control c)
+	     (simple-condition-format-arguments  c)))))
+
+
+;;; * Condition Type Protocol: NAMESPACE-NOT-FOUND
+
+(define-condition namespace-not-found (name-not-found)
+  ()
+  (:report
+   (lambda (c s)
+     (format s "Namespace ~s not found in ~s"
+	     (name-condition-name c)
+	     (namespace-condition-namespace c)))))
+
+
+(define-condition namespace-not-found-error (error
+					     namespace-not-found)
+  ())
+
+
+;;;  * Namespace Resolvers
+
+
 (defun compute-namespace (namespace registry &optional ensure-p)
   ;; FIXME: Propagate ENSURE-P behavior to other ensure=>compute
   ;; functions in this file [DO NEXT]
@@ -193,33 +250,26 @@ created newly in this evaluation."
 		 (return (values ns nil))))))
       (or (find-registered)
 	  (cond
-	  	((and ensure-p (instance-finalized-p registry)
-	     (error "Unable to create instance for namespace ~s in ~
-finalized registry ~s"
-		    namespace registry))
 	    (ensure-p
+	     (assert-not-finalized registry
+				   "Unable to add instance for namespace ~s"
+				   namespace)
 	     (let ((reg (make-namespace the-string)))
 	       (vector-push-extend reg table)
-	       (values reg t))))
-	     (t (error "Namespace ~s not found in registry ~s ~
-when :ENSURE-P NIL"
-	     		namespace registry))
-	       ))))
+	       (values reg t)))
+	    (t (error 'namespace-not-found-error
+		      :name namespace
+		      :namespace registry)))
+	  ))))
 
+;;; * Condition Type Protocol: Namespace Binding/Unbinding
 
-(define-condition namespace-condition ()
-  ((namespace
-    :initarg :namespace
-    :reader namespace-condition-namespace)))
-
-(define-condition namespace-prefix-condition (namespace-condition)
-  ((prefix
-    :initarg :prefix
-    :reader prefix-condition-prefix)))
+(define-condition namespace-prefix-condition (name-condition namespace-condition)
+  ())
 
 (defmethod print-object ((instance namespace-prefix-condition) stream)
   (print-unreadable-object (instance stream :type t :identity t)
-    (write-string (prefix-condition-prefix instance) stream)
+    (write-string (name-condition-name instance) stream)
     (write-char #\Space stream)
     (let ((ns (namespace-condition-namespace instance)))
       (typecase ns
@@ -231,27 +281,63 @@ when :ENSURE-P NIL"
   ()
   (:report
    (lambda (c s)
-     (let ((ns (namespace-condition-namespace c)))
        (format s "prefix ~s bound to ~a"
-	       (prefix-condition-prefix c)
-	       (typecase ns
-		 ;; fixme: frobbed dispatching
-		 (namespace (namespace-string ns))
-		 (t ns)))))))
+	       (name-condition-name c)
+	       (namespace-condition-namespace c)))))
+
 
 (define-condition namespace-prefix-unbind (namespace-prefix-condition)
   ()
   (:report
    (lambda (c s)
-     (let ((ns (namespace-condition-namespace c)))
-       (format s "prefix ~s unbound from ~a"
-	       (prefix-condition-prefix c)
-	       (typecase ns
-		 ;; fixme: frobbed dispatching
-		 (namespace (namespace-string ns))
-		 (t ns)))))))
+     (format s "prefix ~s unbound from ~a"
+	     (name-condition-name c)
+	     (namespace-condition-namespace c)))))
+
+
+;;; * Condition Type Protocol: PREFIX-ALREADY-BOUND
+
+(define-condition prefix-already-bound (name-condition
+					namespace-condition)
+  ()
+  (:report
+   (lambda (c s)
+     (fomat s "Prefix ~s is already bound to ~s"
+	    (name-condition-name c)
+	    (namespace-condition-namespace c)))))
+
+(define-condition prefix-already-bound-error (error
+					      prefix-already-bound)
+  ())
+
+;;; * Condition Type Protocol: PREFIX-NOT-FOUND
+
+(define-condition prefix-not-found (name-not-found)
+  ()
+  (:report
+   (lambda (c s)
+     (format s "Prefix ~s not found in ~s"
+	     (name-condition-name c)
+	     (namespace-condition-namespace c)))))
+
+(define-condition prefix-not-found-error (error prefix-not-found)
+  ())
+
+
+;;; * Namespace Prefix Resolvers
 
 (defun resolve-prefix-namespace (prefix registry &optional (errorp t))
+  "Compute and return the namespace for PREFIX within REGISTRY,
+if PREFIX is bound to any namespace within REGISTRY.
+
+When PREFIX is found, the namespace is returned as the first
+value. The exact, simplified prefix string object for PREFIX within
+that namesapce is returned as the second value.
+
+## Exceptional Situations
+
+When PREFIX is not found for any namespace within REGISTRY and ERRORP
+is \"True\", an error of type PREFIX-NOT-FOUND-ERROR is signaled"
   (declare (type string prefix)
 	   (type namespace-registry regisry)
 	   (values (or namespace null)
@@ -261,8 +347,9 @@ when :ENSURE-P NIL"
 	ns-p pf-p)
     (do-vector (ns namespaces (cond
 				(errorp
-				 (error "Prefix ~s not found in ~s"
-					prefix registry))
+				 (error 'prefix-not-found-error
+					:name  prefix
+					:namespace registry))
 				(t (values nil nil))))
       (declare (type namespace ns))
       (let ((p (find-prefix prefix ns)))
@@ -270,23 +357,36 @@ when :ENSURE-P NIL"
 	  (return (values ns p)))))))
 
 
-(defun ensure-prefix (prefix uri registry)
-  "Ensure that the namespace prefix PREFIX is registered uniquely to the
-namespace URI in namespace-registry REGISTRY.
+(defun bind-prefix (prefix uri registry &optional ensure-p)
+"Ensure that the namespace prefix PREFIX is registered uniquely to
+the namespace URI in namespace-registry REGISTRY.
 
-If an existing prefix/namespace binding is superseded by this bindimg,
+The namespace object is returned as the first value. The exact,
+simplified prefix string object for PREFIX is returned as the second
+value.
+
+## Signals
+
+If an existing prefix/namespace binding is superseded by this binding,
 a condition of type NAMESPACE-PREFIX-UNBIND is signaled.
 
 If a new prefix/namespace binding is created - whether newly or in
 superseding an existing binding - a condition of type
 NAMESPACE-PREFIX-BIND is signaled.
 
-The namespace object is returned as the first value. The simplified
-prefix string is returned as the second value.
+## Exceptional Situations
 
-An error is signaled when a new binding must be created in either the
-REGISTRY or the respective namespace, though the object would be
-FINALIZED-P"
+An error of type PREFIX-ALREADY-BOUND-ERROR is signaled when ENSURE-P
+is \"False\" and PREFIX denotes a prefix bound to a namespace not
+namespace-equivalent (that is, string-equivalent) to URI
+
+An error of type PREFIX-NOT-FOUND-ERROR is signaled when ENSURE-P
+is \"False\" and PREFIX denotes a prefix not present in the namespace
+for URI within REGISTRY
+
+An error of type SIMPLE-INSTANCE-FINALIZED-ERROR is signaled when a
+new binding must be created in either the REGISTRY or the namespace,
+though the respective object would be FINALIZED-P"
   (declare (type string prefix uri)
 	   (type namespace-registry registry)
 	   (values namespace simple-string &optional))
@@ -306,21 +406,24 @@ FINALIZED-P"
 	    ((and ns-p (string= (namespace-string ns-p) urix))
 	     (return-from local-binding
 	       (values ns-p pf-p)))
-	    ((and ns-p (instance-finalized-p ns-p))
-	     (error "Unable to add prefix ~s to ~
-finalized namespace ~s"
-		    pf-p ns-p))
-	    (ns-p
-	     ;; FIXME: Thread safety....?
+	    ((and ns-p ensure-p)
+	     (assert-not-finalized ns-p
+				   "Unable to add prefix ~s"
+				   pf-p)
+
+	     ;; FIXME: Thread safety onto NS-P - lock NS-P
 	     (delete pf-p (namespace-prefix-table ns-p)
 		     :test #'eq)
 	     (restart-case
 		 (signal 'namespace-prefix-unbind
-			 :namespace ns-p
-			 :prefix pf-p)
-	       (continue)))))) ;; block ns-prefix
-      ;; FIXME: try to wrap the following in a restart (?)
-      ;; cf.  non-loal exit when the NAMESPACE-PREFIX-UNBIND signal is caught
+			 :name pf-p
+			 :namespace ns-p)
+	       (continue)))
+	    (ns-p
+	     (error 'prefix-already-bound-error
+		    :name pf-p
+		    :namespaace ns-p))
+	    ))) ;; block ns-prefix
       (block ns-uri
 	;; 1) check for URI in Registry
 	;; 1.A) if not, create namespace, initial prefix binding,
@@ -329,26 +432,23 @@ finalized namespace ~s"
 	;; 1.B.A) if so, return
 	;; 1.B.B) if not, add prefix to namespace, emit signal
 	;;        PREFIX-BIND
-	(multiple-value-bind (ns new-p)
-	    (compute-namespace uri registry)
+	(multiple-value-bind (ns ns-new-p)
+	    (compute-namespace uri registry ensure-p)
 	  (flet ((add-prefix ()
-		   (cond
-		     ((instance-finalized-p ns)
-		      (error "Unable to add prefix ~s to ~
-finalized namespace ~s"
-			     pfx ns))
-		     (t
-		      ;; FIXME: Thread safety....?
-		      (vector-push-extend pfx (namespace-prefix-table ns)
-					  #.+qname-buffer-extent+)
-		      (restart-case
-			  (signal 'namespace-prefix-bind
-				  :namespace ns
-				  :prefix pfx)
+		   (assert-not-finalized ns
+					 "Unable to add prefix ~s"
+					 pfx)
+		   ;; FIXME: Thread safety onto NS - lock NS
+		   (vector-push-extend pfx (namespace-prefix-table ns)
+				       #.+qname-buffer-extent+)
+		   (restart-case
+		       (signal 'namespace-prefix-bind
+			       :namespace ns
+			       :name pfx)
 			(continue))
-		      (values ns pfx)))))
+		   (values ns pfx)))
 	    (cond
-	      (new-p (add-prefix))
+	      (ns-new-p (add-prefix))
 	      (t
 	       (let ((pf-p (find-prefix pfx ns)))
 		 (cond
@@ -356,10 +456,14 @@ finalized namespace ~s"
 		   (pf-p
 		    (return-from local-binding
 		      (values ns pf-p)))
-		   (t (add-prefix))))
-	       )))) ;; block ns-uri
-	)  ;; block local-binding
-      ))) ;; defun
+		   (ensure-p (add-prefix))
+		   (t
+		    (error 'prefix-not-found-error
+			   :name prefix
+			   :namespace ns
+			   ))))))))) ;; block ns-uri
+      )  ;; block local-binding
+    ))) ;; defun
 
 #|
 
@@ -375,7 +479,7 @@ finalized namespace ~s"
 
 
  (multiple-value-bind (ns pfx)
-     (ensure-prefix *foo* *foo.ex* *r*)
+     (bind-prefix *foo* *foo.ex* *r*)
    (values (eq pfx *foo*) ns )
    )
   ;; => T, #<structure-object ...>
@@ -387,11 +491,11 @@ finalized namespace ~s"
 ;; (aref (namespace-registry-namespace-table *r*) 0)
 
 
- (ensure-prefix "bar" *foo.ex* *r*)
+ (bind-prefix "bar" *foo.ex* *r*)
  ;; ^ call multiple times, should not be duplicating prefixes
 
  (handler-case
-     (ensure-prefix "bar" "http://bar.example.com/" *r*)
+     (bind-prefix "bar" "http://bar.example.com/" *r*)
    (namespace-prefix-unbind (c)
      (warn "Caught unbind signal: ~s" c)
      (continue c)))
@@ -400,7 +504,7 @@ finalized namespace ~s"
  ;;    => 2
 
  (handler-case
-     (ensure-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
+     (bind-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
    (namespace-prefix-bind (c)
      (warn "Caught bind signal: ~s" c)
      (continue c)))
@@ -408,8 +512,12 @@ finalized namespace ~s"
 
 |#
 
+;;; * QName Resolvers
 
 (defun ensure-qname (cname registry)
+  ;; FIXME: Reformat this function as ENSURE-QNAME-SYMBOL ?
+  ;; (would require that NAMESPACE-PACKAGE be added to NAMESPACE as an
+  ;; accessor)
   (declare (type string cname) (type namespace-registry registry)
 	   (values simple-string simple-string &optional))
   (multiple-value-bind (prefix name)
@@ -418,9 +526,10 @@ finalized namespace ~s"
       (type-error :expected-type 'ncname :datum prefix))
     (unless (cxml::valid-ncname-p name)
       (type-error :expected-type 'ncname :datum name))
-    ;; FIXME: define RESOLVE-PREFIX-NAMESPACE
     (let ((ns (resolve-prefix-namespace prefix registry)))
       (unless ns
-	(error "Prefix ~s is not registered in ~s" prefix registry))
+	(error 'prefix-not-found-error
+	       :name prefix
+	       :namespace registry))
       (values (ensure-qname-string name ns)
 	      ns))))
