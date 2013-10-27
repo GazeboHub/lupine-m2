@@ -53,14 +53,18 @@
   (uri (allocate-instance (find-class 'puri:uri))
    ;; FIXME: Use or discard the URI support
    :type puri:uri)
+
   (prefix-table (make-array #.+qname-buffer-extent+
 			    :element-type 'simple-string
 			    :adjustable t
 			    :fill-pointer 0)
    :type (or (vector simple-string) simple-vector))
+
   (local-names-table (make-hash-table
 		      :test #'equal
 		      :size #.+qname-buffer-extent+)
+   ;; FIXME: Transform LOCAL-NAMES-TABLE to a symbol table in the
+   ;; NAMESPACE-PACKAGE for NAMESPACE (using EQ for the hash table)
    :type hash-table))
 
 (defmethod print-object ((instance namespace) stream)
@@ -73,17 +77,25 @@
 
 (defmethod finalize ((instance namespace))
   ;; FIXME: call FINALIZE sometime after model initialization
-  ;;
-  ;; FIXME: how to make the instance's slot values read-only ?
-  ;;        ^ (needs CLOS, SLOT-VALUE-USING-CLASS, etc
-
-  ;; FIXME: also finalize LOCAL-NAMES-TABLE ? (implementation-specific
-  ;; finalization procedures, specifically w.r.t hash-tables' internal
-  ;; vectors, where previously adjustsble - needs a 'finalized-p' flag
-  ;; on the hash-table, then)
+  ;; FIXME: Thread safety
   (setf (namespace-prefix-table instance)
 	(coerce (namespace-prefix-table instance)
 		'simple-vector)))
+
+
+(defmethod unfinalize ((instance namespace))
+  ;; Assumption: INSTANCE is finalized
+  ;; FIXME: Regression testing
+  ;; FIXME: Thread safety
+  (let* ((table (namespace-prefix-table instance))
+	 (len (length (the simple-vector table))))
+    (setf (namespace-prefix-table instance)
+	  (make-array len
+		      :element-type 'simple-string
+		      :fill-pointer len
+		      :adjustable t
+		      :initial-contents table))))
+
 
 (declaim (type hash-table *qname-ns-registry*))
 
@@ -131,6 +143,10 @@
 
 ;;; ** Meta Registry (Multiple Namespaces)
 
+;; FIXME: When moving this code into a new Lupine/NS module,
+;; also move the finalizable instance proocol into its own module,
+;; namely Lupine/Final
+
 (defstruct (namespace-registry
 	    (:include finalizable-instance)
 	    (:constructor make-namespace-registry ())
@@ -153,23 +169,30 @@
 
 (defmethod finalize ((instance namespace-registry))
   ;; FIXME: call FINALIZE sometime after model initialization
-  ;;
-  ;; FIXME: how to make the instance's slot values read-only ?
-  ;;        ^ (needs CLOS, SLOT-VALUE-USING-CLASS, etc
-
-  ; FIXME: Thread safety
+  ;; FIXME: Thread safety
   (let ((table (coerce (namespace-registry-namespace-table instance)
 		       'simple-vector)))
     (setf (namespace-registry-namespace-table instance)
 	  table)
     (do-vector (ns (the simple-vector table) instance)
-      (finalize ns)
-      )))
+      (finalize ns))))
 
-#+NIL
+
 (defmethod unfinalize ((instance namespace-registry))
-  (setf (namespace-registry-namespace-table instance)
-	...))
+  ;; Assumption: INSTANCE is finalized
+  ;; FIXME: Thread Safety
+  ;; FIXME: Regression testing
+  (let* ((table (namespace-registry-namespace-table instance))
+	 (len (length (the simple-vector table))))
+    (setf (namespace-registry-namespace-table instance)
+	  (make-array len
+		      :element-type 'namespace
+		      :fill-pointer len
+		      :adjustable t
+		      :initial-contents table))
+    (do-vector (ns (the simple-vector table) instance)
+      (unfinalize ns))))
+
 
 ;;; * Condition Types NAME-CONDITION, NAMESPACE-CONDITION
 
@@ -465,6 +488,9 @@ though the respective object would be FINALIZED-P"
       )  ;; block local-binding
     ))) ;; defun
 
+;; FIXME: For XML namespace support, defun ADD-DEFAULT-XML-NAMESPACES
+;; cf. "xml" and "xmlns" prefixes' standard namespace bindings
+
 #|
 
  (defparameter *r* (make-namespace-registry))
@@ -515,17 +541,16 @@ though the respective object would be FINALIZED-P"
 ;;; * QName Resolvers
 
 (defun ensure-qname (cname registry)
-  ;; FIXME: Reformat this function as ENSURE-QNAME-SYMBOL ?
-  ;; (would require that NAMESPACE-PACKAGE be added to NAMESPACE as an
-  ;; accessor)
   (declare (type string cname) (type namespace-registry registry)
-	   (values simple-string simple-string &optional))
+	   (values simple-string namespace &optional))
   (multiple-value-bind (prefix name)
       (split-string-1 #\: cname)
+
     (unless (cxml::valid-ncname-p prefix)
       (type-error :expected-type 'ncname :datum prefix))
     (unless (cxml::valid-ncname-p name)
       (type-error :expected-type 'ncname :datum name))
+
     (let ((ns (resolve-prefix-namespace prefix registry)))
       (unless ns
 	(error 'prefix-not-found-error
