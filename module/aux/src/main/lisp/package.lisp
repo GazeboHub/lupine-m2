@@ -14,6 +14,9 @@
 (defpackage #:lupine/aux
   (:use #:cl)
   (:export
+   ;; package.lisp
+   #:package-designator
+   #:package-shortest-name
    ;; type.lisp
    #:array-index
    #:class-designator
@@ -36,3 +39,31 @@
    #:dash-transform-camel-case
    )
   )
+
+(in-package #:lupine/aux)
+
+(deftype package-designator ()
+  '(or string symbol package character))
+
+(defun package-shortest-name (package)
+  (declare (type package-designator package)
+	   (values simple-string &optional))
+  (let ((p (or (find-package package)
+	       (error "Package not found: ~s" package))))
+    (car (sort (cons (package-name p)
+		     (copy-list (package-nicknames p)))
+	       #'< :key #'length))))
+
+#|
+
+ (package-shortest-name '#:cl)
+ =EXPECT=> "CL"
+
+ (defpackage "http://foo.example.com"
+     (:nicknames #:FOO))
+
+ (package-shortest-name  "http://foo.example.com")
+
+ =EXPECT=> "FOO"
+
+|#
