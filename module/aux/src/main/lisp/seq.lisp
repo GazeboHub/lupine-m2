@@ -50,12 +50,16 @@
 ;; (split-string-1 #\: "FOOBAR")
 
 (deftype readtable-case-designator ()
+  "Symbol denoting READTABLE-CASE"
   '(member :upcase :downcase :preserve :invert))
 
 (defun char-readtable-case (c
 			    &optional
 			      (char-case
 			       (readtable-case *readtable*)))
+  "Convert character C per CHAR-CASE
+
+Note that the :INVERT CHAR-CASE is interpreted only with regards to C"
   (declare (type character c)
 	   (type readtable-case-designator char-case)
 	   (values character &optional))
@@ -75,6 +79,11 @@
 (defun dash-transform-camel-case
     (name &optional
 	    (convert-case (readtable-case *readtable*)))
+    "Convert CompoundName name to COMPOUND-NAME
+
+See also:
+* <http://en.wikipedia.org/wiki/Medial_capitals>"
+
   (declare (type string name)
 	   (values simple-string &optional))
   (let* ((start-p t)
