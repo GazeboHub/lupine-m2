@@ -26,6 +26,8 @@
 
 (defgeneric instance-finalized-p (instance))
 
+(defgeneric (setf instance-finalized-p) (new-value instance))
+
 
 ;;; * Condition Protocol: INSTANCE-FINALIZED
 
@@ -55,19 +57,19 @@
 
 
 (defmacro assert-not-finalized (instance &optional format-control
-					 &rest format-args)
+				&rest format-args)
   (with-gensyms (%instance)
-    `(let (,%instance ,instance)
+    `(let ((,%instance ,instance))
        (when (instance-finalized-p ,%instance)
 	 ,@(cond
 	     (format-control
-	      `(error 'simple-instance-finalized-error
-		      :instance ,%instance
-		      :format-control ,format-control
-		      :format-arguments (list ,@format-args)))
+	      `((error 'simple-instance-finalized-error
+		       :instance ,%instance
+		       :format-control ,format-control
+		       :format-arguments (list ,@format-args))))
 	     (t
-	      `(error 'instance-finalized-error
-		      :instance ,%instance)))))))
+	      `((error 'instance-finalized-error
+		       :instance ,%instance))))))))
 
 
 ;;; * FINALIZABLE-INSTANCE
@@ -80,6 +82,12 @@
 
 (defmethod instance-finalized-p ((instance finalizable-instance))
   (%instance-finalized-p instance))
+
+(defmethod (setf instance-finalized-p) (new-value
+					(instance finalizable-instance))
+  (setf (%instance-finalized-p instance)
+	(when new-value t)))
+
 
 (defmethod finalize :around ((instance finalizable-instance))
   (unless (instance-finalized-p instance)
