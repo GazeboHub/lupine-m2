@@ -533,28 +533,30 @@ though the respective object would be FINALIZED-P"
 
  (defpackage "http://bar.example.com/")
 
-
- (handler-case
+;; an example of appropriate handling for namespace-perfix-unbind,
+;; such that the handler results in completion of the later binding
+;; behavior:
+ (handler-bind ((NAMESPACE-PREFIX-UNBIND
+		       #'(lambda (c)
+			     (declare (ignore C))
+			     (invoke-restart 'CONTINUE))))
    (progn
      (defparameter *r* (make-namespace-registry))
      (bind-prefix *foo* *foo.ex* *r* t)
      (bind-prefix "bar" *foo.ex* *r* t)
-     (bind-prefix "bar" "http://bar.example.com/" *r* t))
-   (namespace-prefix-unbind (c)
-     (warn "Caught unbind signal: ~s" c)
-     ;; ^ expect warning message only on first call
-     (continue)
-   ))
- ;; expect, always - noting that the signal should happen only once
- ;;   (length (namespace-registry-namespace-table *r*))
- ;;    =EXPECT=> 2 (SHOULD, BUT DOES NOT)
+     (bind-prefix "bar" "http://bar.example.com/" *r* t)
+     (length (namespace-registry-namespace-table *r*))
+     ))
+
+
+;;; "last test"
 
  (handler-case
      (bind-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
    (namespace-prefix-bind (c)
      (warn "Caught bind signal: ~s" c)
      (continue c)))
-;; ^ check :
+;; ^ always adds a new prefix. check :
 (namespace-registry-namespace-table *r*)
 
 |#
