@@ -169,7 +169,7 @@ refer to ./transform.md
       (let ((nsreg (ensure-nsreg)))
 	(dolist (ns namespaces)
 	  (destructuring-bind (prefix . uri) ns
-	    (ensure-prefix prefix uri nsreg)))))))
+	    (bind-prefix prefix uri nsreg t)))))))
 
 
 
