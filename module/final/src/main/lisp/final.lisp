@@ -14,7 +14,7 @@
 ;; example usage: in FINALIZE, convert adjustable vectors to simple
 ;; vectors
 
-(in-package #:lupine/xmi)
+(in-package #:lupine/final)
 
 ;;; * Generic Functions
 

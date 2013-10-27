@@ -9,12 +9,7 @@
 
 |#
 
-(in-package #:lupine/xmi)
-
-;;; * Utils for Parse-Schema
-
-(deftype parser-input-source ()
-  '(or pathname stream string runes:xstream))
+(in-package #:lupine/ns)
 
 ;;; * Utils for Name Validation
 

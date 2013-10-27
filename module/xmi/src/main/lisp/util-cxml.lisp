@@ -9,14 +9,9 @@
 
 |#
 
+(in-package #:lupine/xmi)
 
-(in-package #:cl-user)
+;;; * Utils for Parse-Schema
 
-(defpackage #:lupine/xd
-    (:use #:c2mop #:cl)
-    (:export
-     #:namespace-type
-     #:namespace
-     #:put-instance
-     #:get-instance
-     ))
+(deftype parser-input-source ()
+  '(or pathname stream string runes:xstream))

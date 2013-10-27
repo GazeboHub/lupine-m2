@@ -19,24 +19,12 @@
 
 (in-package #:lupine/system)
 
-(defsystem #:lupine-xmi
+(defsystem #:lupine-ns
   ;; :class 'lupine-system/system
   ;; :project #:lupine
   ;; :defsystem-depends-on #:lupine-asdf
-  :depends-on (#:lupine-ns
-	       #:cxml
-	       #:lupine-mop
-	       #:lupine-aux)
+  :depends-on (#:cxml #:puri #:lupine-final #:lupine-aux)
   :components
   ((:file "package")
-   (:file "package-late" :depends-on ("package"))
-   (:file "transform" :depends-on ("package"))
-   (:file "util-cxml" :depends-on ("package"))
-   (:file "uri" :depends-on ("package"))
-   (:file "model" :depends-on ("package" "uri"))
-   (:file "transform-klacks" :depends-on ("package"
-					  "package-late"
-					  "transform"
-					  "model"
-					  "util-cxml"))
+   (:file "ns" :depends-on ("package"))
    ))
