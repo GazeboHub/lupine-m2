@@ -26,9 +26,12 @@
    ;; macro.lisp
    #:with-gensyms
    ;; seq.lisp
-   #:array-dimension-index
-   #:array-length
+   #:array-index
+   #:array-dim
    #:do-vector
    #:split-string-1
+   #:readtable-case-designator
+   #:char-readtable-case
+   #:dash-transform-camel-case
    )
   )

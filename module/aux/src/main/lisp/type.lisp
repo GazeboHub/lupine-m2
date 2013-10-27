@@ -11,9 +11,6 @@
 
 (in-package #:lupine/aux)
 
-(deftype array-index ()
-  `(mod #.array-dimension-limit))
-
 (deftype class-designator ()
   '(or symbol class))
 
