@@ -124,7 +124,9 @@ refer to ./transform.md
 
 (defgeneric add-cdata (encoding cdata model-element model))
 ;; ^ cf. READ-XMI
-;; ^ FIXME: Implement ADD-CDATA for those bootstrap metamodel elements accepting cdata contents (cf. ownedComment, and the non-OCL-interpreting ownedRule impl)
+;; ^ FIXME: Implement ADD-CDATA for those bootstrap metamodel elements
+;; accepting cdata contents (cf. ownedComment, and the
+;; non-OCL-interpreting ownedRule impl)
 
 
 ;;; * Bootstrap Metamodel

@@ -96,7 +96,7 @@
      ns-string
      (puri:intern-uri ns-string *qname-ns-registry*))))
 
-(defun ensure-qname-string (ncname ns)
+(defun ensure-qname-string (ncname ns )
   (declare (type string ncname)
 	   (type namespace ns)
 	   (values simple-ncname &optional))
@@ -127,21 +127,6 @@
 	   (values (or null simple-string) &optional))
   (find prefix (namespace-prefix-table namespace)
 	:test #'string=))
-
-#+QNAMES
-(defstruct (qname
-	    (:constructor %make-qname (namespace name)))
-  ;; FIXME: back-reference to a containing qname registry?
-  (namespace "" :type simple-string)
-  (name "" :type simple-string))
-
-#+QNAMES
-(defgeneric ensure-qname (name namespace)
-  (:method ((name string) (namespace namespace))
-    (values (%make-qname (namespace-string registry)
-			 (ensure-qname-string qname registry))
-	    namespace)))
-
 
 
 ;;; ** Meta Registry (Multiple Namespaces)
@@ -186,13 +171,10 @@
   (setf (namespace-registry-namespace-table instance)
 	...))
 
-#+QNAMES
-(declaim (type namespace-registry *namespace-registry*))
-#+QNAMES ;; used in ENSURE-QNAME (STRING STRING)
-(defvar *namespace-registry*)
-
 (defun compute-namespace (namespace registry &optional ensure-p)
-;; FIXME: Propagate ENSURE-P behavior to other ensure=>compute functions in this file
+  ;; FIXME: Propagate ENSURE-P behavior to other ensure=>compute
+  ;; functions in this file [DO NEXT]
+
   "Ensure that a namespace object exists for the string URI within the
 specified NAMESPACE-REGISTRY. Returns the namespace object and a
 second, boolean value indicating whether the namespace object was
@@ -219,19 +201,10 @@ finalized registry ~s"
 	     (let ((reg (make-namespace the-string)))
 	       (vector-push-extend reg table)
 	       (values reg t))))
-	     (t (error "Namespace ~s not found in registry ~s when :ENSURE-P NIL"
+	     (t (error "Namespace ~s not found in registry ~s ~
+when :ENSURE-P NIL"
 	     		namespace registry))
 	       ))))
-
-
-#+QNAMES
-(defmethod ensure-qname ((name string) (namespace string))
-  "Ensure that the NAME is registered to a namespace denoted by
-STRING, within `*NAMESPACE-REGISTRY*'. Returns the simplified NAME
-and its contsining NAMESPACE object"
-  (let ((ns (compute-namespace namespace *namespace-registry*)))
-    (values (ensure-qname name ns)
-	    ns)))
 
 
 (define-condition namespace-condition ()
