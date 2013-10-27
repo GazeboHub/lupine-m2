@@ -13,7 +13,7 @@
 
 
 (deftype array-index ()
-  '(mod 0 #.array-dimension-limit))
+  '(mod #.array-dimension-limit))
 
 (deftype array-dim ()
   `(integer 0 #.array-dimension-limit))
