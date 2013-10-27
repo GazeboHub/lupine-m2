@@ -15,7 +15,11 @@
   (:use #:cl)
   (:export
    ;; package.lisp
+   #:name-condition
+   #:name-condition-name
+   #:package-not-found
    #:package-designator
+   #:find-package*
    #:package-shortest-name
    ;; type.lisp
    #:array-index
@@ -42,8 +46,29 @@
 
 (in-package #:lupine/aux)
 
+
+(define-condition name-condition ()
+  ((name
+    :initarg :name
+    :reader name-condition-name)))
+
+(define-condition package-not-found (name-condition error)
+  ()
+  (:report
+   (lambda (c s)
+     (format s "Package not found: ~a" (name-condition-name c)))))
+
 (deftype package-designator ()
   '(or string symbol package character))
+
+(defun find-package* (name &optional (errorp t))
+  (declare (type package-designator name)
+	   (values (or package null) &optional))
+  (or (find-package name)
+      (when errorp
+	(error 'package-not-found :name name))))
+
+;; (find-package* (gensym "NOT-A-PKG-"))
 
 (defun package-shortest-name (package)
   (declare (type package-designator package)
