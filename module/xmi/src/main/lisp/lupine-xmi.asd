@@ -26,12 +26,14 @@
   :depends-on (#:cxml #:lupine-mop #:puri #:lupine-aux)
   :components
   ((:file "package")
+   (:file "package-late" :depends-on ("package"))
    (:file "finalizable" :depends-on ("package"))
    (:file "transform" :depends-on ("package"))
    (:file "util-cxml" :depends-on ("package" "finalizable"))
    (:file "uri" :depends-on ("package"))
    (:file "model" :depends-on ("package" "uri"))
    (:file "transform-klacks" :depends-on ("package"
+					  "package-late"
 					  "transform"
 					  "model"
 					  "util-cxml"))
