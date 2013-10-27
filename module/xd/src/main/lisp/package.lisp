@@ -12,11 +12,11 @@
 
 (in-package #:cl-user)
 
-(defpackage #:lupime/xd
+(defpackage #:lupine/xd
     (:use #:c2mop #:cl)
     (#:export
-        #:namespace-type
-        #:namespace
-        #:put-instance
-        #:get-instance
+	#:namespace-type
+	#:namespace
+	#:put-instance
+	#:get-instance
     ))
