@@ -14,12 +14,14 @@
 (deftype class-designator ()
   '(or symbol class))
 
-(defun compute-class (c)
-  (declare (type class-designator c)
-	   (values class &optional))
-  (etypecase c
-    (symbol (find-class c))
-    (class c)))
+(defmacro compute-class (c &environment env)
+  (let ((%c (gensym "%C-")))
+    `(let ((,%c ,c))
+       (etypecase ,%c
+	 (symbol (find-class ,%c t ,env))
+	 (class ,%c)))))
+
+;; (compute-class 'standard-class)
 
 (deftype type-designator ()
   '(or class-designator (cons symbol t)))
