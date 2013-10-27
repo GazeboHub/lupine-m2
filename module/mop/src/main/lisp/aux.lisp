@@ -1,16 +1,6 @@
 
 (in-package #:lupine/mop)
 
-(deftype class-designator ()
-  '(or symbol class))
-
-(defun compute-class (designator &optional (errorp t)
-				   &env env)
-  (declare (type class-designator designator)
-	   (values (or class null) &optional))
-  (etypecase designator
-    (class (values designator))
-    (symbol (find-class designator errorp env))))
 
 (defun compute-direct-slot-definitions (name class)
   ;; By preferring class-direct-superclasses, this does not rely on
