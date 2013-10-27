@@ -419,81 +419,82 @@ though the respective object would be FINALIZED-P"
 	(urix (simplify-string uri)))
     (declare (type simple-string pfx urix))
     (block local-binding
-      (block ns-prefix
-	;; 0) check for prefix in registry (locating namespace
-	;;    if available)
-	;; 0.A) If so: Check for string equivalence to URI
-	;; 0.A.A) If so, return
-	;; 0.A.B) If not: remove prefix, emit signal PREFIX-UNBIND
-	(multiple-value-bind (ns-p pf-p)
-	    (resolve-prefix-namespace pfx registry nil)
-	  (cond
-	    ((and ns-p (string= (namespace-string ns-p) urix))
-	     (return-from local-binding
-	       (values ns-p pf-p)))
-	    ((and ns-p move-p)
-	     (assert-not-finalized ns-p
-				   "Unable to add prefix ~s"
-				   pf-p)
+      (labels ((bind-ns-uri ()
+		 ;; 1) check for URI in Registry
+		 ;; 1.A) if not, create namespace, initial prefix binding,
+		 ;;      and add to registry, emit signal PREFIX-BIND (?)
+		 ;; 1.B) if so, determine whether prefix exists for namespace
+		 ;; 1.B.A) if so, return
+		 ;; 1.B.B) if not, add prefix to namespace, emit signal
+		 ;;        PREFIX-BIND
+		 (multiple-value-bind (ns ns-new-p)
+		     (compute-namespace uri registry move-p)
+		 (flet ((add-prefix ()
+			  (assert-not-finalized ns
+						"Unable to add prefix ~s"
+						pfx)
+			  ;; FIXME: Thread safety onto NS - lock NS
+			  (vector-push-extend pfx (namespace-prefix-table ns)
+					      #.+qname-buffer-extent+)
+			  (restart-case
+			      (signal 'namespace-prefix-bind
+				      :namespace ns
+				      :name pfx)
+			    (continue ()
+			      (bind-ns-uri)))
 
-	     ;; FIXME: Thread safety onto NS-P - lock NS-P
-	     (setf (namespace-prefix-table ns-p)
-		   (delete pf-p (namespace-prefix-table ns-p)
-			   :test #'eq))
+			  (values ns pfx)))
+		   (cond
+		     (ns-new-p (add-prefix))
+		     (t
+		      (let ((pf-p (find-prefix pfx ns)))
+			(cond
+			  ;; scan for prefix
+			  (pf-p (return-from local-binding
+				  (values ns pf-p)))
+			  (t (add-prefix)))))))))
+	       (bind-ns-prefix ()
+		 ;; 0) check for prefix in registry (locating namespace
+		 ;;    if available)
+		 ;; 0.A) If so: Check for string equivalence to URI
+		 ;; 0.A.A) If so, return
+		 ;; 0.A.B) If not: remove prefix, emit signal PREFIX-UNBIND
+		 (multiple-value-bind (ns-p pf-p)
+		     (resolve-prefix-namespace pfx registry nil)
+		   (cond
+		     ((and ns-p (string= (namespace-string ns-p) urix))
+		      (return-from local-binding
+			(values ns-p pf-p)))
+		     ((and ns-p move-p)
+		      (assert-not-finalized ns-p
+					    "Unable to add prefix ~s"
+					    pf-p)
 
-	     ;; FIXME: when the unbind signal is caught in
-	     ;; a containing handler-case calling this function
-	     ;; within its body, then even after 'continue' in that
-	     ;; handler-case, the later binding is not made
-	     (restart-case
-		 (signal 'namespace-prefix-unbind
-			 :name pf-p
-			 :namespace ns-p)
-	       (continue ()
-		 #+NIL ;; not the right approach
-		 (values ns-p pf-p)))
-	    (ns-p
-	     (error 'prefix-already-bound-error
-		    :name pf-p
-		    :namespace ns-p))
-	    ))) ;; block ns-prefix
-      (block ns-uri
-	;; 1) check for URI in Registry
-	;; 1.A) if not, create namespace, initial prefix binding,
-	;;      and add to registry, emit signal PREFIX-BIND (?)
-	;; 1.B) if so, determine whether prefix exists for namespace
-	;; 1.B.A) if so, return
-	;; 1.B.B) if not, add prefix to namespace, emit signal
-	;;        PREFIX-BIND
-	(multiple-value-bind (ns ns-new-p)
-	    (compute-namespace uri registry move-p)
-	  (flet ((add-prefix ()
-		   (assert-not-finalized ns
-					 "Unable to add prefix ~s"
-					 pfx)
-		   ;; FIXME: Thread safety onto NS - lock NS
-		   (vector-push-extend pfx (namespace-prefix-table ns)
-				       #.+qname-buffer-extent+)
-		   (restart-case
-		       (signal 'namespace-prefix-bind
-			       :namespace ns
-			       :name pfx)
-		     (continue))
+		      ;; FIXME: Thread safety onto NS-P - lock NS-P
+		      (setf (namespace-prefix-table ns-p)
+			    (delete pf-p (namespace-prefix-table ns-p)
+				    :test #'eq))
 
-		   (values ns pfx)))
-	    (cond
-	      (ns-new-p (add-prefix))
-	      (t
-	       (let ((pf-p (find-prefix pfx ns)))
-		 (cond
-		   ;; scan for prefix
-		   (pf-p
-		    (return-from local-binding
-		      (values ns pf-p)))
-		   (t (add-prefix))
-		   ))))))) ;; block ns-uri
-      )  ;; block local-binding
-    )) ;; defun
+		      ;; FIXME: when the unbind signal is caught in
+		      ;; a containing handler-case calling this function
+		      ;; within its body, then even after 'continue' in that
+		      ;; handler-case, the later binding is not made
+		      (restart-case
+			  (signal 'namespace-prefix-unbind
+				    :name pf-p
+				    :namespace ns-p)
+			(continue ()
+			  ;; How to ensure that BIND-NS-URI is called
+			  ;; after control flow returns (?) to this function?
+			  (bind-ns-uri))))
+		     (ns-p
+		      (error 'prefix-already-bound-error
+			     :name pf-p
+			     :namespace ns-p))
+		     ))))
+	(bind-ns-prefix)
+	(bind-ns-uri))
+    ))) ;; defun
 
 ;; FIXME: For XML namespace support, defun ADD-DEFAULT-XML-NAMESPACES
 ;; cf. "xml" and "xmlns" prefixes' standard namespace bindings
@@ -528,27 +529,33 @@ though the respective object would be FINALIZED-P"
 
 
 
- (bind-prefix "bar" *foo.ex* *r* t)
  ;; ^ call multiple times, should not be duplicating prefixes
 
  (defpackage "http://bar.example.com/")
 
+
  (handler-case
-     (bind-prefix "bar" "http://bar.example.com/" *r* t)
+   (progn
+     (defparameter *r* (make-namespace-registry))
+     (bind-prefix *foo* *foo.ex* *r* t)
+     (bind-prefix "bar" *foo.ex* *r* t)
+     (bind-prefix "bar" "http://bar.example.com/" *r* t))
    (namespace-prefix-unbind (c)
      (warn "Caught unbind signal: ~s" c)
      ;; ^ expect warning message only on first call
-   (continue c)))
+     (continue)
+   ))
  ;; expect, always - noting that the signal should happen only once
  ;;   (length (namespace-registry-namespace-table *r*))
- ;;    => 2
+ ;;    =EXPECT=> 2 (SHOULD, BUT DOES NOT)
 
  (handler-case
      (bind-prefix (string (gensym "NS-")) "http://bar.example.com/" *r*)
    (namespace-prefix-bind (c)
      (warn "Caught bind signal: ~s" c)
      (continue c)))
-
+;; ^ check :
+(namespace-registry-namespace-table *r*)
 
 |#
 
