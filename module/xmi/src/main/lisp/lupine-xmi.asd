@@ -19,7 +19,7 @@
 
 (in-package #:lupine/system)
 
-(defsystem lupine-xmi
+(defsystem #:lupine-xmi
   ;; :class 'lupine-system/system
   ;; :project #:lupine
   ;; :defsystem-depends-on #:lupine-asdf

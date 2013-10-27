@@ -12,6 +12,7 @@
   	<module>module/mop</module>
   	<module>module/asdf</module>
   	<module>module/pmmt</module>
+  	<module>module/ns</module>
   	<module>module/xd</module>
   	<module>module/m2</module>
   </modules>
