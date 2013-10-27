@@ -85,6 +85,7 @@ See also:
 * <http://en.wikipedia.org/wiki/Medial_capitals>"
 
   (declare (type string name)
+	   (type readtable-case-designator convert-case)
 	   (values simple-string &optional))
   (let* ((start-p t)
 	 after-up-p

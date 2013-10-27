@@ -191,7 +191,8 @@
 #+QNAMES ;; used in ENSURE-QNAME (STRING STRING)
 (defvar *namespace-registry*)
 
-(defun ensure-namespace (namespace registry)
+(defun compute-namespace (namespace registry &optional ensure-p)
+;; FIXME: Propagate ENSURE-P behavior to other ensure=>compute functions in this file
   "Ensure that a namespace object exists for the string URI within the
 specified NAMESPACE-REGISTRY. Returns the namespace object and a
 second, boolean value indicating whether the namespace object was
@@ -210,14 +211,17 @@ created newly in this evaluation."
 		 (return (values ns nil))))))
       (or (find-registered)
 	  (cond
-	    ((instance-finalized-p registry)
-	     (error "Unable to add registry for namespace ~s to ~
+	  	((and ensure-p (instance-finalized-p registry)
+	     (error "Unable to create instance for namespace ~s in ~
 finalized registry ~s"
 		    namespace registry))
-	    (t
+	    (ensure-p
 	     (let ((reg (make-namespace the-string)))
 	       (vector-push-extend reg table)
-	       (values reg t))))))))
+	       (values reg t))))
+	     (t (error "Namespace ~s not found in registry ~s when :ENSURE-P NIL"
+	     		namespace registry))
+	       ))))
 
 
 #+QNAMES
@@ -225,7 +229,7 @@ finalized registry ~s"
   "Ensure that the NAME is registered to a namespace denoted by
 STRING, within `*NAMESPACE-REGISTRY*'. Returns the simplified NAME
 and its contsining NAMESPACE object"
-  (let ((ns (ensure-namespace namespace *namespace-registry*)))
+  (let ((ns (compute-namespace namespace *namespace-registry*)))
     (values (ensure-qname name ns)
 	    ns)))
 
@@ -353,7 +357,7 @@ finalized namespace ~s"
 	;; 1.B.B) if not, add prefix to namespace, emit signal
 	;;        PREFIX-BIND
 	(multiple-value-bind (ns new-p)
-	    (ensure-namespace uri registry)
+	    (compute-namespace uri registry)
 	  (flet ((add-prefix ()
 		   (cond
 		     ((instance-finalized-p ns)
@@ -392,8 +396,8 @@ finalized namespace ~s"
 
  (defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
 
- (eq (ensure-namespace *foo.ex* *r*)
-     (ensure-namespace *foo.ex* *r*))
+ (eq (compute-namespace *foo.ex* *r*)
+     (compute-namespace *foo.ex* *r*))
  ;; => T
 
 

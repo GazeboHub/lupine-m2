@@ -11,9 +11,9 @@
 
 (in-package #:lupine/xmi)
 
-(defun make-event-source (source &key
-				 sax-handler
-				 (tmodel *xmi-unmarshalling-model*))
+(defun make-event-handler (source &key sax-handler)
+  ;; FIXME: Modify this form producing a handler implementing the
+  ;; QNAME-OVERRIDE behavior denoted in Namespaces.md
   "Generate an appropriate `KLACKS:SOURCE' handler for parsing SOURCE.
 
 SAX-HANDLER, if non-nil, must be a CXML SAX handler
@@ -30,81 +30,151 @@ See also:
       (klacks:make-tapping-source source sax-handler)
       (cxml:make-source source)))
 
+#+NIL ;; use *boostrap-model*
 (defun make-standard-model (&optional source)
   (make-instance 'standard-model :source source))
 
-(defun read-xmi (source &key sax-handler
-			  (transform-model (make-standard-model source)))
-  ;; FIXME: should this just
-  ;; 'MAKE-MODEL SOURCE &REST OTHERSTUFF' ?
+(define-condition event-condition ()
+  ((event :initarg :event :reader event-condition-event)
+   (event-data :initarg :event-data :reader event-condition-event-data)))
+
+(define-condition unsupported-event-type (event-condition warning)
+  ()
+  (:report (lambda (c s)
+	     (format s "Unsupported event type: ~s - event data: ~s"
+		     (event-condition-event c)
+		     (event-condition-event-data c)))))
+
+(defgeneric intern-qname-symbol (uri lname metamodel)
+  ;; FIXME: This represents a point of integration between the XML and
+  ;; Common Lisp namespaces, allowing for some peculiar instances, e.g
+  ;; if URI is "CL". The side-effects of that may be negligible
+  ;; insofar as the interned name is not used as a function or
+  ;; variable name. However, it should be denoted in the
+  ;; documentation, for developer interest.
+  (:method ((uri simple-string) (lname simple-string)
+	    (metamodel stub-metamodel))
+    ;; FIXME: Later, audit this method for application not
+    ;; only w.r.t STUB-METAMODEL (broaden)
+    (let ((reg (model-namespace-registry metamodel))
+	  ;; FIXME: Define MODEL-NAMESPACE-REGISTRY accessor
+	  ;; and remove redefinitions of that feature
+	  (ns (compute-namespace uri reg)))
+      (cond
+	(ns (let ((p (namespace-package ns)))
+	      (values (intern lname (the package p))
+		      p)))
+	(*INTERN-IN-NULL-NAMESPACE*
+	 ;; FIXME: Define this runtime feature - optionally as
+	 ;; a METAMODEL feature deriving somehow from
+	 ;; :QNAME-OVERRIDE
+
+	 ;; FIXME: Define REGISTY-NULL-NAMESPACE accessor, and
+	 ;; document this special handling of "null nameapace
+	 ;; in metamodel", specifically with regards to
+	 ;; :QNAME-OVERRIDE
+	 (let ((p (registry-null-namespace reg)))
+	   (values (intern lname (the package p))
+		   p))))
+      (t (error "cannot intern local name ~s - No namespace ~
+for ~s found in metamodel-namespace-registry ~s of ~s and not ~
+*INTERN-IN-NULL-NAMESPACE*"
+		lname uri reg metsmodel))))))
+
+(defun read-xmi (source &key
+			  (event-handler (make-event-handler source))
+			  (serialization-model *boostrap-model*))
   (declare (type parser-input-source source)
+	   (type serialization-model serialization-model)
 	   (values model boolean &optional))
-  ;; cf. `cxml-rng:parse-schema' for some klacks usage reference
+  ;; cf. `cxml-rng:parse-schema' for klacks usage reference
   ;; also <http://common-lisp.net/project/cxml/klacks.html#sources>
-  (let (*container*)
-    (klacks:with-open-source (s (make-event-source source sax-handler))
-      (handler-case
-	  (block klacks-parse
-	    (loop
-	      (multiple-value-bind (event-type &rest event-data)
-		  (klacks:consume s)
-		(ecase event-type
-		  ((nil)
-		   ;; return model as created so far.
-		   ;; second value indicates "did not complete document"
-		   (return-from klacks-parse (values m nil)))
-		  (:start-document
-		   )
-		  (:dtd
-		   )
-		  (:start-element
-		   (destructuring-bind (namespace lname qname) event-data
-		     (declare (ignore qname))
-		     (setq *container* (allocate-instance
-					;; FIXME: should this use namespace,
-					;; qname in the element class query?
-					;;
-					;; FIXME: should this also
-					;; use *container* ?
-					(model-default-element-class transform-model)))
-
-		     ;; dispatch on attributes
-		     ;; cf. klacks:map-attributes
-
-		     ;; @xmi:type
-		     (let ((trans (find-type-transform
-				   namespace lname type transform-model)))
-		       ;; FIXME: should do more than "Change class," here?
-		       (change-class *container* trans))
-
-		     ;; @id = needs to be stored, for reference, in
-		     ;; the result model (TO DO)
-
-		     ;; availablity of other attributes, in a
-		     ;; conforming model, will depend on {NAMESPACE, LNAME}
-		     ;; e.g @name = may or may not be available
-
-		     ;; 2. "dispatch" onto element contents
-		  (:end-element
-		   ;; "close" *container*
-		   (initialize-instance *container*) ;; (?)
-		   )
-		  (:characters ;; contents for *container*
-		   )
-		  (:processing-instruction ;; use special PI handling
-		   ;; (non-normative)
-		   )
-		  (:comment ;; use comment handling
-		   ;; (non-normative)
-		   )
-		  (:end-document
-		   ;; 1. finalize model
-
-		   ;; (?)
-
-		   ;; 2. then return - second value indicates
-		   ;; "Completed document"
-		   (return-from klacks-parse (values m t)))
-		  ))))
-	;; handle errors that the klacks parser might produce...
-	))))
+  (let (*model-element*
+	*model*
+	*xml-version*
+	*xml-document-encoding*
+	*xml-standalone-p*)
+    (locally (declare (special
+		       *model-element* *model*
+		       *xml-version* *xml-document-encoding*
+		       *xml-standalone-p*))
+      (klacks:with-open-source (s event-handler)
+	(handler-case
+	    (block klacks-parse
+	      (loop
+		(multiple-value-bind (event-type &rest event-data)
+		    (klacks:consume s)
+		  (macrolet ((warn-unsupported ()
+			       (warn 'unsupported-event-type
+				     :event event-type
+				     :event-data event-data)))
+		    (ecase event-type
+		      ((nil)
+		       ;; return model as created so far.
+		       ;; second value indicates "did not complete document"
+		       ;; note that this does not call INITIALIZE-MODEL
+		       (return-from klacks-parse (values *model* nil)))
+		      (:start-document
+		       ;; version, encoding, standalonep
+		       (multiple-value-bind (v enc s)
+			   ;; FIXME: Parse string values for numeric biding
+			   (setq *xml-version* v
+				 *xml-document-encoding*
+				 (intern enc '#:xml/encoding)
+				 *xml-standalone-p* s)))
+		      (:dtd ;; name, public-id, system-id
+		       (warn-unsupported))
+		      (:start-element ;; uri, lname, qname
+		  	;;; 1) Detect root XMI element, intialize *MODEL*
+		  	;;; 2) Else, ALLOCATE-ELEMENT and map ATTRS "here"
+		       (multiple-value-bind (uri lname qname) event-data
+			 (declare (ignore qname) (type simple-string uri lname))
+			 (let ((qname-symbol (intern-qname-symbol
+					      uri lname serialization-model)))
+			   (cond
+			     ((eq qname-symbol (quote ns/xmi:XMI))
+			      (setq *model* (allocate-model
+					     *xml-encoding*
+					     source serialization-model)))
+			     (t
+			      (setq *model-element*
+				    (allocate-element
+				     qname-symbol
+				     uri lname *model* source
+				     serialization-model)))))
+			 (klacks:map-attributes
+			  (lambda (uri lname qname val defaulted-p)
+			    (declare (simple-string uri lname val)
+				     (ignore qname defaulted-p))
+			    (let ((qs (intern-qname-symbol
+				       uri lname serializatino-model)))
+			      (apply-atrribute qs uri lname
+					       *model-element* *model*
+					       source
+					       serialization-model)))
+			  source)))
+		      (:end-element ;; uri, lname, qname
+		       ;; "close" *model-element*
+		       (final-initialize *model-element*
+					 *model*
+					 serialization-model))
+		      (:characters ;; data
+		       ;; FIXME: Normalize string - optional or
+		       ;; element-dependent - handle in ADD-CDATA
+		       ;; methods
+		       (add-cdata *xml-encoding* data
+				  *model-element*
+				  *model*))
+		      (:processing-instruction ;; pi-target, data
+		       (warn-unsupported))
+		      (:comment ;; data
+		       (warn-unsupported))
+		      (:end-document
+		       ;; 1. "close" and shared-initialize *model*
+		       (final-initialize *model* source serialization-model)
+		       ;; 2. then return - second value indicates
+		       ;; "Completed document"
+		       (return-from klacks-parse (values m t)))
+		      )))) ;; block klacks-parse
+	      ;; handle errors that the klacks parser might produce...
+	      ))))))

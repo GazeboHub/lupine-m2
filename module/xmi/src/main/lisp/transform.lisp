@@ -22,12 +22,116 @@ refer to ./transform.md
 
 (defgeneric class-model-metaclass (class))
 
+(decclass lupine-standard-class (standard-class)
+	;; FIXME: Improve and utilize lupine-mop "read-only standard slots" protocol in this metsclass' instances
+	())
 
-;;; * Element transformation proto.
+(defclass model ()
+  ((source-serialization-model
+    :type serialization-model
+    :initarg :source-serialization-model
+    :reader model-source-serialization-model
+    :read-only t)
+   (source
+    :type uri
+    :initarg :source
+    :reader model-source)
+   (source-encoding
+    ;; should be a symbol interned in #:XML/ENCODING (FIXME: Denote that in the codebase documentation)
+    :type symbol
+    :initarg :source-encoding
+    :accessor model-source-encoding
+    ;; FIXME: Provide recode functionaliy on slot-vslue change?
+    ;; (low-priority; complex procedures for nested model element iteration)
+    ))
+  (:metaclass lupine-standard-class))
+
+(defclass serialization-model (model)
+  ((instance-class
+    ;; cf. ALLOCATE-MODEL, BOOTSTRAP-METAMODEL
+    :type class-designstor
+    :initarg :instance-class
+    :accessor :serialization-model-instance-class)
+   (qname-override-p
+    ;; FIXME: Use this slot's value during qname resolution in TRANSFORM-ELEMENT
+    ;; cf. Namespaces.md (Lupine-XMI Documentation)
+    :type boolean
+    :initarg :qname-override
+    :accessor serialization-model-qname-override-p
+    )))
+
+;;; * Element transformation protocol
+
+
+(defgeneric compute-source-uri (source))
+;; FIXME: Move this defn into utils-cxml.lisp and define its methods
+;; there, cf. allocate-model
+
+(defgeneric allocate-model (encoding source serialzation-model)
+  (:method ((encoding symbol) (source t)
+	    (serialzation-model serialization-model))
+    (let ((m (allocate-instance
+	      (find-class
+	       (serialization-model-instance-class serialzation-model)))))
+      (setf (model-source m) (compute-source-uri source))
+      (setf (model-source-encoding m) encoding))))
+
+(defgeneric allocate-element (qname-symbol namespace name
+			      model source serialzation-model)
+  (:method ((qs symbol) (ns simple-string) (name simple-string)
+	    (model stub-metamodel)
+	    (source t)
+	    (serialization-model serialzation-model))
+    ;; FIXME: Later, audit this method for application not only w.r.t
+    ;; STUB-METAMODEL, STUB-METAMODEL-ELEMENT (broaden)
+
+    ;; FIXME: "REAL WORK HERE"
+    ;; See first: intern-qname-symbol, then UML-CLASS definition
+
+    ))
+
+
+(defgeneric apply-atrribute (qname-symbol namespace name element
+			     model source serialzation-model)
+  ;; FIXME: move defmethod to after stub-metamodel-element class definition
+  (:method ((qs symbol) (ns simple-string) (name simple-string)
+	    (element stub-metamodel-element)
+	    (model stub-metamodel)
+	    (source t)
+	    (serialization-model serialzation-model))
+    ;; FIXME: Later, audit this method for application not only w.r.t
+    ;; STUB-METAMODEL, STUB-METAMODEL-ELEMENT (broaden)
+
+    ;; FIXME: "REAL WORK HERE"
+    ;; See first: allocate-element, UML class definition, and
+    ;; UML-CLASS "Property table" slot definitions (special cases:
+    ;; generalizations, owned attributes, owned operations, owned
+    ;; rules cf. OCL, and documentation-stub handling. also address
+    ;; UML associations and UML enumeration metaclasses)
+
+    ;; NB also: (eql ns/xmi:type) and CHANGE-CLASS (w.r.t class
+    ;; selection in ALLOCATE-ELEMENT, and the specifications by which
+    ;; that behavior will be defined in the Lupine-XMI UML
+    ;; stub/metamodel unmarshaling protocol)
+
+    ))
+
+
+(defgeneric final-initialize (model context serialization-model)
+  (:method ((model model) (context t)
+	    (serialization-model serialization-model))
+    (initialize-instance model)))
+
+(defgeneric add-cdata (encoding cdata model-element model))
+;; ^ cf. READ-XMI
+;; ^ FIXME: Implement ADD-CDATA for those bootstrap metamodel elements accepting cdata contents (cf. ownedComment, and the non-OCL-interpreting ownedRule impl)
+
+
+;;; * Bootstrap Metamodel
 
 (defconstant +package-buffer-extent+ 1)
 
-(defclass bootstrap-metamodel ()
+(defclass bootstrap-metamodel (serialization-model)
   ;; effectively a container for XMI -> Common Lisp transformation
   ;; descriptors, so far as to unmarshal the full UML metamodel
   ;; serialized in UML.xmi
@@ -43,14 +147,8 @@ refer to ./transform.md
 			  :element-type 'uml-package
 			  :fill-pointer 0
 			  :adjustable t)
-   )))
-
-
-(defgeneric add-element (element model))
-
-(defgeneric find-element (name model))
-
-(defgeneric apply-element-transform (element source)) ;; ??
+    ))
+  (:default-initargs :instance-class bootstrap-metamodel))
 
 
 (defmethod shared-initialize :after ((instance bootstrap-metamodel)
@@ -73,33 +171,38 @@ refer to ./transform.md
 
 
 
-
-
-(declaim (type bootstrap-metamodel *boostrap-model*))
+(declaim (type bootstrap-metamodel *boostrap-model*)) ;; FIXME class?
 (defvar *boostrap-model* ;; name ??
-  (make-instance 'bootstrap-metamodel
-		 :namespaces
-		 '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
+  (make-instance
+   'bootstrap-metamodel
+   :namespaces
+   '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
 
 
-(defclass bootstrap-metamodel-component ()
-  ;; used in METAMODEL-TRANSFORM and in metamodel-stub-class
+(defclass stub-metamodel-element ()
+  ;; used in METAMODEL-TRANSFORM and in METAMODEL-STUB-CLASS
   ((model
+    ;; model containing this component
     :initarg :model
     :type bootstrap-metamodel
     :initform *bootstrap-metamodel*
     :accessor component-model)
+
+   ;; naming elements
    (namespace
-   :type namespace
-   :initarg :namespace
-   :accessor component-namespace
-    )
+    ;; namespace corresponding to the package containing the named
+    ;; element reified by this component
+    :type namespace
+    :initarg :namespace
+    :accessor component-namespace)
    (local-name
-    ;; ^ local name for type of metamodel serialiation. (Note that that
-    ;; name will identify a single metamodel element type)
+    ;; ^ local name for type of metamodel serialization. (Note that
+    ;; that name must identify a single named element in the
+    ;; serialization metamodel )
     :initarg :local-name
     :type string ;; FIXME: namespace qualified strings - see ensure-qname
-    :accessor component-local-name)))
+    :accessor component-local-name)
+   ))
 
 (defgeneric (setf resolve-composite-name) (new-value name model))
 ;; ^ return local-name
@@ -107,16 +210,43 @@ refer to ./transform.md
 (defgeneric resolve-composite-name (name model &optional errorp))
 
 (defgeneric resolve-qname (name model &optional errorp)
-	;; some axioms:
-	;; * before this function is called, MODEL must contain a set of (URL, predix+) namespace bindings
-	;; * every element used in a serialized metamodel (i.e every metamodel element) represents a model element or a feature of a model element
-	;; * every metamodel element supported in the stub metamodel - that is, the bootsrap-metamodel - may be represented with a metaclass or a slot definition contained by such a metaclass, such that may be registered to the bootstrap-metamodel when or after the metaclass is defined
-	;; * once every such metsclass is defined in Lisp and furthermore is registered to the bootstrap-metamodel, the bootstrap-metamodel may then be used for unmarshallimg the entire UML metamodel serialized in UML.xmi. (That unmarshaling procedure may result in discrete modifications onto the same metaclasses used in unmarshalling that metamodel, or alternately it would result in the production of an objectively distinct model, however whose metaclasses may inherit from metsclasses defined in the bootstrap-metamodel)
-	;; * once the UML metamodel is completely defined, then it may be presented for graphical operations via CLIM presemtation methods
-	;;
-	;; That outline basically describes the design intention underlying the implementation of the Lupine-XMI components.
-	;;
-	;; In the implementation of the Lupine-XMI metamodel unmarshaling model, as denoted in the previous outline, a design issue has been noticed, as would be denoted in Namespaces.md
+  ;; some axioms:
+  ;;
+  ;; * before this function is called, MODEL must contain a set
+  ;; of (URL, predix+) namespace bindings
+  ;;
+  ;; * every element used in a serialized metamodel (i.e every
+  ;; metamodel element) represents a model element or a feature of a
+  ;; model element
+  ;;
+  ;; * every metamodel element supported in the stub metamodel - that
+  ;; is, the bootsrap-metamodel - may be represented with a metaclass
+  ;; or a slot definition contained by such a metaclass, such that may
+  ;; be registered to the bootstrap-metamodel when or after the
+  ;; metaclass is defined
+  ;;
+  ;; * once every such metsclass is defined in Lisp and furthermore is
+  ;; registered to the bootstrap-metamodel, the bootstrap-metamodel
+  ;; may then be used for unmarshallimg the entire UML metamodel
+  ;; serialized in UML.xmi. (That unmarshaling procedure may result in
+  ;; discrete modifications onto the same metaclasses used in
+  ;; unmarshalling that metamodel, or alternately it would result in
+  ;; the production of an objectively distinct model, however whose
+  ;; metaclasses may inherit from metsclasses defined in the
+  ;; bootstrap-metamodel)
+  ;;
+  ;; * once the UML metamodel is completely defined, then it may be
+  ;; presented for graphical operations via CLIM presemtation methods
+  ;;
+  ;;
+  ;; That outline basically describes the design intention underlying
+  ;; the implementation of the Lupine-XMI components.
+  ;;
+  ;; In the implementation of the Lupine-XMI metamodel unmarshaling
+  ;; model, as denoted in the previous outline, a design issue has
+  ;; been noticed with regards to namespace defaulting. That design
+  ;; issue and a workaround for that design issue have been denoted in
+  ;; Namespaces.md in the Lupine XMI module's documentation
 
   (:method ((name string) model &optional (errorp t))
     (resolve-qname (simplify-string string) model errorp))
@@ -130,34 +260,31 @@ refer to ./transform.md
 	  ;; account for containing namespaces during element
 	  ;; processing) (see Namespaces.md)
 	  (split-string-1 #\: name)
-	(cond
-	  (pfx
-	   (let ((ns (resolve-prefix-namespace pfx )))
-	     (cond
-	       (ns
-		(let ((ln-p (gethash lname (namespace-local-names-table ns))))
-		  (cond
-		    (ln-p (values ln-p))
-		    (errorp
-		     (error "Local name ~s not registered in namespace ~s" ns))
-		    (t (values nil ns)))))
-	       (errorp
-		(error "No namepace registered for prefix ~s in ~s ns-registry ~s"
-		       pfx model nsreg))
-	       (t (values nil nil)))))
-	  (t  ;; element name was not qualified with a prefix
-	   (error "???") ;; What to do, here?
-	   ;; Option 1): Search for a "default namespace" in the
-	   ;; registry, and "Use it" (even if that namespace has no
-	   ;; URI assigned to it)
-	   ;;
-	   ;; Option 2): If there's a "containing element" context,
-	   ;; use its namespace - whether that  namespace is assigned
-	   ;; by namespace defaulting or by explicit qualified name
-	   ;; declaration
-	   )))
+	(flet ((resolve-in-namespace (ns)
+		 (gethash lname (namespace-local-names-table ns))))
+	  (cond
+	    (pfx
+	     (let ((ns (resolve-prefix-namespace pfx)))
+	       (cond
+		 (ns
+		  (let ((ln-p (resolve-in-namespace ns)))
+		    (cond
+		      (ln-p (values ln-p))
+		      (errorp
+		       (error "Local name ~s not registered in ~
+namespace ~s" ns))
+		      (t (values nil ns)))))
+		 (errorp
+		  (error "No namepace registered for prefix ~s in ~s ~
+ns-registry ~s"
+			 pfx model nsreg))
+		 (t (values nil nil)))))
+	    (t  ;; element name was not qualified with a prefix
+	     ;; FIXME: this assumes no namespace has been defaulted (?)
+	     (let ((ns (registry-null-namespace ns-reg)))
+	       (resolve-in-namespace ns)))))))))
 
-(defmethod shared-initialize ((instance bootstrap-metamodel-component)
+(defmethod shared-initialize ((instance stub-metamodel-element)
 			      slots &rest initargs
 			      &key &allow-other-keys)
   (macrolet ((uncadr (name)
@@ -171,7 +298,7 @@ refer to ./transform.md
     (let ((model (uncadr :model))
 	  (name (uncadr :qname)))
       (when name
-      ;; FIXME: split qname into name, prefix. resolve.
+	;; FIXME: split qname into name, prefix. resolve.
 	(setf (getf initargs :qname)
 	      (simplify-string name)))
       (prog1 (apply #'call-next-method instance slots initargs)
@@ -186,22 +313,12 @@ refer to ./transform.md
 ;;; * ...
 
 
-(defclass metamodel-transform (bootstrap-metamodel-component)
-
+(defclass metamodel-transform (stub-metamodel-element)
   ;; this may be subject to some revision - note the irrelevance of
   ;; the 'type' slot and the corredponding @xmi:type attribute, with
   ;; regards to "simple" metamodel unmarshaling
 
-  (
-   (namespace ;; ??
-
-    ;; XML namespace URI for the element in the metamodel
-    ;; serialization, likewise may the URI of a UML package containing
-    ;; the element
-    :initarg namespace
-    :type namespace
-    :accessor transform-namespace)
-   (element-p
+  ((element-p
     ;; whether the metamodel element is known to be serialized as an
     ;; XML element
     :initarg :element-p
@@ -214,14 +331,11 @@ refer to ./transform.md
     :type boolean
     :accessor transform-attribute-p)
 
-   #+NIL ;; not needed in the metamodel
-   (type ;; type of the model element object to be unmarshaled
-    ;; cf. xmi:type attribute value in UML
-    ;; (FIXME: Decouple that from the metamodel?)
-    :initarg :type
-    :type string ;; ?? FIXME: namespace qualified strings ??
-    )
-   ;; ...
+   ;; Note that xmi:type does not need to be implemented directly in
+   ;; the metamodel unmarshalling framework.
+   ;;
+   ;; The input xmi:type value would rather denote the metaclass
+   ;; of the element being umarshaled
    ))
 
 
@@ -242,7 +356,7 @@ refer to ./transform.md
 
 ;; * Trasform-Class
 
-(defclass metamodel-stub-class (bootstrap-metamodel-component standard-class)
+(defclass metamodel-stub-class (stub-metamodel-element standard-class)
   ((model-metaclass
     :initarg :model-metaclass
     :types simple-string
@@ -338,7 +452,8 @@ refer to ./transform.md
   (:model-metaclass  "uml:Class")  ;; cf. @xmi:type="uml:Class"
   )
 
-#+Nil ;; FIXME: do this CHANGE-CLASS for all elements in the *boostrap-model* after loading
+#+Nil ;; FIXME: do this CHANGE-CLASS for all elements in the
+;; *boostrap-model* after loading
 (let ((c (find-class 'uml-class)))
   (change-class c c))
 
@@ -423,7 +538,7 @@ refer to ./transform.md
 		    (compute-coposite-name ns)))
       (t (values  name)))))
 #+NIL
-(defmethod (setf resolve-composite-name) ((new-value bootstrap-metamodel-component)
+(defmethod (setf resolve-composite-name) ((new-value stub-metamodel-element)
 					  (name string)
 					  (model bootstrap-metamodel)
 					  )

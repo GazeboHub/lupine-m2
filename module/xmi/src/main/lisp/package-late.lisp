@@ -13,6 +13,7 @@
 (in-package #:lupine/xmi)
 
 (defpackage #:xml/encoding
+  (:nicknames #:encoding)
   ;; package for interning of arbitrary XML encoding names as symbols
   ;; cf. ADD-CDATA, READ-XMI
   ;; See also: <http://www.w3.org/TR/REC-xml/#NT-EncodingDecl>
