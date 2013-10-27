@@ -25,6 +25,7 @@
    #:simple-style-warning
    ;; macro.lisp
    #:with-gensyms
+   #:defconst
    ;; seq.lisp
    #:array-index
    #:array-dim

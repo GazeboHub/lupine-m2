@@ -23,3 +23,16 @@
 
 ;; (macroexpand-1 '(with-gensyms (a b c) (list a b c)))
 ;; (with-gensyms (a b c) (list a b c))
+
+
+(defmacro defconst (name value &optional docs)
+  (with-gensyms (%value)
+  `(let ((,%value ,value))
+     (defconstant ,name
+       (cond
+	 ((boundp (quote ,name))
+	  (symbol-value (quote ,name)))
+	 (t ,%value))
+       ,@(when docs (list docs))))))
+
+;; (defconst *FOO* "foo")
