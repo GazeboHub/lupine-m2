@@ -42,7 +42,7 @@
 	     (instance-finalized-instance c)))))
 
 
-(define-condition instance-finalized-error (error instance-finalized)
+(define-condition instance-finalized-error (program-error instance-finalized)
   ())
 
 (define-condition simple-instance-finalized-error (simple-condition
