@@ -19,14 +19,13 @@
    #:simple-ncname
 
    #:namespace
-   #:simple-namespace
    #:prefix-qualified-namespace
    #:namespace-string
    #:namespace-package
-   #:namespace-local-names-table
-   #:namespace-prefix-table
 
    #:make-namespace
+   #:make-prefix-qualified-namespace
+
    #:compute-qname-string
    #:find-prefix
 
@@ -54,4 +53,36 @@
    #:compute-qname
    #:compute-qname-symbol
 
+   #:ensure-standard-namespaces
    ))
+
+(defpackage "http://www.w3.org/XML/1998/namespace"
+  ;; cf. http://www.w3.org/TR/xml-names/#ns-decl
+  (:nicknames #:ns/xml)
+  (:export  #:|base| #:|id| #:|lang| #:|space| )
+  (:use))
+
+(defpackage "http://www.w3.org/2000/xmlns/"
+  ;; cf. http://www.w3.org/TR/xml-names/#ns-decl
+  ;;
+  ;; NOTE: Application developers may be cautioned before binding
+  ;; symbols in this package to any document-specific values. For
+  ;; example, Whereas in an XML namespace, xmlns:quux may denote one
+  ;; namespace in a document A and an entirely other namespace in a
+  ;; document B, then if ns/xmlns::|quux| would bound to any single
+  ;; value in processing the former document, the behaviors are
+  ;; unspecified for how the binding of ns/xmlns::|quux| would be
+  ;; handled in processing the latter document.
+  ;;
+  ;; For most intents and purposes, this package may simply serve in
+  ;; denoting the xmlns namespace and any symbols that may be interned
+  ;; in that namespace, though normal application procedures
+  ;;
+  ;; FIXME: Concerning "Package as persistent collector" - it's up to
+  ;; the application developer to ensure that symbols will be
+  ;; uninterned when no longer needed in any xmlns/foo package
+  ;; namespace. Regarding the matter of packages serving as persisent
+  ;; objects, implementation-specific features may be avaialble for
+  ;; deleting unused packages.
+  (:nicknames #:ns/xmlns)
+  (:use))

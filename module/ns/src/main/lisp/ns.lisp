@@ -574,7 +574,7 @@ is \"True\", an error of type PREFIX-NOT-FOUND-ERROR is signaled"
 					:namespace registry))
 				(t (values nil nil))))
       (declare (type namespace ns))
-      (let ((p (find-prefix prefix ns)))
+      (let ((p (find-prefix prefix ns nil)))
 	(when p
 	  (return (values ns p)))))))
 
@@ -641,7 +641,7 @@ though the respective object would be FINALIZED-P"
 		   (cond
 		     (ns-new-p (add-prefix))
 		     (t
-		      (let ((pf-p (find-prefix pfx ns)))
+		      (let ((pf-p (find-prefix pfx ns nil)))
 			(cond
 			  ;; scan for prefix
 			  (pf-p (return-from local-binding
@@ -831,5 +831,55 @@ though the respective object would be FINALIZED-P"
    (compute-qname-symbol "foo:FOO" *r* t)
    (values (eq ns *ns*) s))
  ;; =EXPECT=> T, |http://foo.example.com/|::FOO
+
+|#
+
+
+(defun ensure-standard-namespaces (registry)
+  (declare (type namespace-registry registry)
+	   (values namespace-registry &optional))
+  (dolist (spec
+	   '(("xml" . "http://www.w3.org/XML/1998/namespace")
+	     ("xmlns" . "http://www.w3.org/2000/xmlns/"))
+	   registry)
+    (destructuring-bind (pfx . uri) spec
+      (bind-prefix pfx uri registry t))))
+
+
+#|
+
+ ;; test harness setup
+
+ (defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
+
+ (progn
+   (defparameter *r* (make-namespace-registry))
+
+   (defparameter  *foo* (simplify-string "foo"))
+
+   (defpackage #.*foo.ex* (:use) (:nicknames "NS/FOO"))
+
+   (defparameter *ns* (bind-prefix *foo* *foo.ex* *r*))
+ )
+
+
+
+  (progn
+   (ensure-standard-namespaces *r*)
+   (multiple-value-bind (s ns)
+     (compute-qname-symbol "foo:FOO" *r* t)
+     (values (eq ns *ns*) s)))
+ ;; =EXPECT=> T, |http://foo.example.com/|::FOO
+
+
+ (progn
+   (ensure-standard-namespaces *r*)
+   (multiple-value-bind (s ns)
+       (compute-qname-symbol "xml:id" *r* t)
+     (values (eq s 'ns/xml::|id|)
+	     (eq (namespace-package ns)
+		 (find-package  "http://www.w3.org/XML/1998/namespace")))
+     ))
+ ;; => T, T
 
 |#
