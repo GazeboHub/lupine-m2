@@ -11,7 +11,30 @@
 
 (in-package #:lupine/ns)
 
-;;; * Utils for Name Validation
+;;; * Compile/Load/Eval-Time Forms
+
+;;; ** :SYMBOL-NAME-EQ feature
+
+(eval-when (:compile-toplevel :execute)
+
+  (let ((name "ncname"))
+    (when (eq (symbol-name (read-from-string name))
+	      (symbol-name (read-from-string name)))
+      (pushnew :SYMBOL-NAME-EQ *features* :test #'eq)
+      ))
+
+) ;; EVAL-WHEN
+
+;;; ** Constants
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+
+(defconstant +qname-buffer-extent+ 32)
+
+) ;; EVAL-WHEN
+
+
+;;; * Type Definitions
 
 ;; This needs the cxml-ncname-patch.diff onto CXML
 ;; for (fboundp #'cxml::valid-ncname-p) => T
@@ -29,7 +52,6 @@
   '(and (or runes::simple-rod simple-string)
     ncname))
 
-
 ;;; * Namespace Qualified Names (QNames)
 
 ;; FIXME: The followimg code, excepting the call to ncname-p, does
@@ -40,43 +62,50 @@
 ;; values created in the Lisp image, for persistent representstion of
 ;; QName (Namespace URI and NCName) values
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-(defconstant +qname-buffer-extent+ 32))
+
+;;; ** Class Definitions
 
 
 (defstruct (namespace
 	    (:include finalizable-instance)
-	    (:constructor nil)
-	    (:conc-name #:%namespace-))
-  (local-names-table (make-hash-table
-		      :test #'equal
-		      :size #.+qname-buffer-extent+)
-   :type hash-table))
+	    (:conc-name #:%namespace-)
+	    (:constructor
+		%make-namespace
+		(string &key
+			  #+NAMESPACE-URI uri
+			  (package (find-package* string)))))
 
-
-(defstruct (simple-namespace
-	    (:include namespace)
-	    (:constructor make-simple-namespace (package)))
   (string #.(simplify-string "")
+   ;; string version of namespace URI
    :type simple-string)
+
   #+NAMESPACE-URI ;; FIXME: Use or discard the URI support
+  ;; URI vesion of namespace URI
   (uri (allocate-instance (find-class 'puri:uri))
    :type puri:uri)
 
-  ;; FIXME: PACKAGE essentially duplicates LOCAL-NAMES-TABLE.
-  ;; Consider replacing local-names-table search with FIND-SYMBOL calls
-  (package (copy-structure (defpackage "SIMPLE-NAMESPACE-CLONE"))
+  ;; FIXME: PACKAGE essentially duplicates LOCAL-NAMES-TABLE,
+  ;; albeit serving as an index of unique strings inasmuch.
+
+  #-:SYMBOL-NAME-EQ
+  (local-names-table (make-hash-table
+		      :test #'equal
+		      :size #.+qname-buffer-extent+)
+   :type hash-table)
+
+  (package (copy-structure (defpackage "NAMESPACE-CLONE"))
    :type package
    ))
 
 
 (defstruct (prefix-qualified-namespace
-	    (:include simple-namespace)
+	    (:include namespace)
 	    (:constructor
-		%make-namespace
-		(string #+NAMESPACE-URI uri
-			&optional
-			  (package (find-package* string)))))
+		%make-prefix-qualified-namespace
+		(string &key
+			  #+NAMESPACE-URI uri
+			  (package (find-package* string))
+			  prefix-table)))
   (prefix-table (make-array #.+qname-buffer-extent+
 			    :element-type 'simple-string
 			    :adjustable t
@@ -87,18 +116,19 @@
 ;;; * Accessor Protocol
 
 (defgeneric namespace-string (namespace)
-  (:method ((namespace simple-namespace))
-    (simple-namespace-string namespace)))
+  (:method ((namespace namespace))
+    (%namespace-string namespace)))
 
 #+NAMESPACE-URI
 (defgeneric namespace-uri (namespace)
-  (:method ((namespace simple-namespace))
-    (simple-namespace-uri namespace)))
+  (:method ((namespace namespace))
+    (%namespace-uri namespace)))
 
 (defgeneric namespace-package (namespace)
-  (:method ((namespace simple-namespace))
-    (simple-namespace-package namespace)))
+  (:method ((namespace namespace))
+    (%namespace-package namespace)))
 
+#-:SYMBOL-NAME-EQ
 (defgeneric namespace-local-names-table (namespace)
   (:method ((namespace namespace))
     (%namespace-local-names-table namespace)))
@@ -111,21 +141,22 @@
 
 
 (defgeneric (setf namespace-string) (new-value namespace)
-  (:method ((new-value string) (namespace simple-namespace))
-    (setf (simple-namespace-string namespace)
+  (:method ((new-value string) (namespace namespace))
+    (setf (%namespace-string namespace)
 	  new-value)))
 
 #+NAMESPACE-URI
 (defgeneric (setf namespace-uri) (new-value namespace)
-  (:method ((new-value uri) (namespace simple-namespace))
-    (setf (simple-namespace-uri namespace)
+  (:method ((new-value uri) (namespace namespace))
+    (setf (%namespace-uri namespace)
 	  new-value)))
 
 (defgeneric (setf namespace-package) (new-value namespace)
-  (:method ((new-value package) (namespace simple-namespace))
-    (setf (simple-namespace-package namespace)
+  (:method ((new-value package) (namespace namespace))
+    (setf (%namespace-package namespace)
 	  new-value)))
 
+#-:SYMBOL-NAME-EQ
 (defgeneric (setf namespace-local-names-table) (new-value namespace)
   (:method ((new-value hash-table) (namespace namespace))
     (setf (%namespace-local-names-table namespace)
@@ -143,7 +174,7 @@
 #|
  (let ((ns (simplify-string "CL")))
   (defparameter *ns*
-    (%make-namespace ns (puri:intern-uri ns))))
+    (%make-namespace ns #+NIL (puri:intern-uri ns))))
 
  (eq (namespace-package *ns*) (find-package "COMMON-LISP"))
  =EXPECT=> T
@@ -188,14 +219,27 @@
 			 (package (find-package* ns-string)))
   (declare (type string ns-string)
 	   (type package package)
-	   ;; FIXME: Always return a prefix-qualified-namespace ?
-	   (values prefix-qualified-namespace &optional))
+	   (values namespace &optional))
   (let ((s (simplify-string ns-string)))
     (%make-namespace s
-		     #+NAMESPACE-URI
-		     (puri:intern-uri s *qname-ns-registry*)
-		     package)))
+		     #+NAMESPACE-URI :uri
+		     #+NAMESPACE-URI (puri:intern-uri s *qname-ns-registry*)
+		     :package package)))
 
+(defun make-prefix-qualified-namespace (ns-string
+					&optional
+					  (package
+					   (find-package* ns-string)))
+  (declare (type string ns-string)
+	   (type package package)
+	   (values prefix-qualified-namespace &optional))
+  (let ((s (simplify-string ns-string)))
+    (%make-prefix-qualified-namespace
+     s #+NAMESPACE-URI :uri
+       #+NAMESPACE-URI (puri:intern-uri s *qname-ns-registry*)
+       :package package)))
+
+#-:SYMBOL-NAME-EQ
 (defun compute-qname-string (ncname ns &optional ensure)
   (declare (type string ncname)
 	   (type namespace ns)
@@ -212,28 +256,66 @@
 	 (setf (gethash ncname-s table) ncname-s))
 	(t (error 'name-not-found :name ncname :namespace ns))))))
 
+#+:SYMBOL-NAME-EQ
+(defun compute-qname-string (ncname ns &optional ensure)
+  (declare (type string ncname)
+	   (type namespace ns)
+	   (values simple-ncname &optional))
+  (locally (declare (inline cxml::valid-ncname-p))
+    (let ((p (namespace-package ns)))
+      (declare (type package p))
+      (multiple-value-bind (s visibility)
+	  (find-symbol ncname p)
+	(cond
+	  ;; NOTE: If NCNAME is already interned in P, this function
+	  ;; assumes it must be a valid ncname
+	  (visibility (values (symbol-name s)))
+	  (ensure
+	   (unless (cxml::valid-ncname-p ncname)
+	     (error 'type-error :expected-type 'ncname :datum ncname))
+	   (values (symbol-name (intern ncname p))))
+	  (t (error 'name-not-found :name ncname :namespace ns)))))))
+
 #|
 
- (defpackage "http://foo.example.com/"
-   (:use #:cl))
+;; FIXME: note that regression tests for this system should be
+;; conducted under conditions both of when this code is compiled
+;; #+:SYMBOL-NAME-EQ and when #-:SYMBOL-NAME-EQ. That, in itself, may
+;; serve to need some extension f othe test harness framework
 
- (let ((reg (make-namespace "http://foo.example.com/"))
-      (q "FOO"))
-  (eq (compute-qname-string q reg t)
-      (compute-qname-string q reg)))
+ (progn
+     (defpackage "http://foo.example.com/"
+       (:use))
 
+     (let ((reg (make-namespace "http://foo.example.com/"))
+	  (q "FOO"))
+      (eq (compute-qname-string q reg t)
+	  (compute-qname-string q reg)))
+  )
 ;; =expect=> T
 
 
 |#
 
-(defun find-prefix (prefix namespace)
-  ;; FIXME: ADD ERRORP
+(defun find-prefix (prefix namespace &optional (errorp t))
   (declare (type simple-string prefix)
 	   (type prefix-qualified-namespace namespace)
 	   (values (or null simple-string) &optional))
-  (find prefix (prefix-qualified-namespace-prefix-table namespace)
-	:test #'string=))
+  ;; Note that this system prefers a simple string table for prefix
+  ;; values, rather than any additional packages for the same, as in
+  ;; consideration:
+  ;;
+  ;;  * that prefix values may not be as numerous as cname values,
+  ;;    within a namespace
+  ;;
+  ;;  * that prefix values may be effectively "moved" between
+  ;;    namespace URI within a naming context
+  (or  (find prefix (prefix-qualified-namespace-prefix-table namespace)
+	     :test #'string=)
+       (when errorp
+	 (error 'prefix-not-found
+		:name prefix
+		:namespace namespace))))
 
 
 ;;; ** Meta Registry (Multiple Namespaces)
@@ -250,9 +332,9 @@
 	    (:constructor make-namespace-registry
 		(&optional null-namespace))
 	    (:conc-name #:namespace-registry-))
-  ;; the namespace-table slot uses a vector for its table, in not
+  ;; the prefix-table slot uses a vector for its table, in not
   ;; expecting a lot of variety/breadth in the table's contents
-  (namespace-table (make-array #.+qname-buffer-extent+
+  (prefix-table (make-array #.+qname-buffer-extent+
 			       :element-type 'prefix-qualified-namespace
 			       :adjustable t
 			       :fill-pointer 0)
@@ -262,25 +344,27 @@
    ;; "Null namespace" within a namespace-registry decoupled from an
    ;; XML document object model - to a question, what would be the
    ;; namespace URI of the null namespace within a namespace registry?
-   (make-simple-namespace
-    (copy-structure (defpackage "NULL-NAMESPACE-CLONE")))
-   :type simple-namespace))
+   (%make-namespace #.(simplify-string "")
+		    :package
+		    (copy-structure
+		     (defpackage "NULL-NAMESPACE-CLONE")))
+   :type namespace))
 
 ;; (namespace-registry-null-namespace (make-namespace-registry))
 
 (defmethod print-object ((instance namespace-registry) stream)
   (print-unreadable-object (instance stream :type t :identity t)
     (format stream "~D ~A"
-	    (length (namespace-registry-namespace-table instance))
+	    (length (namespace-registry-prefix-table instance))
 	    (instance-finalized-p instance))))
 
 
 (defmethod finalize ((instance namespace-registry))
   ;; FIXME: call FINALIZE sometime after model initialization
   ;; FIXME: Thread safety
-  (let ((table (coerce (namespace-registry-namespace-table instance)
+  (let ((table (coerce (namespace-registry-prefix-table instance)
 		       'simple-vector)))
-    (setf (namespace-registry-namespace-table instance)
+    (setf (namespace-registry-prefix-table instance)
 	  table)
     (finalize (namespace-registry-null-namespace instance))
     (do-vector (ns (the simple-vector table) instance)
@@ -291,9 +375,9 @@
   ;; Assumption: INSTANCE is finalized
   ;; FIXME: Thread Safety
   ;; FIXME: Regression testing
-  (let* ((table (namespace-registry-namespace-table instance))
+  (let* ((table (namespace-registry-prefix-table instance))
 	 (len (length (the simple-vector table))))
-    (setf (namespace-registry-namespace-table instance)
+    (setf (namespace-registry-prefix-table instance)
 	  (make-array len
 		      :element-type 'namespace
 		      :fill-pointer len
@@ -322,7 +406,7 @@
 	     (name-condition-name c)
 	     (namespace-condition-namespace c)))))
 
-(define-condition name-not-found-error (error name-not-found)
+(define-condition name-not-found-error (program-error name-not-found)
   ())
 
 (define-condition simple-name-not-found-error (simple-condition
@@ -348,7 +432,7 @@
 	     (namespace-condition-namespace c)))))
 
 
-(define-condition namespace-not-found-error (error
+(define-condition namespace-not-found-error (program-error
 					     namespace-not-found)
   ())
 
@@ -357,18 +441,31 @@
 
 
 (defun compute-namespace (uri registry &optional ensure-p)
-  ;; FIXME: Propagate ENSURE-P behavior to other ensure=>compute
-  ;; functions in this file [DO NEXT]
-
   "Ensure that a namespace object exists for the string URI within the
 specified NAMESPACE-REGISTRY. Returns the namespace object and a
 boolean value indicating whether the namespace object was created
-newly in this evaluation."
+newly in this evaluation.
+
+## Exceptional Situations
+
+When ENSURE-P is true and a namespace is not found for the URI onto
+REGISTRY, this function will create a new PREFIX-QUALIFIED-NAMESPACE.
+If there is no package defined with the URI as a package name or
+nickname at that time, then an error of type PACKAGE-NOT-FOUND will be
+signaled.
+
+If REGISTRY is finalized-p and ENSURE-P is true, then when a new
+namespace must be added to the registry, an error of type
+INSTANCE-FINALIZED-ERROR will be signaled.
+
+If ENSURE-P is false and no namespace is found for URI onto REGISTRY,
+then an error of type NAMESPACE-NOT-FOUND-ERROR will be signaled."
+
   (declare (type string uri)
 	   (type namespace-registry registry)
-	   (values simple-namespace boolean &optional))
+	   (values namespace boolean &optional))
   (let ((%uri (simplify-string uri))
-	(table (namespace-registry-namespace-table registry)))
+	(table (namespace-registry-prefix-table registry)))
     (declare (type simple-string %uri)
 	     (type vector table))
     (flet ((find-registered ()
@@ -383,7 +480,7 @@ newly in this evaluation."
 	   (assert-not-finalized registry
 				 "Unable to add instance for uri ~s"
 				 %uri)
-	   (let ((ns-new (make-namespace %uri)))
+	   (let ((ns-new (make-prefix-qualified-namespace %uri)))
 	     (vector-push-extend ns-new table)
 	     (values ns-new t)))
 	  (t (error 'namespace-not-found-error
@@ -431,7 +528,7 @@ newly in this evaluation."
 	     (name-condition-name c)
 	     (namespace-condition-namespace c)))))
 
-(define-condition prefix-already-bound-error (error
+(define-condition prefix-already-bound-error (program-error
 					      prefix-already-bound)
   ())
 
@@ -445,7 +542,8 @@ newly in this evaluation."
 	     (name-condition-name c)
 	     (namespace-condition-namespace c)))))
 
-(define-condition prefix-not-found-error (error prefix-not-found)
+(define-condition prefix-not-found-error (program-error
+					  prefix-not-found)
   ())
 
 
@@ -468,7 +566,7 @@ is \"True\", an error of type PREFIX-NOT-FOUND-ERROR is signaled"
 	   (values (or prefix-qualified-namespace null)
 		   (or simple-string null)
 		   &optional))
-  (let ((namespaces (namespace-registry-namespace-table registry)))
+  (let ((namespaces (namespace-registry-prefix-table registry)))
     (do-vector (ns namespaces (cond
 				(errorp
 				 (error 'prefix-not-found-error
@@ -627,10 +725,10 @@ though the respective object would be FINALIZED-P"
 ;; (resolve-prefix-namespace "nope" *r*) ;; expect error
 ;; (resolve-prefix-namespace "2xNull" *r* nil) ;; expect NIL, NIL
 
-;; (namespace-registry-namespace-table *r*)
+;; (namespace-registry-prefix-table *r*)
 ;; ^ informative
 
-  (= (length (namespace-registry-namespace-table *r*)) 1)
+  (= (length (namespace-registry-prefix-table *r*)) 1)
  ;; => T
 
 
@@ -653,7 +751,7 @@ though the respective object would be FINALIZED-P"
      (bind-prefix *foo* *foo.ex* *r* t)
      (bind-prefix "bar" *foo.ex* *r* t)
      (bind-prefix "bar" "http://bar.example.com/" *r* t)
-     (length (namespace-registry-namespace-table *r*))
+     (length (namespace-registry-prefix-table *r*))
      ))
  ;; => 2
 
@@ -666,7 +764,7 @@ though the respective object would be FINALIZED-P"
      (warn "Caught bind signal: ~s" c)
      (continue c)))
 ;; ^ always adds a new prefix. cf:
- (namespace-registry-namespace-table *r*)
+ (namespace-registry-prefix-table *r*)
 
 |#
 
@@ -676,7 +774,7 @@ though the respective object would be FINALIZED-P"
   (declare (type string cname)
 	   (type namespace-registry registry)
 	   (values (or simple-string null)
-		   simple-namespace &optional))
+		   namespace &optional))
   (multiple-value-bind (prefix name)
       (split-string-1 #\: cname)
 
@@ -705,10 +803,12 @@ though the respective object would be FINALIZED-P"
 (defun compute-qname-symbol (cname registry &optional ensure)
     (declare (type string cname)
 	     (type namespace-registry registry)
-	     (values symbol simple-namespace &optional))
+	     (values symbol namespace &optional))
   (multiple-value-bind (ncname ns)
       ;; NB: may result in NAME-NOT-FOUND error (note in docs)
       (compute-qname cname registry ensure)
+    ;; Note than when #+:SYMBOL-NAME-EQ this results in
+    ;; (intern (symbol-name (intern ncname p)) p)
     (values (intern ncname (namespace-package ns))
 	    ns)))
 #|
