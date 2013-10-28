@@ -196,26 +196,31 @@
 		     (puri:intern-uri s *qname-ns-registry*)
 		     package)))
 
-(defun ensure-qname-string (ncname ns)
+(defun compute-qname-string (ncname ns &optional ensure)
   (declare (type string ncname)
 	   (type namespace ns)
 	   (values simple-ncname &optional))
   (locally (declare (inline cxml::valid-ncname-p))
-    (let ((ncname-s (simplify-string ncname))
-	  (table (namespace-local-names-table ns)))
-      (or (gethash ncname-s table)
-	  (progn
-	    (unless (cxml::valid-ncname-p ncname)
+    (let* ((ncname-s (simplify-string ncname))
+	   (table (namespace-local-names-table ns))
+	   (it (gethash ncname-s table)))
+      (cond
+	(it (values it))
+	(ensure
+	 (unless (cxml::valid-ncname-p ncname)
 	      (error 'type-error :expected-type 'ncname :datum ncname))
-	    (setf (gethash ncname-s table) ncname-s)
-	    )))))
+	 (setf (gethash ncname-s table) ncname-s))
+	(t (error 'name-not-found :name ncname :namespace ns))))))
 
 #|
 
+ (defpackage "http://foo.example.com/"
+   (:use #:cl))
+
  (let ((reg (make-namespace "http://foo.example.com/"))
       (q "FOO"))
-  (eq (ensure-qname-string q reg)
-      (ensure-qname-string q reg)))
+  (eq (compute-qname-string q reg t)
+      (compute-qname-string q reg)))
 
 ;; =expect=> T
 
@@ -667,10 +672,11 @@ though the respective object would be FINALIZED-P"
 
 ;;; * QName Resolvers
 
-(defun ensure-qname (cname registry)
+(defun compute-qname (cname registry &optional ensure)
   (declare (type string cname)
 	   (type namespace-registry registry)
-	   (values simple-string simple-namespace &optional))
+	   (values (or simple-string null)
+		   simple-namespace &optional))
   (multiple-value-bind (prefix name)
       (split-string-1 #\: cname)
 
@@ -684,31 +690,37 @@ though the respective object would be FINALIZED-P"
     (let ((ns (cond
 		(prefix (resolve-prefix-namespace prefix registry))
 		(t (namespace-registry-null-namespace registry)))))
-      (unless ns
-	(error 'prefix-not-found-error
-	       :name prefix
-	       :namespace registry))
-      (values (ensure-qname-string name ns)
-	      ns))))
+      (cond
+	(ns
+	 ;; NB: may result in NAME-NOT-FOUND error (note in docs)
+	 (values (compute-qname-string name ns ensure)
+		 ns))
+	(t
+	 (error 'prefix-not-found-error
+		:name prefix
+		:namespace registry))))))
 
-;; (ensure-qname "FOO" (make-namespace-registry ))
+;; (compute-qname "FOO" (make-namespace-registry) t)
 
-(defun ensure-qname-symbol (cname registry)
+(defun compute-qname-symbol (cname registry &optional ensure)
     (declare (type string cname)
 	     (type namespace-registry registry)
 	     (values symbol simple-namespace &optional))
   (multiple-value-bind (ncname ns)
-      (ensure-qname cname registry)
+      ;; NB: may result in NAME-NOT-FOUND error (note in docs)
+      (compute-qname cname registry ensure)
     (values (intern ncname (namespace-package ns))
 	    ns)))
 #|
 
- (progn ;; test harness setup
+ ;; test harness setup
+
+ (defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
+
+ (progn
    (defparameter *r* (make-namespace-registry))
 
    (defparameter  *foo* (simplify-string "foo"))
-
-   (defparameter  *foo.ex* (simplify-string "http://foo.example.com/"))
 
    (defpackage #.*foo.ex* (:use) (:nicknames "NS/FOO"))
 
@@ -716,7 +728,7 @@ though the respective object would be FINALIZED-P"
  )
 
  (multiple-value-bind (s ns)
-   (ensure-qname-symbol "foo:FOO" *r*)
+   (compute-qname-symbol "foo:FOO" *r* t)
    (values (eq ns *ns*) s))
  ;; =EXPECT=> T, |http://foo.example.com/|::FOO
 

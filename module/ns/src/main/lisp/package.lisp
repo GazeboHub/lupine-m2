@@ -27,7 +27,7 @@
    #:namespace-prefix-table
 
    #:make-namespace
-   #:ensure-qname-string
+   #:compute-qname-string
    #:find-prefix
 
    #:namespace-registry
@@ -51,7 +51,7 @@
    #:prefix-not-found-error
 
    #:resolve-prefix-namespace
-   #:ensure-qname
-   #:ensure-qname-symbol
+   #:compute-qname
+   #:compute-qname-symbol
 
    ))
