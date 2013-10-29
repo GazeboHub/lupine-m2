@@ -125,9 +125,10 @@
   (declare (type parser-input-source source)
 	   #+NIL (values list boolean &optional))
   (let ((event-handler (cxml:make-source source))
-	tree
-	node skip-node
-	containing-node)
+	(tree nil)
+	(node nil)
+	#+SKIP-NODE (skip-node nil)
+	(containing-node nil))
     (klacks:with-open-source (s event-handler)
       (loop
 	;; FIXME: &REST not allowed in MV-BIND
@@ -156,30 +157,45 @@
 	       (declare (type (or null simple-string) uri)
 			(type simple-string lname)
 			(ignore qname))
-	       (cond
-		 ((and containing-node
-		       (find-if (lambda (n)
-				  (let ((q (simple-node-element  n)))
-				    (and (string= (qname-namespace q) uri)
-					 (string= (qname-local-name q) lname))))
-				(simple-container-contents containing-node)))
-		  (setq skip-node t))
-		 (t
-		  (let ((n (make-simple-node (make-qname uri lname)
+	       (flet ((add-node ()
+			(let ((n (make-simple-node (make-qname uri lname)
 					     node)))
-		    #+NIL (warn "START: ~S (~s)" n containing-node)
-		    (when containing-node
-		      (setf (simple-container-contents containing-node)
-			    (push n (simple-container-contents
-				     containing-node))))
-		    (setq containing-node node
-			  node n))))))
+			  #+NIL (warn "START: ~S (~s)" n containing-node)
+			  (when containing-node
+			    (setf (simple-container-contents containing-node)
+				  (push n (simple-container-contents
+					   containing-node))))
+			  (setq containing-node node
+				node n))))
+		 #-SKIP-NODE
+		 (add-node)
+		 #+SKIP-NODE
+		 (cond
+		   ((and containing-node
+			 (find-if (lambda (n)
+				    (let ((q (simple-node-element  n)))
+				      (and (string= (qname-namespace q) uri)
+					   (string= (qname-local-name q) lname))))
+				  (simple-container-contents containing-node)))
+		    ;; FIXME:  This SKIP-NODE behavior, "Doesn't work for nesting"
+		    (setq skip-node t))
+		   (t (add-node))))))
 	    (:end-element
-	     ;; FIXME: This isn't propertly nesting the items
-	     (unless skip-node
-	       #+NIL (warn "END ~s" node)
-	       (setq node (simple-node-parent node)
-		     containing-node (simple-node-parent node))))
+	     #-SKIP-NODE
+	     (flet ((reset-buckets ()
+		      #+NIL (warn "END ~s" node)
+		      (when (typep node 'simple-node)
+			(setq node (simple-node-parent node)))
+		      (when (typep node 'simple-node)
+			(setq containing-node
+			      (simple-node-parent node)))))
+	       #-SKIP-NODE
+	       (reset-buckets)
+	       #+SKIP-NODE
+	       ;; FIXME: Is this not propertly nesting the items?
+	       (cond
+		 (skip-node (setq skip-node nil))
+		 (t (reset-buckets)))))
 	    (:characters)
 	    (:processing-instruction)
 	    (:comment)
@@ -207,7 +223,8 @@
   "../../../../../module/xmi/src/main/xmi/UML.xmi"))
 )
 
-(simple-container-contents (car (simple-container-contents *tree*)))
+;; notice that the contents are reversed from document order
+(simple-container-contents (cadr (simple-container-contents *tree*)))
 
 (frob-tree *Tree*)
 |#
