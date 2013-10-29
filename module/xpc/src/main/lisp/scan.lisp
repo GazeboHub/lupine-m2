@@ -122,13 +122,12 @@
 (declaim (optimize (speed 0) (safety 3) (debug 3)))
 
 (defun scan-unique-element-types (source)
+  ;; Prototype for a basic XML paser, using Klacks
   (declare (type parser-input-source source)
 	   #+NIL (values list boolean &optional))
   (let ((event-handler (cxml:make-source source))
 	(tree nil)
-	(node nil)
-	#+SKIP-NODE (skip-node nil)
-	(containing-node nil))
+	(node nil))
     (klacks:with-open-source (s event-handler)
       (loop
 	;; FIXME: &REST not allowed in MV-BIND
@@ -159,43 +158,21 @@
 			(ignore qname))
 	       (flet ((add-node ()
 			(let ((n (make-simple-node (make-qname uri lname)
-					     node)))
-			  #+NIL (warn "START: ~S (~s)" n containing-node)
-			  (when containing-node
-			    (setf (simple-container-contents containing-node)
-				  (push n (simple-container-contents
-					   containing-node))))
-			  (setq containing-node node
-				node n))))
-		 #-SKIP-NODE
-		 (add-node)
-		 #+SKIP-NODE
-		 (cond
-		   ((and containing-node
-			 (find-if (lambda (n)
-				    (let ((q (simple-node-element  n)))
-				      (and (string= (qname-namespace q) uri)
-					   (string= (qname-local-name q) lname))))
-				  (simple-container-contents containing-node)))
-		    ;; FIXME:  This SKIP-NODE behavior, "Doesn't work for nesting"
-		    (setq skip-node t))
-		   (t (add-node))))))
+						   node)))
+			  #+NIL (warn "START: ~S (~s)" n node)
+			  (setf (simple-container-contents node)
+				(push n (simple-container-contents node)))
+			  (setq node n))))
+		 (add-node))))
 	    (:end-element
 	     #-SKIP-NODE
-	     (flet ((reset-buckets ()
+	     (flet ((finalize-node ()
 		      #+NIL (warn "END ~s" node)
-		      (when (typep node 'simple-node)
-			(setq node (simple-node-parent node)))
-		      (when (typep node 'simple-node)
-			(setq containing-node
-			      (simple-node-parent node)))))
+		      (setf (simple-container-contents  node)
+			    (nreverse (simple-container-contents node)))
+		      (setq node (simple-node-parent node))))
 	       #-SKIP-NODE
-	       (reset-buckets)
-	       #+SKIP-NODE
-	       ;; FIXME: Is this not propertly nesting the items?
-	       (cond
-		 (skip-node (setq skip-node nil))
-		 (t (reset-buckets)))))
+	       (finalize-node)))
 	    (:characters)
 	    (:processing-instruction)
 	    (:comment)
@@ -209,7 +186,7 @@
     (mapcar #'frob-tree (simple-container-contents container)))
   (:method ((container simple-node))
     (let ((name (qname-frob (simple-node-element container))))
-      (warn "FROB-TREE ~S" name)
+      ;; (warn "FROB-TREE ~S" name)
       (cons name
 	    (call-next-method)))))
 
@@ -223,8 +200,14 @@
   "../../../../../module/xmi/src/main/xmi/UML.xmi"))
 )
 
-;; notice that the contents are reversed from document order
-(simple-container-contents (cadr (simple-container-contents *tree*)))
+;; note that PUSH results in the elements occurring in reverse order
+;; in the result set, compared to their order in the input set.
+;; (Thus, the corresponding NREVERSE call)
+(simple-container-contents (car (simple-container-contents *tree*)))
 
-(frob-tree *Tree*)
+;; FIXME: SCAN... is not nesting the result set correctly to the
+;; nesting of the input set. It seems that many elements are being
+;; skipped, entirely.
+
+(princ (frob-tree *Tree*) t)
 |#
