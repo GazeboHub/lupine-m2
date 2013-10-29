@@ -7,14 +7,17 @@
   <name>Project Lupine</name>
   <packaging>pom</packaging>
   <modules>
-  	<module>module/data-proxy</module>
   	<module>module/aux</module>
   	<module>module/mop</module>
   	<module>module/asdf</module>
   	<module>module/pmmt</module>
   	<module>module/final</module>
   	<module>module/ns</module>
-  	<module>module/xd</module>
+  	<module>module/ucx</module>
+  	<module>module/xpc</module>
   	<module>module/m2</module>
+	<!-- unused -->
+	<!-- <module>module/xd</module> -->
+  	<!-- <module>module/data-proxy</module> -->
   </modules>
 </project>

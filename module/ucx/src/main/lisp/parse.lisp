@@ -9,7 +9,7 @@
 
 |#
 
-(in-package #:lupine/xmi)
+(in-package #:lupine/ucx)
 
 ;;; * Utils for Parse-Schema
 
