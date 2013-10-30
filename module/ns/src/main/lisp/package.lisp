@@ -30,6 +30,7 @@
    #:find-prefix
 
    #:namespace-registry
+   #:make-namespace-registry
 
    #:namespace-condition
    #:name-not-found
