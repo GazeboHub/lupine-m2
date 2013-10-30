@@ -679,25 +679,37 @@ ns-registry ~s"
 (defgeneric get-property (name table))
 (defgeneric ensure-property (value name table))
 (defgeneric map-properties (function table))
-
+(defgeneric list-properties (sequence-type table))
 
 
 (defclass simple-eq-property-table ()
   ((storage
+    :accessor property-table-storage
     :type hash-table
     :initform (make-hash-table :test #'eq))))
 
 (defmethod get-property ((name symbol) (table simple-eq-property-table))
-  (getf name table))
+  (getf name (property-table-storage table)))
 
 (defmethod ensure-property ((value t) (name symbol)
 			   (table simple-eq-property-table))
-  (setf (getf name table) value))
+  (setf (getf name (property-table-storage table)) value))
 
 (defmethod map-properties ((function function)
 			   (table simple-eq-property-table))
-  (maphash function table))
+  (maphash function (property-table-storage table)))
 
+(defmethod list-properties ((sequence-type t)
+			    (table simple-eq-property-table))
+  ;; FIXME: THREAD SAFETY. LOCK STORAGE TABLE SLOT
+  ;; DEFINE: (WITH-SLOT-VALUE-LOCK ...)
+  (let* ((len (hash-table-count (property-table-storage table)))
+	 (buffer (make-array len :adjustable nil :fill-pointer 0)))
+    (map-properties (lambda (k v)
+		      (declare (ignore k))
+		      (vector-push-extend v buffer))
+		    table)
+    (coerce buffer sequence-type)))
 
 ;;; * Property-Oriented Slot Definitions
 
