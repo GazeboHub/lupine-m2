@@ -23,7 +23,7 @@ refer to ./transform.md
 #+NIL
 (defclass lupine-standard-class (standard-class)
   ;; FIXME: Improve and utilize lupine-mop "read-only standard
-  ;; slots" protocol in this metsclass' instances
+  ;; slots" protocol in this metaclass' instances
   ())
 
 (defclass model ()
@@ -513,7 +513,7 @@ implementing the opeations)
   ;; some axioms:
   ;;
   ;; * before this function is called, MODEL must contain a set
-  ;; of (URL, predix+) namespace bindings
+  ;; of (URL, prefix+) namespace bindings
   ;;
   ;; * every element used in a serialized metamodel (i.e every
   ;; metamodel element) represents a model element or a feature of a
@@ -525,14 +525,14 @@ implementing the opeations)
   ;; be registered to the bootstrap-metamodel when or after the
   ;; metaclass is defined
   ;;
-  ;; * once every such metsclass is defined in Lisp and furthermore is
+  ;; * once every such metaclass is defined in Lisp and furthermore is
   ;; registered to the bootstrap-metamodel, the bootstrap-metamodel
   ;; may then be used for unmarshallimg the entire UML metamodel
   ;; serialized in UML.xmi. (That unmarshaling procedure may result in
   ;; discrete modifications onto the same metaclasses used in
   ;; unmarshalling that metamodel, or alternately it would result in
   ;; the production of an objectively distinct model, however whose
-  ;; metaclasses may inherit from metsclasses defined in the
+  ;; metaclasses may inherit from metaclasses defined in the
   ;; bootstrap-metamodel)
   ;;
    ;; * once the UML metamodel is completely defined, then it may be
