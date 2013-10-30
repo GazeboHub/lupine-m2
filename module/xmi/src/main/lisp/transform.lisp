@@ -711,7 +711,6 @@ ns-registry ~s"
 		    table)
     (coerce buffer sequence-type)))
 
-;;; * Property-Oriented Slot Definitions
 
 #|
 
@@ -725,76 +724,24 @@ in the following class attribute groups:
 * Owned Rules (Constraints, inherited from UML::Namespace)
 * Owned Comments (inherited from UML::Element)
 
-The following slot definition protocol represents a generic framework
-for:
+This protocol represents a generic framework for:
 
-  1) Define a single slot definition for each such attribute goup,
-     within a slot vulue of the metacalss
+  1) Define a single slot for each such attribute goup,
+     within a UML element instance
 
   2) Add/Set/Delete/List/Map properties within each such attribute
-     group, within that slot's value on the metaclass
+     group, within that slot's value on the element instance
 
-FIXME: As it representing a thin and perhaps ill fitting layer on an
-ordinary instance access protocol, this slot definition framework
-should be deleted
 
 |#
 
 
-(defclass property-transform-slot-definition
-    ;; FIXME: THIS THING NEEDS WORK TOO
-    (metamodel-transform slot-definition)
-  ())
-
-(defclass direct-property-transform-slot-definition
-    (metamodel-transform-slot-definition standard-direct-slot-definition)
-  ())
-
-(defclass effective-property-transform-slot-definition
-    (metamodel-transform-slot-definition standard-effective-slot-definition)
-  ())
-
-;; * Trasform-Class
-
-(defclass bootstrap-metamodel-metaclass
-    (bootstrap-metamodel-element standard-class)
-  ())
-
-
-(defmethod direct-slot-definition-class ((class bootstrap-metamodel-metaclass)
-					 &rest initargs)
-  ;; towards a pattern: type-specialized slot definitions
-
-  (destructuring-bind (&key type &allow-other-keys)
-      initargs
-    (cond
-      ((subtypep type 'property-table)
-       (find-class 'direct-property-transform-slot-definition))
-      (t (call-next-method))))
-  #+NIL
-  (destructuring-bind (&key local-name &allow-other-keys)
-      initargs
-    (cond
-      (local-name
-       (find-class 'direct-property-transform-slot-definition))
-      (t (call-next-method)))))
-
-(defmethod effective-slot-definition-class ((class bootstrap-metamodel-metaclass)
-					    &rest initargs)
-  (destructuring-bind (&key name &allow-other-keys)
-      initargs
-    (let ((dslots (compute-direct-slot-definitions name class)))
-      (delare (type cons dslots))
-      (cond
-	((some #'(lambda (sl)
-		   (typep sl 'direct-property-transform-slot-definition))
-	       dslots)
-	 (find-class 'effective-property-transform-slot-definition))
-	(t (call-next-method))))))
-
-
-(defmethod get-property ((name symbol) (table bootstrap-metamodel-metaclass))
-  (find-slot-definition name table))
+#+PROTOTYPE
+(progn ;; define one such set for each such attribute group
+(defgeneric add-comment (comment element))
+(defgeneric delete-comment (comment element))
+(defgeneric map-comments (function element))
+)
 
 
 ;;; * UML-Class
