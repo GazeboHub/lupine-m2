@@ -51,6 +51,7 @@
    #:prefix-not-found-error
 
    #:resolve-prefix-namespace
+   #:bind-prefix
    #:compute-qname
    #:compute-qname-symbol
 
