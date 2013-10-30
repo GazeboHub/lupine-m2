@@ -20,8 +20,7 @@ refer to ./transform.md
 
 ;;; * Metaclasses
 
-(defgeneric class-model-metaclass (class))
-
+#+NIL
 (defclass lupine-standard-class (standard-class)
   ;; FIXME: Improve and utilize lupine-mop "read-only standard
   ;; slots" protocol in this metsclass' instances
@@ -32,7 +31,8 @@ refer to ./transform.md
     :type serialization-model
     :initarg :source-serialization-model
     :reader model-source-serialization-model
-    :read-only t)
+    ;; :read-only t
+    )
    (source
     :type uri
     :initarg :source
@@ -47,8 +47,55 @@ refer to ./transform.md
     ;; FIXME: Provide recode functionaliy on slot-value change.
     ;; (low-priority; complex procedures for nested model string
     ;; element iteration and recoding)
-    ))
-  (:metaclass lupine-standard-class))
+    )
+   (id-table
+    ;; FIXME: Implement this slot
+    ;; Note also in documentation: Persistent element IDs
+    )
+   (ns-registry
+    ;; NB: This slot consumes the :namespaces instance initarg
+    :type namespace-registry
+    :accessor model-namespace-registry)
+   )
+  #+NIL (:metaclass lupine-standard-class) ;; cf :READ-ONLY slots
+  )
+
+(defmethod shared-initialize :after ((instance model)
+				     slots &rest initargs
+				     &key namespaces &allow-other-keys)
+  (declare (ignore slots initargs))
+  (when namespaces
+    (flet ((ensure-nsreg ()
+	     (cond
+	       ((slot-boundp instance 'ns-registry)
+		(model-namespace-registry instance))
+	       (t
+		(let ((nsreg (make-namespace-registry)))
+		  (setf (model-namespace-registry instance)
+			nsreg))))))
+      (let ((nsreg (ensure-nsreg)))
+	(ensure-standard-namespaces nsreg)
+	(dolist (ns namespaces)
+	  (destructuring-bind (prefix . uri) ns
+	    (bind-prefix prefix uri nsreg t)))))))
+#| TEST
+
+(defparameter *m*
+  (make-instance 'model
+		 :namespaces
+		 '(("uml" . "http://www.omg.org/spec/UML/20110701" )
+		   ("xmi" . "http://www.omg.org/spec/XMI/20110701" )
+		   ("mofext" . "http://www.omg.org/spec/MOF/20110701")
+		   )))
+
+ (mapcar #'(lambda (n)
+	    (compute-qname-symbol  n (model-namespace-registry *m*)))
+	'("xmi:XMI" "uml:Package" "mofext:Tag"))
+
+
+
+|#
+
 
 (defclass serialization-model (model)
   ((model-class
@@ -63,29 +110,8 @@ refer to ./transform.md
     :initarg :qname-override
     :accessor serialization-model-qname-override-p
     )
-   (ns-registry
-    ;; NB: This slot consumes the :namespaces instance initarg
-    :type namespace-registry
-    :accessor serialization-model-namespace-registry)))
+   ))
 
-(defmethod shared-initialize :after ((instance serialization-model)
-				     slots &rest initargs
-				     &key namespaces &allow-other-keys)
-  (declare (ignore slots initargs))
-  (when namespaces
-    (flet ((ensure-nsreg ()
-	     (cond
-	       ((slot-boundp instance 'ns-registry)
-		(serialization-model-namespace-registry instance))
-	       (t
-		(let ((nsreg (make-namespace-registry)))
-		  (setf (serialization-model-namespace-registry instance)
-			nsreg))))))
-      (let ((nsreg (ensure-nsreg)))
-	(ensure-standard-namespaces nsreg)
-	(dolist (ns namespaces)
-	  (destructuring-bind (prefix . uri) ns
-	    (bind-prefix prefix uri nsreg t)))))))
 
 ;;; * Element transformation protocol
 
@@ -349,19 +375,12 @@ refer to ./transform.md
 * PrimitiveTypes::Integer -> CL:INTEGER
 * PrimitiveTypes::Real -> CL:REAL
 * PrimitiveTypes::String -> CL:STRING
-* PrimittiveTypes::UnlimitedNatural -> ???
+* PrimittiveTypes::UnlimitedNatural -> (or unsigned-byte (eql :*))
 
 
 # Model Elements
 
-## Model Element Metaclasses
-
-* uml-association
-* uml-class
-* uml-enumeration
-
 ## Model Element Types (Bootstrap model)
-
 
 ### Abstract Element Types (Bootstrap model)
 
@@ -373,12 +392,14 @@ refer to ./transform.md
 ### Metaclass Types
 
 * UML::Class
-* UML::Association
-* UML::Enumeration
 
 ### Other Types
+* UML::Association
+* UML::Enumeration
 * UML::Package
 * UML::Property
+
+### UML Packages
 
 ### UML Classes
 
@@ -387,12 +408,20 @@ refer to ./transform.md
 #### Class Attributes
 
 #### Class Operations (from ???)
-(Note: It's a matter of modeling the operations, not _per se_ of
+(Note: It's a matter of modeling the operations, not _per se_ of|
 implementing the opeations)
 
 #### Owned Rules (from Namespace)
 
 #### Comments (from Element)
+
+### UML Profiles
+
+(extending UML::Package)
+(metaclass,profle relations - by way of UML packages)
+(stereotypes - extending metaclasses)
+
+
 
 |#
 
@@ -449,11 +478,11 @@ implementing the opeations)
 
 
 (defclass bootstrap-metamodel-element ()
-  ;; used in METAMODEL-TRANSFORM and in BOOSTRAP-METAMODEL-METACLASS
+  ;; used in METAMODEL-TRANSFORM and in BOOTSTRAP-METAMODEL-METACLASS
   ((model
     ;; model containing this component
     :initarg :model
-    :type bootstrap-metamodel
+    :type serialization-metamodel
     :initform *bootstrap-metamodel*
     :accessor component-model)
 
@@ -465,10 +494,8 @@ implementing the opeations)
     :initarg :namespace
     :accessor component-namespace)
 
-   (local-name ;; FIXME: Discard this slot (?)
-    ;; ^ local name for type of metamodel serialization. (Note that
-    ;; that name must identify a single named element in the
-    ;; serialization metamodel )
+   (local-name ;; FIXME: Discard this slot, or inherit by NAMED-ELEMENT
+    ;; ^ local name for type of metamodel serialization.
     :initarg :local-name
     :type string ;; FIXME: namespace qualified strings - see ensure-qname
     :accessor component-local-name)
@@ -526,7 +553,7 @@ implementing the opeations)
 
   (:method ((name simple-string) (model bootstrap-metamodel)
 	    &optional (errorp t))
-    (let ((ns-reg (serialization-model-namespace-registry model)))
+    (let ((ns-reg (model-namespace-registry model)))
       (multiple-value-bind (pfx lname)
 	  ;; FIXME: allow for "foo" as well as "bar:foo"
 	  ;; i.e. "Null namespace" (but note: program must make
@@ -562,7 +589,8 @@ ns-registry ~s"
 
 (defmethod shared-initialize ((instance bootstrap-metamodel-element)
 			      slots &rest initargs
-			      &key &allow-other-keys)
+			      &key qname &allow-other-keys)
+  ;; This method consumes the :QNAME initarg
   (macrolet ((uncadr (name)
 	       (with-gensyms (it)
 		 (let ((,it (getf initargs ,name)))
@@ -574,17 +602,26 @@ ns-registry ~s"
     (let ((model (uncadr :model))
 	  (name (uncadr :qname)))
       (when name
-	;; FIXME: split qname into name, prefix. resolve.
-	(setf (getf initargs :qname)
-	      (simplify-string name)))
+	;; FIXME:
+	;; 1) split qname into name, prefix
+	;; 2) resolve namespace from prefix,
+	;;    (setf getf) resolved namespace as :namespace initarg value
+	;; 3) (setf getf) local name as name value
+	(let ((reg (model-namespace-registry model)))
+	  (multiple-value-bind (s ns)
+	      (compute-qname-symbol name reg t)
+	    (setf (getf initargs :local-name)
+		  (symbol-name s))
+	    (setf (getf initargs :namespace)
+		  ns)
+	    (delf :qname initargs)))
+
       (prog1 (apply #'call-next-method instance slots initargs)
 	(when (and name model)
-	  (let ((local-name
-		  (setf (resolve-composite-name name model)
-			instance)))
+	  (let ((local-name (setf (resolve-composite-name name model)
+				  instance)))
 	    (setf (component-local-name instance)
 		  local-name)))))))
-
 
 ;;; * ...
 
@@ -632,37 +669,12 @@ ns-registry ~s"
 
 ;; * Trasform-Class
 
-(defclass boostrap-metamodel-metaclass
+(defclass bootstrap-metamodel-metaclass
     (bootstrap-metamodel-element standard-class)
-  ((model-metaclass
-    ;; FIXME: Use of this slot definition?
-    :initarg :model-metaclass
-    :types simple-string
-    :accessor class-model-metaclass
-    )
-   ))
+  ())
 
 
-(defmethod shared-initialize ((instance boostrap-metamodel-metaclass)
-			      slots &rest initargs
-			      &key &allow-other-keys)
-  (macrolet ((uncadr (name)
-	       (with-gensyms (it)
-		 (let ((,it (getf initargs ,name)))
-		   (when (and ,it (consp ,it))
-		     (setf (getf initargs ,name)
-			   (cadr ,it)))))))
-    ;; FIXME: resolve MODEL-METACLASS (as a QName) onto model
-    ;; namespace registry (prefix/ns bindings) in MODEL
-    (uncadr :model-metaclass)
-    ;; FIXME: resolve COMPOSITE-NAME ...
-    (apply #'call-next-method instance slots initargs)
-    (let ((qname (compute-qname-symbol
-		  cname (model-namspace-registry model))))
-      (setf (symbol-value qname) instance)))
-
-
-(defmethod direct-slot-definition-class ((class boostrap-metamodel-metaclass)
+(defmethod direct-slot-definition-class ((class bootstrap-metamodel-metaclass)
 					 &rest initargs)
   (destructuring-bind (&key source-local-name &allow-other-keys)
       initargs
@@ -671,7 +683,7 @@ ns-registry ~s"
        (find-class 'direct-property-transform-slot-definition))
       (t (call-next-method)))))
 
-(defmethod effective-slot-definition-class ((class boostrap-metamodel-metaclass)
+(defmethod effective-slot-definition-class ((class bootstrap-metamodel-metaclass)
 					    &rest initargs)
   (destructuring-bind (&key name &allow-other-keys)
       initargs
@@ -690,7 +702,7 @@ ns-registry ~s"
 (def-uml-package "UML") ;; ?
 
 
-(defclass uml-class (classifier boostrap-metamodel-metaclass)
+(defclass uml-class (classifier bootstrap-metamodel-metaclass)
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
@@ -713,7 +725,7 @@ ns-registry ~s"
     :type boolean)
    )
 
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
 
   ;; FIXME: add :MODEL to other class definitions (?)
   (:model *bootstrap-metamodel*)
@@ -751,7 +763,7 @@ ns-registry ~s"
     :initarg :owned-comments
     :type property-table
     :accessor class-direct-owned-comments-table))
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
   (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:Element")
@@ -763,7 +775,13 @@ ns-registry ~s"
     :attribute-p t
     :local-name "name"
     :initarg :name
-    :type simple-string ;; fixme: NQname
+    :type simple-string
+    ;; fixme: :type simple-ncname ;; ?
+    ;; (NB: NCName type for 'name' is not specified in UML, but may be
+    ;; implied on account of the XMI serialization for UML named
+    ;; elements, in which a named element's name is used as an XML
+    ;; element name, optionally qualified within a XML namespace
+    ;; having the URI of the UML package conaining the element)
     :accessor named-element-name)
    (namespace
     ;; not directly encoded in XMI, rather derived from when a
@@ -775,7 +793,7 @@ ns-registry ~s"
     :accessor named-element-namespace
     )
    )
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
   (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:NamedElement")
@@ -790,7 +808,7 @@ ns-registry ~s"
     :type property-table
     :accessor class-direct-owned-rules-table
     ))
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
   (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:Namespace")
@@ -841,7 +859,7 @@ ns-registry ~s"
     :type property-table
     :accessor class-direct-generalizations-table
     ))
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
   (:model *bootstrap-metamodel*)
   (:model-metaclass "uml:Class")
   (:qname "UML:Classifier")
@@ -860,7 +878,79 @@ ns-registry ~s"
     :local-name "packagedElement"
     :type property-table
     :accessor uml-package-packaged-elements))
-  (:metaclass boostrap-metamodel-metaclass)
+  (:metaclass bootstrap-metamodel-metaclass)
   (:model *bootstrap-metamodel*)
   (:model-metaclass "uml:Class")
   (:qname "UML:Package"))
+
+
+;;; * UML Primitive Types
+
+
+(defclass data-type (classifier)
+  ((lisp-type
+    :initarg :lisp-type
+    :accessor data-type-lisp-type))
+  (:metaclass bootstrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:Class")
+  (:qname "UML:Package")
+  (:is-abstract t))
+
+
+
+(defclass primitive-type (data-type standard-class)
+  ()
+  (:metaclass bootstrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:Class")
+  (:qname "UML:PrimitiveType"))
+
+
+(defclass type-proxy ()
+  ;; FIXME: use an AROUND method on (SETF TYPE-PROXY-VALUE) to ensure
+  ;; that the NEW-VALUE is of the appopriate LISP-TYPE
+  ((value
+    :initarg :value
+    :accessor type-proxy-value)
+   ))
+
+(defclass uml-boolean (type-proxy)
+  ((value
+    :type boolean))
+  (:metaclass primitive-type)
+  (:lisp-type boolean)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:PrimitiveType")
+  (:qname "PrimitiveTypes:Boolean"))
+
+
+(defclass uml-integer (type-proxy)
+  ((value
+    :type integer))
+  (:metaclass primitive-type)
+  (:lisp-type integer)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:PrimitiveType")
+  (:qname "PrimitiveTypes:Integer"))
+
+(defclass uml-string (type-proxy)
+  ((value
+    :type string))
+  (:metaclass primitive-type)
+  (:lisp-type string)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:String")
+  (:qname "PrimitiveTypes:Integer"))
+
+(deftype unlimited-natural ()
+  '(or unsigned-byte (eql :*)))
+
+(defclass uml-unlimited-natural (type-proxy)
+  ((value
+    :type unlimited-natural))
+  (:metaclass primitive-type)
+  (:lisp-type unlimited-natural)
+  (:model *bootstrap-metamodel*)
+  (:model-metaclass "uml:String")
+  (:qname "PrimitiveTypes:Integer"))
