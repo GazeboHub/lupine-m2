@@ -28,8 +28,14 @@
    #:type-designator
    #:member-typep
    #:simplify-string
-   ;; conditions.lisp
+   ;; condition.lisp
    #:simple-style-warning
+   #:namespace-condition
+   #:namespace-condition-namespace
+   #:name-not-found
+   #:name-not-found-error
+   #:simple-name-not-found-error
+
    ;; macro.lisp
    #:with-gensyms
    #:defconst
@@ -46,6 +52,8 @@
 
 (in-package #:lupine/aux)
 
+
+;;; * Condition Type NAME-CONDITION
 
 (define-condition name-condition ()
   ((name

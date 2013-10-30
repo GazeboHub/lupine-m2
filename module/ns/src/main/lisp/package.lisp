@@ -32,11 +32,6 @@
    #:namespace-registry
    #:make-namespace-registry
 
-   #:namespace-condition
-   #:name-not-found
-   #:name-not-found-error
-   #:simple-name-not-found-error
-
    #:namespace-not-found
    #:namespace-not-found-error
 
