@@ -17,7 +17,12 @@
    (:export
     #:class-designator
     #:compute-class
-    #:compute-direct-slot-definitions)
+    #:compute-direct-slot-definitions
+    #:slot-definition-not-found
+    #:direct-slot-definition-not-found
+    #:find-slot-definition
+    #:find-direct-slot-definition
+    )
    )
 
 (let ((p (find-package '#:lupine/mop)))
