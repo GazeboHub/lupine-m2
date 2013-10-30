@@ -23,7 +23,7 @@
   (local-name (error 'frob) :type simple-ncname))
 
 
-(defun qname-frob (qname)
+(defun qname-string (qname)
   (declare (type qname qname)
 	   (values simple-string))
   (let ((ns (qname-namespace qname))
@@ -32,7 +32,7 @@
       (ns (format nil "{~a}~a" ns n))
       (t (values n)))))
 
-;; (qname-frob (make-qname "http://a.example.com/" "b"))
+;; (qname-string (make-qname "http://a.example.com/" "b"))
 
 
 (defun qname= (q1 q2)
@@ -116,7 +116,7 @@
 (defmethod print-object ((object simple-node) stream)
   (print-unreadable-object (object stream :type t :identity t)
     (format stream "~a (~d)"
-	    (qname-frob (simple-node-element object))
+	    (qname-string (simple-node-element object))
 	    (length (simple-container-contents object)))))
 
 #+NIL
@@ -182,12 +182,12 @@
 	     )))))))
 
 
-(defgeneric frob-tree (container)
+(defgeneric tree-to-list (container)
   (:method ((container simple-container))
-    (mapcar #'frob-tree (simple-container-contents container)))
+    (mapcar #'tree-to-list (simple-container-contents container)))
   (:method ((container simple-node))
-    (let ((name (qname-frob (simple-node-element container))))
-      ;; (warn "FROB-TREE ~S" name)
+    (let ((name (qname-string (simple-node-element container))))
+      ;; (warn "TREE-TO-LIST ~S" name)
       (cons name
 	    (call-next-method)))))
 
@@ -210,5 +210,5 @@
 ;; nesting of the input set. It seems that many elements are being
 ;; skipped, entirely.
 
-(princ (frob-tree *Tree*) t)
+(princ (tree-to-list *Tree*) t)
 |#
