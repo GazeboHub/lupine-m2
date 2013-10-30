@@ -449,7 +449,7 @@ implementing the opeations)
 
 ;;; * Bootstrap Metamodel
 
-(defconstant +package-buffer-extent+ 1)
+(defconstant +package-buffer-extent+ 1) ;; FIXME: usage ?
 
 (defclass bootstrap-metamodel (serialization-model)
   ;; effectively a container for XMI -> Common Lisp transformation
@@ -652,10 +652,85 @@ ns-registry ~s"
    ))
 
 
-;;; * Slot Definitions
+;;; * Property Tables
+;;
+;; Precursor to PROPERTY-TRANSFORM-SLOT-DEFINITION
+;;
+;; Precedent: Unique trie of (value, name, table)
+;;
+;; Usage in UML:
+;;
+;;      name => persistent XML ID, as a symbol interned in the model's
+;;              ID symbol namespace (cf. INTERN-ID, to do)
+;;      value => UML object representing <name>
+
+
+(defclass property-table ()
+  ;; usage: e.g. to store the set of packageElement properties
+  ;; definied within a UML Package
+  ())
+
+(defclass named-property-table (named-element)
+  ;; usage: e.g. to store the set of packageElement properties
+  ;; definied within a UML Package
+  ())
+
+
+(defgeneric get-property (name table))
+(defgeneric ensure-property (value name table))
+(defgeneric map-properties (function table))
+
+
+
+(defclass simple-eq-property-table ()
+  ((storage
+    :type hash-table
+    :initform (make-hash-table :test #'eq))))
+
+(defmethod get-property ((name symbol) (table simple-eq-property-table))
+  (getf name table))
+
+(defmethod ensure-property ((value t) (name symbol)
+			   (table simple-eq-property-table))
+  (setf (getf name table) value))
+
+(defmethod map-properties ((function function)
+			   (table simple-eq-property-table))
+  (maphash function table))
+
+
+;;; * Property-Oriented Slot Definitions
+
+#|
+
+Motivation:
+
+A UML metaclass (type UML::Class) is defined with a set of properties,
+in the following class attribute groups:
+
+* Owned Attributes
+* Owned Operations
+* Owned Rules (Constraints, inherited from UML::Namespace)
+* Owned Comments (inherited from UML::Element)
+
+The following slot definition protocol represents a generic framework
+for:
+
+  1) Define a single slot definition for each such attribute goup,
+     within a slot vulue of the metacalss
+
+  2) Add/Set/Delete/List/Map properties within each such attribute
+     group, within that slot's value on the metaclass
+
+FIXME: As it representing a thin and perhaps ill fitting layer on an
+ordinary instance access protocol, this slot definition framework
+should be deleted
+
+|#
 
 
 (defclass property-transform-slot-definition
+    ;; FIXME: THIS THING NEEDS WORK TOO
     (metamodel-transform slot-definition)
   ())
 
@@ -676,10 +751,19 @@ ns-registry ~s"
 
 (defmethod direct-slot-definition-class ((class bootstrap-metamodel-metaclass)
 					 &rest initargs)
-  (destructuring-bind (&key source-local-name &allow-other-keys)
+  ;; towards a pattern: type-specialized slot definitions
+
+  (destructuring-bind (&key type &allow-other-keys)
       initargs
     (cond
-      (source-local-name
+      ((subtypep type 'property-table)
+       (find-class 'direct-property-transform-slot-definition))
+      (t (call-next-method))))
+  #+NIL
+  (destructuring-bind (&key local-name &allow-other-keys)
+      initargs
+    (cond
+      (local-name
        (find-class 'direct-property-transform-slot-definition))
       (t (call-next-method)))))
 
@@ -695,6 +779,10 @@ ns-registry ~s"
 	       dslots)
 	 (find-class 'effective-property-transform-slot-definition))
 	(t (call-next-method))))))
+
+
+(defmethod get-property ((name symbol) (table bootstrap-metamodel-metaclass))
+  (find-slot-definition name table))
 
 
 ;;; * UML-Class
