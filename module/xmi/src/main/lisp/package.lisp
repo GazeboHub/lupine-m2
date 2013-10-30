@@ -31,3 +31,5 @@
    #:+xmi-model-element-name+
    #:read-xmi
    ))
+
+;; NB: See also package-late.lisp

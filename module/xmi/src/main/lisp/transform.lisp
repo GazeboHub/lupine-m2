@@ -22,9 +22,10 @@ refer to ./transform.md
 
 (defgeneric class-model-metaclass (class))
 
-(decclass lupine-standard-class (standard-class)
-	;; FIXME: Improve and utilize lupine-mop "read-only standard slots" protocol in this metsclass' instances
-	())
+(defclass lupine-standard-class (standard-class)
+  ;; FIXME: Improve and utilize lupine-mop "read-only standard
+  ;; slots" protocol in this metsclass' instances
+  ())
 
 (defclass model ()
   ((source-serialization-model
@@ -37,70 +38,269 @@ refer to ./transform.md
     :initarg :source
     :reader model-source)
    (source-encoding
-    ;; should be a symbol interned in #:XML/ENCODING (FIXME: Denote that in the codebase documentation)
+    ;; should be a symbol interned in #:XML/ENCODING
+    ;; (FIXME: Denote that package and its usage, in the codebase
+    ;; documentation)
     :type symbol
     :initarg :source-encoding
     :accessor model-source-encoding
-    ;; FIXME: Provide recode functionaliy on slot-vslue change?
-    ;; (low-priority; complex procedures for nested model element iteration)
+    ;; FIXME: Provide recode functionaliy on slot-value change.
+    ;; (low-priority; complex procedures for nested model string
+    ;; element iteration and recoding)
     ))
   (:metaclass lupine-standard-class))
 
 (defclass serialization-model (model)
-  ((instance-class
+  ((model-class
     ;; cf. ALLOCATE-MODEL, BOOTSTRAP-METAMODEL
     :type class-designstor
-    :initarg :instance-class
-    :accessor :serialization-model-instance-class)
+    :initarg :model-class
+    :accessor serialization-model-model-class)
    (qname-override-p
-    ;; FIXME: Use this slot's value during qname resolution in TRANSFORM-ELEMENT
-    ;; cf. Namespaces.md (Lupine-XMI Documentation)
+    ;; FIXME: Use this slot's value during qname resolution in
+    ;; TRANSFORM-ELEMENT cf. Namespaces.md (Lupine-XMI Documentation)
     :type boolean
     :initarg :qname-override
     :accessor serialization-model-qname-override-p
-    )))
+    )
+   (ns-registry
+    ;; NB: This slot consumes the :namespaces instance initarg
+    :type namespace-registry
+    :accessor serialization-model-namespace-registry)))
+
+(defmethod shared-initialize :after ((instance serialization-model)
+				     slots &rest initargs
+				     &key namespaces &allow-other-keys)
+  (declare (ignore slots initargs))
+  (when namespaces
+    (flet ((ensure-nsreg ()
+	     (cond
+	       ((slot-boundp instance 'ns-registry)
+		(serialization-model-namespace-registry instance))
+	       (t
+		(let ((nsreg (make-namespace-registry)))
+		  (setf (serialization-model-namespace-registry instance)
+			nsreg))))))
+      (let ((nsreg (ensure-nsreg)))
+	(ensure-standard-namespaces nsreg)
+	(dolist (ns namespaces)
+	  (destructuring-bind (prefix . uri) ns
+	    (bind-prefix prefix uri nsreg t)))))))
 
 ;;; * Element transformation protocol
 
-
-(defgeneric compute-source-uri (source))
-;; FIXME: Move this defn into utils-cxml.lisp and define its methods
-;; there, cf. allocate-model
-
 (defgeneric allocate-model (encoding source serialzation-model)
+  (:method ((encoding symbol) (source t)
+	    (serialization-model bootstrap-metamodel))
+    ;; the bootstrap-metamodel is used effectively to bootstrap itself
+    (setf (model-source serialization-model) source)
+    (setf (model-source-encoding serialization-model) encoding)
+    (values serialization-model))
   (:method ((encoding symbol) (source t)
 	    (serialzation-model serialization-model))
     (let ((m (allocate-instance
 	      (find-class
-	       (serialization-model-instance-class serialzation-model)))))
+	       (serialization-model-model-class serialzation-model)))))
       (setf (model-source m) (compute-source-uri source))
       (setf (model-source-encoding m) encoding))))
 
-(defgeneric allocate-element (qname-symbol namespace name
+(defgeneric compute-element-class (qname namespace name
+			   model serialzation-model)
+  (:method ((qname symbol) (ns simple-string) (name simple-string)
+	    (model bootstrap-metamodel) (source t)
+	    (serialization-model serialzation-model))
+    (declare (ignore ns name model source serialization-model))
+    ;; FIXME (Documentation) : Denote this usage of
+    ;;  (namespace, package, symbol, class name)
+    ;; with regards to BOOTSTRAP-METAMODEL
+    (find-class qname nil)))
+
+;; To Do: Determine the relation between "Property type" and
+;; "metaclass contained by property"
+;;
+;;  e.g. with regards to the definition of the packagedElement
+;;  package property in the following excerpt from UML.xmi
+;;
+;;  <xmi:XMI ...
+;;    <uml:Package xmi:type="uml:Package" name="UML"
+;;       URI="http://www.omg.org/spec/UML/20110701">
+;;       <packagedElement name="Package"
+;;                        xmi:type="uml:Class" ...
+;;         <ownedAttribute name="packagedElement"
+;;                         xmi:type="uml:Poperty"
+;;                         type="PackagableElement" ...
+;; Some observations:
+;;
+;; * packagedEleent is the name of a property defined to the
+;;   UML::Package metaclass. packagedElement is not in itself a
+;;   UML metaclass.
+;;
+;; * The xmi:type defined for pacakgedElement as an
+;;   ownedAttribute belongs effectively to the packagedElement
+;;   element itself - the element defined in the given
+;;   specification - it denoting that element's type within
+;;   the element's (in this case, property) relation to its
+;;   containing metaclass, namely UML::Package
+;;
+;; * The non-namespace-qualified 'type' attribute denotes a
+;;   base type for elements defined in that relation. As
+;;   demonstrated in the example itself, a packagedElement
+;;   declaration may serve to define a type extending that
+;;   base type for the packagedElement property - as noting that
+;;   uml:Class is a subtype of PackagableElement
+;;
+;; So, in extensional conclusions:
+;;  1) Insofar as the type of the property specified in the
+;;     element is known (as would be known in a fully defined
+;;     metamodel), a call to change-class may not be
+;;     needed. Note that ownedAttribute defines a relation of
+;;     a property to a metaclass (as of the packagedElement
+;;     relation in its relation to the Package metaclass).
+;;     Inasmuch, the specification of @xmi:type="uml:Property"
+;;     would seem redundant
+;;
+;;  2) In NS/XMI:|type| the class of the element being defined
+;;     to its containing element or model is published - as
+;;     with the uml:Property type of the packagedElement
+;;     relation thusly fedined
+;;
+;;  3) Insofar a uml:Property defines a relation between
+;;     subject and object - as with a tuple (s,p,o) in
+;;     defining p' as the property - the
+;;     non-namespace-qualified 'type' attribute denotes the
+;;     type of the object in that relation, not of the
+;;     relation in itself
+
+;; Note also: once the instance is created (whether as an
+;; instance of a forward-referenced class or otherwise), it
+;; must be bound to its container e.g. (FIXME TO DO)
+;;
+;;   (BIND-ELEMENT ELEMENT PROPERTY CONTAINER)
+;;
+;; in which case the PROPERTY (if a named element) takes up
+;; its qualified, compound name (as derived from its name and
+;; the name of the direct and effective containers)
+;;
+;; see also: IMPORT-ELEMENT (TO DO) cf package import
+;; relations in UML
+
+
+(defgeneric allocate-element (qname namespace name
 			      model source serialzation-model)
-  (:method ((qs symbol) (ns simple-string) (name simple-string)
-	    (model stub-metamodel)
-	    (source t)
+  (:method ((qname symbol) (ns simple-string) (name simple-string)
+	    (model bootstrap-metamodel) (source t)
 	    (serialization-model serialzation-model))
     ;; FIXME: Later, audit this method for application not only w.r.t
-    ;; STUB-METAMODEL, STUB-METAMODEL-ELEMENT (broaden)
+    ;; BOOTSTRAP-METAMODEL, BOOTSTRAP-METAMODEL-ELEMENT (broaden)
 
-    ;; FIXME: "REAL WORK HERE"
-    ;; See first: intern-qname-symbol, then UML-CLASS definition
+    ;; See also: COMPUTE-QNAME-SYMBOL; UML-CLASS
 
+    ;; To a note about how the XMI evaluator may operate:
+    ;;
+    ;; Functionally, the xmi:XMI element serves as a contaier for an
+    ;; XML-encoded UML metamodel, such that in UML.xmi[1] serves as a
+    ;; serialization of the UML metamodel itself - where, in effect,
+    ;; the XMI UML encoding is serving as a sort of functional
+    ;; meta-metamodel (introducing, perhaps, some conceputal ambiguity
+    ;; with regards to MOF) a sort of functional meta-metamodel in
+    ;; which the UML metamodel itself is encoded
+    ;;
+    ;; Functionally, Lupine-XMI will regard each xmi:XMI element as
+    ;; it introducing a new model - whether that model represents a
+    ;; meta-model or simply a user model.
+    ;;
+    ;; Specifically in regards to UML.xmi, xmi:XMI contains two
+    ;; elements - once, a 'uml:Package' element (UML 2.4.1
+    ;; namespace[2]) defining the package named "UML", in its entire
+    ;; conjoined infrastructure/superstructure model[3]. The second
+    ;; element represents an XML namespace prefix for that package,
+    ;; explicitly encoded in addition to the 'URI' property contained
+    ;; on the previous UML package element
+    ;;
+    ;; Concerning what the processing model must consume, on processing
+    ;; the contents of uml:Pacakge: Every element defined within that
+    ;; 'uml:Package' XML element is defined within a 'packagedElement'
+    ;; XML element.
+    ;;
+    ;; [1] <http://www.omg.org/spec/UML/20110701/UML.xmi>
+    ;; [2] <http://www.omg.org/spec/UML/20110701>
+    ;; [3] Effectiely, UML.xmi serves to present the
+    ;;     UML superstructure after all package merge operations. Although
+    ;;     the package structure presented in UML.xmi does not match
+    ;;     the package structure presented in either Infrastructure.xmi
+    ;;     or Supersturcture.xmi, but at least in regards to that the
+    ;;     "UML" package in UML.xmi may represent the only normative
+    ;;     definition of the "UML" package together with its namespace
+    ;;     URI[2], perhaps it may be implied that UML.xmi represents
+    ;;     the exclusive normative encoding of UML 2.4.1 such as may be applied for purpose for XMI format model
+    ;;     serializations
+    (let ((c (compute-element-class qname ns name
+				    model serialization-model)))
+      ;; usage:
+      ;; 1. Inputs:
+      ;;      qname = UML::|Package|
+      ;;      ns="http://www.omg.org/spec/UML/20110701"
+      ;;      name="Package"
+      ;;      model, serilization-model ...
+      ;;
+      ;;    Intended behavior: find class UML::|Package|,
+      ;;                       allocate-instance of that class
+      ;; 2 Inputs:
+      ;;      qname = UML::|packageImport|
+      ;;      ns="http://www.omg.org/spec/UML/20110701"
+      ;;      name="packageImport"
+      ;;      model, serilization-model ...
+      ;;
+      ;;    Intended behavior: allocate an instance of a class for
+      ;;    represeting the property defined in the packageImport
+      ;;    specification.
+      ;;
+      ;;    (find-class (quote UML::packageImport)) may suffice
+      ;;
+
+
+      (allocate-instance c))
     ))
 
 
-(defgeneric apply-atrribute (qname-symbol namespace name element
+
+(defgeneric apply-atrribute (value qname namespace name element
 			     model source serialzation-model)
-  ;; FIXME: move defmethod to after stub-metamodel-element class definition
-  (:method ((qs symbol) (ns simple-string) (name simple-string)
-	    (element stub-metamodel-element)
-	    (model stub-metamodel)
-	    (source t)
-	    (serialization-model serialzation-model))
+  ;; FIXME: move defmethods to after bootstrap-metamodel-element class definition
+  (:method ((value simple-string)
+	    (qname (eql ns/xmi:|type|))
+	    (ns simple-string) (name simple-string)
+	    (element bootstrap-metamodel-element)
+	    (model bootstrap-metamodel)
+	    (source t) (serialization-model serialzation-model))
+    (let ((type (normalize-string value)))
+      (multiple-value-bind (prefix name)
+	  (split-string-1 #\: type)
+	;; FIXME: If COMPUTE-ELEMENT-CLASS does not return a class, define a
+	;; FORWARD-REFERENCED-CLASS with TYPE denoting the cname
+	;; of that class - deriving the metaclass of that class from
+	;; MODEL or SERIALIZATION-MODEL
+	;;
+	;; ^  wrap in an ENSURE-METACLASS call
+	(let ((c (compute-element-class
+		  ;; FIXME: ^ what function to call, there?
+		  (compute-qname-symbol
+		   type
+		   (model-namespace-registry
+		    ;; FIXME:
+		    ;; use model or serialiation-model here?
+		    serialization-model)))))
+
+      (change-class element c)))
+
+  (:method ((value simple-string)
+	    (qname symbol)
+	    (ns simple-string) (name simple-string)
+	    (element bootstrap-metamodel-element)
+	    (model bootstrap-metamodel)
+	    (source t) (serialization-model serialzation-model))
     ;; FIXME: Later, audit this method for application not only w.r.t
-    ;; STUB-METAMODEL, STUB-METAMODEL-ELEMENT (broaden)
+    ;; BOOTSTRAP-METAMODEL, BOOTSTRAP-METAMODEL-ELEMENT (broaden)
 
     ;; FIXME: "REAL WORK HERE"
     ;; See first: allocate-element, UML class definition, and
@@ -117,10 +317,99 @@ refer to ./transform.md
     ))
 
 
-(defgeneric final-initialize (model context serialization-model)
-  (:method ((model model) (context t)
+(defgeneric add-element (element container
+			 model serialization-model))
+;; ^ FIXME: In conceptual regards, clarify whether that function is
+;; for adding an XML element or a model element. Contrast with
+;; ADD-TYPED-RELATION
+
+;; ^ FIXME (TO DO): Note that behaviors of ADD-ELEMENT may
+;; differ per the type of the ELEMENT. For instance, a
+;; packageImport element when added to a Package must result in the
+;; imported package's contents becoming visible in the containing
+;; package - such that must be handled in add-allocated-element,
+;; however exactly "packaged element->package" visibility may
+;; ultimately be handled in the Project Lupine UML API -
+;; wheres a packagedElement being added to a package simply represents
+;; the binding of a definition by way of a packagedElement property,
+;; within the containing package.
+
+
+#|
+
+# UML Primitive Types
+
+### UML PrimitiveTypes Package
+
+* Package URI: <http://www.omg.org/spec/PrimitiveTypes/20110701>
+
+### Primtiive Types - Mapping to Common Lisp (Trivial)
+
+* PrimitiveTypes::Boolean -> CL:BOOLEAN
+* PrimitiveTypes::Integer -> CL:INTEGER
+* PrimitiveTypes::Real -> CL:REAL
+* PrimitiveTypes::String -> CL:STRING
+* PrimittiveTypes::UnlimitedNatural -> ???
+
+
+# Model Elements
+
+## Model Element Metaclasses
+
+* uml-association
+* uml-class
+* uml-enumeration
+
+## Model Element Types (Bootstrap model)
+
+
+### Abstract Element Types (Bootstrap model)
+
+* UML::Element
+* UML::NamedElement
+* UML::Namespace
+* UML::Classifier
+
+### Metaclass Types
+
+* UML::Class
+* UML::Association
+* UML::Enumeration
+
+### Other Types
+* UML::Package
+* UML::Property
+
+### UML Classes
+
+#### Class Generalizations (from Classifier)
+
+#### Class Attributes
+
+#### Class Operations (from ???)
+(Note: It's a matter of modeling the operations, not _per se_ of
+implementing the opeations)
+
+#### Owned Rules (from Namespace)
+
+#### Comments (from Element)
+
+|#
+
+#+NIL
+(defgeneric add-typed-relation (relation container model serialization-model))
+;; ^ no essential distinction with regards to ADD-ELEMENT, simply for
+;; adding an element that repersents a typed relation
+
+(defgeneric final-initialize (element container
+			      model serialization-model)
+  (:method ((element model-element) (container model-element)
+	    (model model)
 	    (serialization-model serialization-model))
-    (initialize-instance model)))
+    (initialize-instance element)
+    (add-element element container model serialization-model)
+    (values element)))
+
 
 (defgeneric add-cdata (encoding cdata model-element model))
 ;; ^ cf. READ-XMI
@@ -137,52 +426,30 @@ refer to ./transform.md
   ;; effectively a container for XMI -> Common Lisp transformation
   ;; descriptors, so far as to unmarshal the full UML metamodel
   ;; serialized in UML.xmi
-  ((ns-registry
-    ;; NB: This slot consumes the :namespaces instance initarg
-    :type namespace-registry
-    :accessor bootstrap-metamodel-ns-registry)
-   (root-packages
-    ;; Notice that UML-PACKAGE will not yet have been defined,
-    ;; when this class' definition is initially evaluted
-    :type (vector uml-package)
-    :initform (make-array #.+package-buffer-extent+
-			  :element-type 'uml-package
-			  :fill-pointer 0
-			  :adjustable t)
-    ))
-  (:default-initargs :instance-class bootstrap-metamodel))
-
-
-(defmethod shared-initialize :after ((instance bootstrap-metamodel)
-				     slots &rest initargs
-				     &key namespaces &allow-other-keys)
-  (declare (ignore slots initargs))
-  (when namespaces
-    (flet ((ensure-nsreg ()
-	     (cond
-	       ((slot-boundp instance 'ns-registry)
-		(bootstrap-metamodel-ns-registry instance))
-	       (t
-		(let ((nsreg (make-namespace-registry)))
-		  (setf (bootstrap-metamodel-ns-registry instance)
-			nsreg))))))
-      (let ((nsreg (ensure-nsreg)))
-	(dolist (ns namespaces)
-	  (destructuring-bind (prefix . uri) ns
-	    (bind-prefix prefix uri nsreg t)))))))
+  ;;
+  ;; Regarding disjunction of this class with regards to other
+  ;; SERIALIZATION-MODEL classes, refer to generic functions having
+  ;; methods specializced this class and on SERIALIZATION-MODEL,
+  ;; e.g. ALLOCATE-MODEL
+  ())
 
 
 
-(declaim (type bootstrap-metamodel *boostrap-model*)) ;; FIXME class?
-(defvar *boostrap-model* ;; name ??
+(declaim (type bootstrap-metamodel *bootstrap-metamodel*)) ;; FIXME class?
+(defvar *bootstrap-metamodel* ;; name ??
   (make-instance
    'bootstrap-metamodel
+   :model-class (quote bootstrap-metamodel)
    :namespaces
-   '(("uml" . "http://www.omg.org/spec/UML/20110701" ))))
+   ;; FIXME: BACKWADS COMPATABILITY (PRE 2.4.1 SERIES UML/XMI/MOF SPECS)
+   '(("uml" . "http://www.omg.org/spec/UML/20110701" )
+     ("xmi" . "http://www.omg.org/spec/XMI/20110701" )
+     ("mofext" . "http://www.omg.org/spec/MOF/20110701")
+     )))
 
 
-(defclass stub-metamodel-element ()
-  ;; used in METAMODEL-TRANSFORM and in METAMODEL-STUB-CLASS
+(defclass bootstrap-metamodel-element ()
+  ;; used in METAMODEL-TRANSFORM and in BOOSTRAP-METAMODEL-METACLASS
   ((model
     ;; model containing this component
     :initarg :model
@@ -191,13 +458,14 @@ refer to ./transform.md
     :accessor component-model)
 
    ;; naming elements
-   (namespace
+   (namespace ;; FIXME: Discard this slot (?)
     ;; namespace corresponding to the package containing the named
     ;; element reified by this component
     :type namespace
     :initarg :namespace
     :accessor component-namespace)
-   (local-name
+
+   (local-name ;; FIXME: Discard this slot (?)
     ;; ^ local name for type of metamodel serialization. (Note that
     ;; that name must identify a single named element in the
     ;; serialization metamodel )
@@ -206,11 +474,14 @@ refer to ./transform.md
     :accessor component-local-name)
    ))
 
+#+NIL ;; needs more baseline code
 (defgeneric (setf resolve-composite-name) (new-value name model))
 ;; ^ return local-name
 
+#+NIL ;; needs more baseline code
 (defgeneric resolve-composite-name (name model &optional errorp))
 
+#+NIL ;; needs cleanups
 (defgeneric resolve-qname (name model &optional errorp)
   ;; some axioms:
   ;;
@@ -237,7 +508,7 @@ refer to ./transform.md
   ;; metaclasses may inherit from metsclasses defined in the
   ;; bootstrap-metamodel)
   ;;
-  ;; * once the UML metamodel is completely defined, then it may be
+   ;; * once the UML metamodel is completely defined, then it may be
   ;; presented for graphical operations via CLIM presemtation methods
   ;;
   ;;
@@ -255,13 +526,15 @@ refer to ./transform.md
 
   (:method ((name simple-string) (model bootstrap-metamodel)
 	    &optional (errorp t))
-    (let ((ns-reg (bootstrap-metamodel-ns-registry model)))
+    (let ((ns-reg (serialization-model-namespace-registry model)))
       (multiple-value-bind (pfx lname)
 	  ;; FIXME: allow for "foo" as well as "bar:foo"
 	  ;; i.e. "Null namespace" (but note: program must make
 	  ;; account for containing namespaces during element
 	  ;; processing) (see Namespaces.md)
 	  (split-string-1 #\: name)
+
+	;; FIXME: use symbol bindings instead!
 	(flet ((resolve-in-namespace (ns)
 		 (gethash lname (namespace-local-names-table ns))))
 	  (cond
@@ -286,7 +559,8 @@ ns-registry ~s"
 	     (let ((ns (registry-null-namespace ns-reg)))
 	       (resolve-in-namespace ns)))))))))
 
-(defmethod shared-initialize ((instance stub-metamodel-element)
+
+(defmethod shared-initialize ((instance bootstrap-metamodel-element)
 			      slots &rest initargs
 			      &key &allow-other-keys)
   (macrolet ((uncadr (name)
@@ -315,7 +589,7 @@ ns-registry ~s"
 ;;; * ...
 
 
-(defclass metamodel-transform (stub-metamodel-element)
+(defclass metamodel-transform (bootstrap-metamodel-element)
   ;; this may be subject to some revision - note the irrelevance of
   ;; the 'type' slot and the corredponding @xmi:type attribute, with
   ;; regards to "simple" metamodel unmarshaling
@@ -358,8 +632,10 @@ ns-registry ~s"
 
 ;; * Trasform-Class
 
-(defclass metamodel-stub-class (stub-metamodel-element standard-class)
+(defclass boostrap-metamodel-metaclass
+    (bootstrap-metamodel-element standard-class)
   ((model-metaclass
+    ;; FIXME: Use of this slot definition?
     :initarg :model-metaclass
     :types simple-string
     :accessor class-model-metaclass
@@ -367,7 +643,7 @@ ns-registry ~s"
    ))
 
 
-(defmethod shared-initialize ((instance metamodel-stub-class)
+(defmethod shared-initialize ((instance boostrap-metamodel-metaclass)
 			      slots &rest initargs
 			      &key &allow-other-keys)
   (macrolet ((uncadr (name)
@@ -381,10 +657,12 @@ ns-registry ~s"
     (uncadr :model-metaclass)
     ;; FIXME: resolve COMPOSITE-NAME ...
     (apply #'call-next-method instance slots initargs)
-    ))
+    (let ((qname (compute-qname-symbol
+		  cname (model-namspace-registry model))))
+      (setf (symbol-value qname) instance)))
 
 
-(defmethod direct-slot-definition-class ((class metamodel-stub-class)
+(defmethod direct-slot-definition-class ((class boostrap-metamodel-metaclass)
 					 &rest initargs)
   (destructuring-bind (&key source-local-name &allow-other-keys)
       initargs
@@ -393,7 +671,7 @@ ns-registry ~s"
        (find-class 'direct-property-transform-slot-definition))
       (t (call-next-method)))))
 
-(defmethod effective-slot-definition-class ((class metamodel-stub-class)
+(defmethod effective-slot-definition-class ((class boostrap-metamodel-metaclass)
 					    &rest initargs)
   (destructuring-bind (&key name &allow-other-keys)
       initargs
@@ -412,7 +690,7 @@ ns-registry ~s"
 (def-uml-package "UML") ;; ?
 
 
-(defclass uml-class (classifier metamodel-stub-class)
+(defclass uml-class (classifier boostrap-metamodel-metaclass)
   ;; NOTE: This class represents the main initial use-case for the
   ;; transformation algorithm proposed in Lupine XMI
   ((owned-attributes
@@ -435,10 +713,10 @@ ns-registry ~s"
     :type boolean)
    )
 
-  (:metaclass metamodel-stub-class)
+  (:metaclass boostrap-metamodel-metaclass)
 
   ;; FIXME: add :MODEL to other class definitions (?)
-  (:model *boostrap-model*)
+  (:model *bootstrap-metamodel*)
 
   ;; UML composite name
   ;;
@@ -455,7 +733,7 @@ ns-registry ~s"
   )
 
 #+Nil ;; FIXME: do this CHANGE-CLASS for all elements in the
-;; *boostrap-model* after loading
+;; *bootstrap-metamodel* after loading
 (let ((c (find-class 'uml-class)))
   (change-class c c))
 
@@ -473,8 +751,8 @@ ns-registry ~s"
     :initarg :owned-comments
     :type property-table
     :accessor class-direct-owned-comments-table))
-  (:metaclass metamodel-stub-class)
-  (:model *boostrap-model*)
+  (:metaclass boostrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:Element")
   (:is-abstract t))
@@ -497,8 +775,8 @@ ns-registry ~s"
     :accessor named-element-namespace
     )
    )
-  (:metaclass metamodel-stub-class)
-  (:model *boostrap-model*)
+  (:metaclass boostrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:NamedElement")
   (:is-abstract t))
@@ -512,8 +790,8 @@ ns-registry ~s"
     :type property-table
     :accessor class-direct-owned-rules-table
     ))
-  (:metaclass metamodel-stub-class)
-  (:model *boostrap-model*)
+  (:metaclass boostrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
   (:model-metaclass  "uml:Class")
   (:qname "UML:Namespace")
   (:is-abstract t))
@@ -540,7 +818,7 @@ ns-registry ~s"
 		    (compute-coposite-name ns)))
       (t (values  name)))))
 #+NIL
-(defmethod (setf resolve-composite-name) ((new-value stub-metamodel-element)
+(defmethod (setf resolve-composite-name) ((new-value bootstrap-metamodel-element)
 					  (name string)
 					  (model bootstrap-metamodel)
 					  )
@@ -563,8 +841,8 @@ ns-registry ~s"
     :type property-table
     :accessor class-direct-generalizations-table
     ))
-  (:metaclass metamodel-stub-class)
-  (:model *boostrap-model*)
+  (:metaclass boostrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
   (:model-metaclass "uml:Class")
   (:qname "UML:Classifier")
   (:is-abstract t))
@@ -582,7 +860,7 @@ ns-registry ~s"
     :local-name "packagedElement"
     :type property-table
     :accessor uml-package-packaged-elements))
-  (:metaclass metamodel-stub-class)
-  (:model *boostrap-model*)
+  (:metaclass boostrap-metamodel-metaclass)
+  (:model *bootstrap-metamodel*)
   (:model-metaclass "uml:Class")
   (:qname "UML:Package"))
