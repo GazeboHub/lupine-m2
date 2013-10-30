@@ -119,9 +119,10 @@
 	    (qname-frob (simple-node-element object))
 	    (length (simple-container-contents object)))))
 
+#+NIL
 (declaim (optimize (speed 0) (safety 3) (debug 3)))
 
-(defun scan-unique-element-types (source)
+(defun scan-element-types (source)
   ;; Prototype for a basic XML paser, using Klacks
   (declare (type parser-input-source source)
 	   #+NIL (values list boolean &optional))
@@ -195,7 +196,7 @@
 (trace simple-node-parent)
 
 (defparameter *tree*
-(scan-unique-element-types
+(scan-element-types
  (merge-pathnames
   "../../../../../module/xmi/src/main/xmi/UML.xmi"))
 )
